@@ -11,7 +11,7 @@
 <style>
 :root {
 --bg: #f6f8fb; --surface: #ffffff; --text: #0f172a; --muted: #6b7280;
---border: rgba(15, 23, 42, 0.14); /* کمی پررنگ‌تر */
+--border: rgba(15, 23, 42, 0.14);
 --border-strong: rgba(15, 23, 42, 0.25);
 --shadow: 0 10px 30px -12px rgba(2,6,23,.18);
 --shadow-strong: 0 18px 42px -14px rgba(2,6,23,.28);
@@ -84,7 +84,6 @@ background: color-mix(in oklab, var(--surface) 80%, transparent);
 </style>
 </head>
 <body>
-<!-- Header -->
 <header class="sticky top-0 z-20 glass">
 <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
 <div class="flex items-center gap-3">
@@ -112,7 +111,6 @@ background: color-mix(in oklab, var(--surface) 80%, transparent);
 </div>
 </header>
 
-<!-- Hero -->
 <section class="max-w-5xl mx-auto px-4 pt-8 pb-2">
 <div class="card p-6 md:p-8">
 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
@@ -138,10 +136,8 @@ background: color-mix(in oklab, var(--surface) 80%, transparent);
 <div class="hidden md:block"></div>
 </div>
 
-<!-- توضیح بزرگِ محصول -->
 <div id="big-desc" class="mb-5 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 md:p-6 text-lg md:text-xl leading-9 font-semibold"></div>
 
-<!-- راهنمای استفاده (ادغام‌شده و شفاف) -->
 <div id="hint-container" class="mb-5 rounded-xl border border-[var(--border)] bg-[var(--surface)]">
 <div class="px-4 py-3 flex items-start gap-3">
 <div class="size-8 rounded-lg bg-[var(--accent-1)]/60 grid place-items-center mt-1">💡</div>
@@ -160,13 +156,11 @@ background: color-mix(in oklab, var(--surface) 80%, transparent);
 
 <textarea id="text-input" rows="10" class="w-full p-3 rounded-xl border bg-[var(--surface)] border-[var(--border)] focus:outline-none"></textarea>
 
-<!-- چک‌باکس کنار باکس متن -->
 <div class="flex items-center gap-2 mt-3">
 <input id="force-wordlist" type="checkbox" class="w-4 h-4 rounded accent-[var(--primary)]">
 <label for="force-wordlist" id="force-wordlist-label" class="text-sm cursor-pointer"></label>
 </div>
 
-<!-- هشدار انتخاب سطح -->
 <div id="level-warning" class="hidden mt-3 rounded-xl border border-yellow-300/60 bg-yellow-50/70 text-yellow-800 px-4 py-3 text-sm"></div>
 
 <div class="flex flex-col md:flex-row gap-3 md:items-center justify-between mt-4">
@@ -188,7 +182,6 @@ background: color-mix(in oklab, var(--surface) 80%, transparent);
 </div>
 </section>
 
-<!-- Results -->
 <main class="max-w-7xl mx-auto px-4 pb-16">
 <section id="results-view" class="hidden mt-8">
 <div class="card p-4 md:p-5 flex flex-col md:flex-row gap-3 md:items-center justify-between mb-6">
@@ -290,8 +283,10 @@ toTopBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smoot
 
 // Refresh labels on source language change (without re-calling AI)
 sourceLangSelect?.addEventListener('change', () => {
-if (!resultsView.classList.contains('hidden') && resultsList.dataset.lastRaw) {
-renderResults(resultsList.dataset.lastRaw);
+if (!resultsView.classList.contains('hidden') && resultsList.dataset.lastJson) {
+  try {
+    renderResults(JSON.parse(resultsList.dataset.lastJson));
+  } catch(e) { console.error("Render error", e); }
 }
 });
 
@@ -366,44 +361,36 @@ function buildPrompt(text, isWordList){
 const src = LANGS.find(l=>l.code===sourceLangSelect.value)?.en || 'Persian';
 const tgt = LANGS.find(l=>l.code===targetLangSelect.value)?.en || 'English';
 const level = userLevelSelect.value;
-const taskDesc = isWordList
-? `You will analyze a USER-PROVIDED LIST of words/phrases in ${tgt}. For EACH item, produce a full analysis.`
-: `You will analyze a LONG TEXT in ${tgt}. Extract ALL useful, everyday words, idioms, and phrases for a ${level} learner. For EACH extracted item, produce a full analysis.`;
-const fieldSpec = `For EACH item, output EXACTLY the following template. Use "---" as a separator between items.
 
-Word: [the item in ${tgt}]
-Translation: [translation in ${src}; if multiple common meanings, separate with ";"]
-Definition: [simple, level-appropriate definition in ${tgt}]
-Grammar: [part of speech; e.g., "phrasal verb (inseparable)", "verb (takes Akkusativ)", "noun (countable)"]
-Collocations: [common combinations, comma-separated; if none, write "N/A"]
-Examples:
-1. [Example 1 in ${tgt}] - [${src} translation]
-2. [Example 2 in ${tgt}] - [${src} translation]
-Common Mistakes: ["nothing specific" OR a concrete pitfall (wrong preposition, false friend, etc.)]
-Context/Note:
-- Write 1–2 concise sentences on ONE of the following (most relevant): register/formality; synonym contrast; required prepositions/case; language-specific behavior (e.g., separable verb); usage frequency.
-- Never output "N/A". Default: "neutral register; general-use".
-Pronunciation: [IPA/Pinyin/phonetic if applicable; else "N/A"]
-Tags:
-- Choose 1–3 tags from the list (AT LEAST ONE required). Separate with semicolons.
-- Allowed: informal; formal; neutral; spoken; academic; business; travel; tech; slang; idiom; phrasal-verb; collocation; fixed-expression; false-friend; grammar; pronunciation; register; preposition; case; separable; aspect; measure-word; gender; article; tense; frequency-high; frequency-medium; frequency-low; level-a1; level-a2; level-b1; level-b2; level-c1
----`;
-const extraRules = isWordList
-? `INPUT MODE: WORD LIST. Treat each line or hyphen-separated token as ONE item.`
-: `INPUT MODE: LONG TEXT. "Example 1" MUST be the EXACT sentence from the source text. Add other natural examples. If an item is too basic/rare for ${level}, SKIP it.`;
-return `You are an expert language tutor AI. User's native: ${src}. Target: ${tgt}. ${isWordList ? '' : `Proficiency: ${level}.`}
+const modeInstruction = isWordList
+? `INPUT IS A WORD LIST. Analyze each item individually.`
+: `INPUT IS A LONG TEXT. Extract ALL useful, everyday words/idioms appropriate for a ${level} learner. Skip extremely basic words or rare words not suitable for ${level}.`;
 
-${taskDesc}
+return `You are an expert language tutor AI. 
+Source Language: ${src}
+Target Language: ${tgt}
+${isWordList ? '' : `Learner Level: ${level}`}
 
-RULES:
-- Prioritize PRACTICAL usage.
-- Output MUST strictly follow the template. No extra commentary.
+TASK:
+${modeInstruction}
+For each extracted or listed item, provide a detailed analysis in JSON format.
 
-${fieldSpec}
+OUTPUT FORMAT:
+Return ONLY a valid JSON array of objects. Do not wrap in markdown (no \`\`\`json).
+Each object must have these exact keys:
+- "word": (string) The word or phrase in ${tgt}.
+- "translation": (string) Meaning in ${src}. Separate multiple common meanings with ";".
+- "definition": (string) Simple definition in ${tgt}.
+- "grammar": (string) Part of speech and grammar notes (e.g. "verb (separable)", "noun (plural only)").
+- "collocations": (array of strings) Common combinations. If none, empty array.
+- "examples": (array of objects) 2-3 natural examples. Structure: [{"sentence": "...", "translation": "..."}].
+- "common_mistakes": (string) Specific pitfall or "nothing specific".
+- "context_note": (string) 1-2 sentences on register, synonyms, or usage frequency. Default: "Neutral register".
+- "pronunciation": (string) IPA or phonetic approximation.
+- "tags": (array of strings) Select relevant tags: informal, formal, slang, idiom, phrasal-verb, grammar, business, tech, level-a1, level-a2, level-b1, level-b2, level-c1.
 
-${extraRules}
-
-${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to analyze:\n${text}`}`;
+INPUT TEXT:
+${text}`;
 }
 
 async function callAI(text, isWordList){
@@ -414,11 +401,33 @@ setTimeout(()=>controller.abort(), 60000);
 const res = await fetch(PROXY_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ prompt }), signal: controller.signal });
 if(!res.ok) throw new Error(`Network error: ${res.status}`);
 const data = await res.json();
-const ai = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-if(!ai) throw new Error(uiStrings[currentLang].errorAIResponse);
+let aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
-resultsList.dataset.lastRaw = ai;
-renderResults(ai);
+if(!aiText) throw new Error(uiStrings[currentLang].errorAIResponse);
+
+// Sanitize JSON
+aiText = aiText.replace(/```json/g, '').replace(/```/g, '').trim();
+
+let parsedData;
+try {
+  parsedData = JSON.parse(aiText);
+} catch (e) {
+  console.error("JSON Parse Error", e);
+  // Fallback: try to find array brackets if there is extra text
+  const start = aiText.indexOf('[');
+  const end = aiText.lastIndexOf(']');
+  if (start !== -1 && end !== -1) {
+    parsedData = JSON.parse(aiText.substring(start, end + 1));
+  } else {
+    throw new Error(uiStrings[currentLang].errorAIResponse);
+  }
+}
+
+if (!Array.isArray(parsedData)) throw new Error("Invalid format received");
+
+resultsList.dataset.lastJson = JSON.stringify(parsedData);
+renderResults(parsedData);
+
 }catch(err){
 console.error(err);
 resultsList.innerHTML = `<div class="card p-8 text-center text-red-500">${err.message || (uiStrings[currentLang].errorServer)}</div>`;
@@ -427,26 +436,7 @@ loader.classList.add('hidden');
 }
 }
 
-function parseAIResponse(s){
-return s.split('---').filter(x=>x.trim()).map(txt=>{
-const data = {}; let currentKey = '';
-txt.trim().split('\n').forEach(line => {
-const match = line.match(/^([a-zA-Z\s/]+):\s*(.*)/);
-if (match) {
-currentKey = match[1].trim().toLowerCase().replace(/[\s/]/g, '');
-data[currentKey] = match[2].trim();
-} else if (currentKey === 'examples' && /^\d+\./.test(line.trim())) {
-data.exampleslist = data.exampleslist || [];
-data.exampleslist.push(line.trim());
-} else if (currentKey === 'contextnote' && line.trim().startsWith('-')) {
-data[currentKey] = (data[currentKey] || '') + '\n' + line.trim();
-}
-});
-return data;
-});
-}
-
-function escapeHTML(s=''){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeHTML(s=''){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function speakText(ev, text, langCode){
 ev?.stopPropagation?.(); if(!text) return;
 speechSynthesis.cancel();
@@ -454,38 +444,35 @@ const u = new SpeechSynthesisUtterance(text); u.lang = langCode; speechSynthesis
 }
 function tagPalette(i){ return ['#e0e7ff','#ccfbf1','#fef3c7','#fce7f3','#fee2e2'][i % 5]; }
 
-function renderResults(ai){
-const parsed = parseAIResponse(ai);
+function renderResults(dataArray){
 const sourceCode = (sourceLangSelect.value || '').trim() || currentLang;
 const strings = uiStrings[sourceCode] || uiStrings.en;
+const tts = (LANGS.find(l=>l.code===targetLangSelect.value)?.tts) || 'en-US';
 
-if (parsed.length === 0 || parsed.every(x => !x.word)){
+if (!dataArray || dataArray.length === 0){
 resultsList.innerHTML = `<div class="card p-8 text-center muted">${strings.errorNoResults}</div>`;
 return;
 }
-const tts = (LANGS.find(l=>l.code===targetLangSelect.value)?.tts) || 'en-US';
 
-resultsList.innerHTML = parsed.map((it, idx)=>{
+resultsList.innerHTML = dataArray.map((it, idx)=>{
 const word = escapeHTML(it.word || '');
 const translation = escapeHTML(it.translation || '');
 const grammar = escapeHTML(it.grammar || strings.notApplicable);
-const collocRaw = (it.collocations || '').split(/,|،/).map(s => s.trim()).filter(Boolean);
-const tagsRaw = (it.tags || '').split(';').map(s=>s.trim()).filter(Boolean);
-const examplesHTML = (it.exampleslist || []).map(ex => {
-const splitAt = ex.lastIndexOf(' - ');
-let original = ex.slice(ex.indexOf('.') + 1).trim();
-let trans = '';
-if (splitAt > 1) {
-original = ex.slice(ex.indexOf('.') + 1, splitAt).trim();
-trans = ex.slice(splitAt + 3).trim();
-}
-return `<li>
-             <div class="flex items-center gap-2">
-               <p>${escapeHTML(original)}</p>
-               <button class="btn btn-ghost p-2" onclick="speakText(event,'${original.replace(/'/g, "\\'")}', '${tts}')" title="${strings.speakSentence}">🔊</button>
-             </div>
-             ${trans ? `<p class="text-sm muted">${escapeHTML(trans)}</p>`:''}
-           </li>`;
+const collocations = Array.isArray(it.collocations) ? it.collocations : [];
+const tags = Array.isArray(it.tags) ? it.tags : [];
+const examples = Array.isArray(it.examples) ? it.examples : [];
+
+const examplesHTML = examples.map(ex => {
+  const sentence = typeof ex === 'string' ? ex : (ex.sentence || '');
+  const trans = typeof ex === 'string' ? '' : (ex.translation || '');
+  
+  return `<li>
+            <div class="flex items-center gap-2">
+              <p>${escapeHTML(sentence)}</p>
+              <button class="btn btn-ghost p-2" onclick="speakText(event,'${sentence.replace(/'/g, "\\'")}', '${tts}')" title="${strings.speakSentence}">🔊</button>
+            </div>
+            ${trans ? `<p class="text-sm muted">${escapeHTML(trans)}</p>`:''}
+          </li>`;
 }).join('');
 
 return `<div class="ring-card">
@@ -516,13 +503,13 @@ return `<div class="ring-card">
                  <div class="md:col-span-2">
                    <div class="flex items-center gap-2 mb-2"><span>🔗</span><strong>${strings.collocations}:</strong></div>
                    <div class="flex flex-wrap gap-2">
-                     ${collocRaw.length ? collocRaw.map((c,i)=>`<span class="chip" style="background: color-mix(in oklab, ${tagPalette(i)} 60%, transparent)">${escapeHTML(c)}</span>`).join('') : `<span class="text-sm muted">${strings.notApplicable}</span>`}
+                     ${collocations.length ? collocations.map((c,i)=>`<span class="chip" style="background: color-mix(in oklab, ${tagPalette(i)} 60%, transparent)">${escapeHTML(c)}</span>`).join('') : `<span class="text-sm muted">${strings.notApplicable}</span>`}
                    </div>
                  </div>
                  <div class="md:col-span-2">
                    <div class="flex items-center gap-2 mb-2"><span>🏷️</span><strong>${strings.tags}:</strong></div>
                    <div class="flex flex-wrap gap-2">
-                     ${tagsRaw.length ? tagsRaw.map((t,i)=>`<span class="chip" style="background: color-mix(in oklab, ${tagPalette(i+1)} 60%, transparent)">${escapeHTML(t)}</span>`).join('') : `<span class="text-sm muted">${strings.notApplicable}</span>`}
+                     ${tags.length ? tags.map((t,i)=>`<span class="chip" style="background: color-mix(in oklab, ${tagPalette(i+1)} 60%, transparent)">${escapeHTML(t)}</span>`).join('') : `<span class="text-sm muted">${strings.notApplicable}</span>`}
                    </div>
                  </div>
                  <div class="md:col-span-2">
@@ -531,11 +518,11 @@ return `<div class="ring-card">
                  </div>
                  <div>
                    <div class="flex items-center gap-2 mb-2"><span>⚠️</span><strong>${strings.commonMistakes}:</strong></div>
-                   <p>${escapeHTML(it.commonmistakes || strings.notApplicable)}</p>
+                   <p>${escapeHTML(it.common_mistakes || strings.notApplicable)}</p>
                  </div>
                  <div>
                    <div class="flex items-center gap-2 mb-2"><span>💡</span><strong>${strings.contextNote}:</strong></div>
-                   <p>${(it.contextnote || '').replace(/\n/g,'<br>') || strings.notApplicable}</p>
+                   <p>${(it.context_note || '').replace(/\n/g,'<br>') || strings.notApplicable}</p>
                  </div>
                </div>
              </div>
@@ -618,17 +605,17 @@ dropHint:"می‌توانید کلمات را تایپ کنید یا فایل .t
 modeWordlist:"حالت: لیست کلمات",
 modeText:"حالت: متن/فایل",
 footerBuilder:`
-         <span>سازنده:</span>
-         <span class="font-semibold"> ${FOOTER_NAME}</span>
-         <span class="inline-flex items-center gap-3 ms-3">
-           <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${linkedInSVG}<span>LinkedIn</span>
-           </a>
-           <span class="opacity-50">•</span>
-           <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${instagramSVG}<span>Instagram</span>
-           </a>
-         </span>`
+          <span>سازنده:</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
 },
 en:{
 appTitle:"AI Language Learner",
@@ -640,14 +627,14 @@ targetLangLabel:"Language I'm Learning",
 userLevelLabel:"My Level",
 forceWordlistLabel:"This is a word list",
 hintStatic:`
-         <div class="space-y-2 leading-7">
-           <div>🧭 <b>Two ways to use:</b></div>
-           <ol class="list-decimal pl-5 space-y-2">
-             <li>🧾 <b>Analyze a text</b> (news, story, subtitles, etc.): pick your level above; we extract <b>level-appropriate</b> items and show <b>translation, examples, grammar, pronunciation</b>.</li>
-             <li>🗒️ <b>Your own list</b>: enter items (one per line or separated by “-”) and enable <b>“This is a word list”</b> to get <b>meaning, examples, pronunciation, grammar</b> for them.</li>
-           </ol>
-           <div>✨ <i>Tip:</i> If you already have a list, no need to select a level.</div>
-         </div>`,
+          <div class="space-y-2 leading-7">
+            <div>🧭 <b>Two ways to use:</b></div>
+            <ol class="list-decimal pl-5 space-y-2">
+              <li>🧾 <b>Analyze a text</b> (news, story, subtitles, etc.): pick your level above; we extract <b>level-appropriate</b> items and show <b>translation, examples, grammar, pronunciation</b>.</li>
+              <li>🗒️ <b>Your own list</b>: enter items (one per line or separated by “-”) and enable <b>“This is a word list”</b> to get <b>meaning, examples, pronunciation, grammar</b> for them.</li>
+            </ol>
+            <div>✨ <i>Tip:</i> If you already have a list, no need to select a level.</div>
+          </div>`,
 uploadBtnText:"Upload File (.txt, .srt)",
 processBtn:"Analyze",
 resultsTitle:"Analysis Results",
@@ -678,17 +665,17 @@ dropHint:"Type your words or drag & drop a .txt/.srt file.",
 modeWordlist:"Mode: Word list",
 modeText:"Mode: Text/File",
 footerBuilder:`
-         <span>Built by</span>
-         <span class="font-semibold"> ${FOOTER_NAME}</span>
-         <span class="inline-flex items-center gap-3 ms-3">
-           <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${linkedInSVG}<span>LinkedIn</span>
-           </a>
-           <span class="opacity-50">•</span>
-           <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${instagramSVG}<span>Instagram</span>
-           </a>
-         </span>`
+          <span>Built by</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
 },
 de:{
 appTitle:"KI Sprachlerner",
@@ -730,17 +717,17 @@ dropHint:"Wörter tippen oder .txt/.srt ziehen und ablegen.",
 modeWordlist:"Modus: Wortliste",
 modeText:"Modus: Text/Datei",
 footerBuilder:`
-         <span>Erstellt von</span>
-         <span class="font-semibold"> ${FOOTER_NAME}</span>
-         <span class="inline-flex items-center gap-3 ms-3">
-           <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${linkedInSVG}<span>LinkedIn</span>
-           </a>
-           <span class="opacity-50">•</span>
-           <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${instagramSVG}<span>Instagram</span>
-           </a>
-         </span>`
+          <span>Erstellt von</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
 },
 fr:{
 appTitle:"Apprenant de langues IA",
@@ -782,17 +769,17 @@ dropHint:"Saisir des mots ou glisser-déposer un .txt/.srt.",
 modeWordlist:"Mode : Liste de mots",
 modeText:"Mode : Texte/Fichier",
 footerBuilder:`
-         <span>Réalisé par</span>
-         <span class="font-semibold"> ${FOOTER_NAME}</span>
-         <span class="inline-flex items-center gap-3 ms-3">
-           <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${linkedInSVG}<span>LinkedIn</span>
-           </a>
-           <span class="opacity-50">•</span>
-           <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${instagramSVG}<span>Instagram</span>
-           </a>
-         </span>`
+          <span>Réalisé par</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
 },
 es:{
 appTitle:"Aprendiz de idiomas con IA",
@@ -834,17 +821,17 @@ dropHint:"Escribe palabras o arrastra y suelta un .txt/.srt archivo.",
 modeWordlist:"Modo: Lista de palabras",
 modeText:"Modo: Texto/Archivo",
 footerBuilder:`
-         <span>Hecho por</span>
-         <span class="font-semibold"> ${FOOTER_NAME}</span>
-         <span class="inline-flex items-center gap-3 ms-3">
-           <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${linkedInSVG}<span>LinkedIn</span>
-           </a>
-           <span class="opacity-50">•</span>
-           <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${instagramSVG}<span>Instagram</span>
-           </a>
-         </span>`
+          <span>Hecho por</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
 },
 zh:{
 appTitle:"AI 语言学习助手",
@@ -886,17 +873,17 @@ dropHint:"输入单词或拖拽 .txt/.srt 文件。",
 modeWordlist:"模式：单词列表",
 modeText:"模式：文本/文件",
 footerBuilder:`
-         <span>制作：</span>
-         <span class="font-semibold"> ${FOOTER_NAME}</span>
-         <span class="inline-flex items-center gap-3 ms-3">
-           <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${linkedInSVG}<span>LinkedIn</span>
-           </a>
-           <span class="opacity-50">•</span>
-           <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${instagramSVG}<span>Instagram</span>
-           </a>
-         </span>`
+          <span>制作：</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
 },
 tr:{
 appTitle:"YZ Dil Öğrenici",
@@ -938,17 +925,17 @@ dropHint:".txt/.srt dosyasını sürükleyip bırakabilirsiniz.",
 modeWordlist:"Mod: Kelime listesi",
 modeText:"Mod: Metin/Dosya",
 footerBuilder:`
-         <span>Hazırlayan:</span>
-         <span class="font-semibold"> ${FOOTER_NAME}</span>
-         <span class="inline-flex items-center gap-3 ms-3">
-           <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${linkedInSVG}<span>LinkedIn</span>
-           </a>
-           <span class="opacity-50">•</span>
-           <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${instagramSVG}<span>Instagram</span>
-           </a>
-         </span>`
+          <span>Hazırlayan:</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
 },
 it:{
 appTitle:"Apprendimento lingue con IA",
@@ -990,17 +977,17 @@ dropHint:"Scrivi parole o trascina un .txt/.srt.",
 modeWordlist:"Modalità: Lista",
 modeText:"Modalità: Testo/File",
 footerBuilder:`
-         <span>Creato da</span>
-         <span class="font-semibold"> ${FOOTER_NAME}</span>
-         <span class="inline-flex items-center gap-3 ms-3">
-           <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${linkedInSVG}<span>LinkedIn</span>
-           </a>
-           <span class="opacity-50">•</span>
-           <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${instagramSVG}<span>Instagram</span>
-           </a>
-         </span>`
+          <span>Creato da</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
 },
 ru:{
 appTitle:"Изучение языков с ИИ",
@@ -1042,17 +1029,17 @@ dropHint:"Введите слова или перетащите .txt/.srt.",
 modeWordlist:"Режим: список слов",
 modeText:"Режим: текст/файл",
 footerBuilder:`
-         <span>Автор:</span>
-         <span class="font-semibold"> ${FOOTER_NAME}</span>
-         <span class="inline-flex items-center gap-3 ms-3">
-           <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${linkedInSVG}<span>LinkedIn</span>
-           </a>
-           <span class="opacity-50">•</span>
-           <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
-             ${instagramSVG}<span>Instagram</span>
-           </a>
-         </span>`
+          <span>Автор:</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
 },
 };
 
