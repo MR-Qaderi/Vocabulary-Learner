@@ -166,11 +166,27 @@ body::after{
 .logo-mark svg{width:32px;height:32px}
 .brand-subtitle{display:inline-flex;align-items:center;gap:.45rem}
 #brand-kicker{color:var(--accent);letter-spacing:.13em}
-.select-control{font-variant-emoji:text}
+.select-control,.lang-flag{font-family:'Vazirmatn','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-variant-emoji:emoji}
 .lang-code{font-weight:950}
 @media (max-width:520px){
   .logo-mark{width:46px;height:46px}
   .logo-mark svg{width:30px;height:30px}
+}
+
+
+/* Mobile stability polish */
+.app-shell{min-height:100svh}
+.textarea-control{font-size:16px}
+@media (max-width:640px){
+  header .max-w-7xl{flex-wrap:wrap;align-items:flex-start}
+  header .control-cluster{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center}
+  .lang-picker{min-width:0}
+  .lang-picker .select-control{min-width:0;width:100%}
+  .hero-card{padding:1.1rem}
+  .result-header{padding:1rem}
+  .result-details.open{padding:1rem}
+  .info-tile{padding:.9rem}
+  .creator-id{align-items:center}
 }
 
 </style>
@@ -197,7 +213,7 @@ body::after{
       </div>
     </div>
     <div class="control-cluster">
-      <div class="lang-picker" title="Interface language">
+      <div id="ui-lang-picker" class="lang-picker" title="Interface language">
         <span class="lang-picker-label"><span>🌐</span><span class="hide-mobile">UI</span></span>
         <select id="ui-lang-switcher" class="select-control text-sm"></select>
       </div>
@@ -554,8 +570,7 @@ function syncLevelRequirement(){
     userLevelSelect.value = 'Unspecified';
   }
   updateCharCount();
-  updateCharCount();
-updateModeBadge();
+  updateModeBadge();
 }
 
 function showError(m){
@@ -569,6 +584,7 @@ function hideLevelWarning(){ levelWarning.classList.add('hidden'); }
 function setBusy(isBusy){
   const s = uiStrings[currentLang] || uiStrings.en;
   processBtn.disabled = isBusy;
+  processBtn.classList.toggle('is-loading', Boolean(isBusy));
   processBtn.querySelector('span').textContent = isBusy ? (s.analyzingText || 'Analyzing...') : s.processBtn;
   processBtn.querySelector('.process-icon')?.classList.toggle('animate-pulse', isBusy);
 }
@@ -643,6 +659,57 @@ ${extraRules}
 ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to analyze:\n${text}`}`;
 }
 
+function makeAppError(type, status, message, details=''){
+  const err = new Error(message || type);
+  err.appErrorType = type;
+  err.status = status;
+  err.details = details;
+  return err;
+}
+
+function getStatusText(status){
+  return status ? `HTTP ${status}` : '';
+}
+
+function buildErrorMessage(base, status, details=''){
+  const s = uiStrings[currentLang] || uiStrings.en;
+  const statusText = getStatusText(status);
+  const pieces = [base];
+  if (statusText) pieces.push(`${s.errorStatusLabel || 'Error code'}: ${statusText}`);
+  if (details) pieces.push(`${s.errorDetailsLabel || 'Details'}: ${details}`);
+  return pieces.join(' | ');
+}
+
+function classifyHttpError(res, data={}, rawText=''){
+  const s = uiStrings[currentLang] || uiStrings.en;
+  const status = res?.status || data?.status || data?.error?.code || '';
+  const attempts = Array.isArray(data?.attempts) && data.attempts.length
+    ? data.attempts.map(a => `${a.model || 'model'}: ${a.message || a.errorType || a.status || 'failed'}`).join(' | ')
+    : '';
+  const serverMessage = data?.message || data?.error?.message || (typeof data?.error === 'string' ? data.error : '') || '';
+  const compactRaw = !serverMessage && rawText ? String(rawText).slice(0, 220).replace(/\s+/g, ' ').trim() : '';
+  const details = [serverMessage, attempts, compactRaw].filter(Boolean).join(' — ');
+
+  if (status === 400) return makeAppError('bad-request', status, buildErrorMessage(s.errorBadRequest || s.errorServer, status, details), details);
+  if (status === 401 || status === 403) return makeAppError('api-auth', status, buildErrorMessage(s.errorApiAuth || s.errorServer, status, details), details);
+  if (status === 408 || status === 504) return makeAppError('timeout', status, buildErrorMessage(s.errorTimeout || s.errorServer, status, details), details);
+  if (status === 429) return makeAppError('rate-limit', status, buildErrorMessage(s.errorRateLimit || s.errorServer, status, details), details);
+  if (status >= 500) return makeAppError('api-server', status, buildErrorMessage(s.errorApiServer || s.errorServer, status, details), details);
+  return makeAppError('server', status, buildErrorMessage(s.errorServer || s.errorUnexpected || 'Server error', status, details), details);
+}
+
+function formatCaughtError(err){
+  const s = uiStrings[currentLang] || uiStrings.en;
+  if (err?.name === 'AbortError') return s.errorTimeout || 'The request timed out.';
+  if (err?.appErrorType) return err.message || s.errorServer;
+
+  const raw = err?.message || '';
+  if (/Failed to fetch|NetworkError|Load failed|Failed to execute 'fetch'|fetch/i.test(raw)) {
+    return buildErrorMessage(s.errorNetwork || s.errorServer, '', raw);
+  }
+  return buildErrorMessage(s.errorUnexpected || s.errorServer || 'Unexpected error', '', raw);
+}
+
 async function callAI(text, isWordList){
   const prompt = buildPrompt(text, isWordList);
   const controller = new AbortController();
@@ -661,26 +728,22 @@ async function callAI(text, isWordList){
     try {
       data = rawText ? JSON.parse(rawText) : {};
     } catch (jsonError) {
-      throw new Error(`پاسخ سرور JSON معتبر نبود. Status: ${res.status}`);
+      const s = uiStrings[currentLang] || uiStrings.en;
+      throw makeAppError('invalid-json', res.status, buildErrorMessage(s.errorInvalidJson || 'Invalid JSON response.', res.status, rawText.slice(0, 220).replace(/\s+/g, ' ').trim()));
     }
 
     if(!res.ok){
-      const details = Array.isArray(data?.attempts) && data.attempts.length
-        ? data.attempts.map(a => `${a.model || 'model'}: ${a.message || a.errorType || a.status}`).join(' | ')
-        : '';
-      const message = data?.message || data?.error?.message || data?.error || `Network error: ${res.status}`;
-      throw new Error(details ? `${message} — ${details}` : message);
+      throw classifyHttpError(res, data, rawText);
     }
 
     const ai = extractAIText(data);
-    if(!ai) throw new Error(uiStrings[currentLang].errorAIResponse);
+    if(!ai) throw makeAppError('empty-ai-response', '', (uiStrings[currentLang] || uiStrings.en).errorAIResponse);
 
     resultsList.dataset.lastRaw = ai;
     renderResults(ai);
   }catch(err){
     console.error(err);
-    const isAbort = err?.name === 'AbortError';
-    const message = isAbort ? ((uiStrings[currentLang] || uiStrings.en).errorTimeout) : (err.message || uiStrings[currentLang].errorServer);
+    const message = formatCaughtError(err);
     resultsList.innerHTML = `<div class="error-box text-center leading-8">${escapeHTML(message)}</div>`;
   }finally{
     clearTimeout(timeoutId);
@@ -764,7 +827,7 @@ function renderResults(ai){
       return `<li class="example-item">
         <div class="flex items-start justify-between gap-3">
           <div>
-            <div class="micro mb-1">Example ${exIdx + 1}</div>
+            <div class="micro mb-1">${strings.exampleLabel || "Example"} ${exIdx + 1}</div>
             <p class="leading-8 font-semibold">${escapeHTML(original)}</p>
             ${trans ? `<p class="text-sm muted leading-7 mt-1">${escapeHTML(trans)}</p>` : ''}
           </div>
@@ -905,6 +968,18 @@ textPlaceholder:"لیست کلمات خود را اینجا وارد کنید ی
 dropHint:"می‌توانید کلمات را تایپ کنید یا فایل .txt/.srt را بکشید و رها کنید.",
 modeWordlist:"حالت: لیست کلمات",
 modeText:"حالت: متن/فایل",
+exampleLabel:"مثال",
+errorInvalidJson:"پاسخ سرور JSON معتبر نبود.",
+errorDetailsLabel:"جزئیات",
+errorStatusLabel:"کد خطا",
+errorUnexpected:"خطای نامشخص رخ داد.",
+errorApiServer:"مشکل API یا سرور واسط: سرویس مقصد پاسخ موفق نداد.",
+errorRateLimit:"محدودیت API: تعداد درخواست‌ها زیاد بوده یا سهمیه سرویس تمام شده است.",
+errorApiAuth:"مشکل دسترسی API: کلید یا مجوز سرویس معتبر نیست یا دسترسی رد شده است.",
+errorBadRequest:"درخواست نامعتبر: متن یا قالب ارسالی برای سرور قابل پردازش نبود.",
+errorNetwork:"مشکل اتصال/اینترنت: درخواست به سرور نرسید. اتصال اینترنت، فیلترشکن/فایروال یا در دسترس بودن آدرس برنامه را بررسی کنید.",
+interfaceLanguageTitle:"زبان رابط کاربری",
+backToTop:"بازگشت به بالا",
 errorTimeout:"زمان پاسخ‌گویی بیش از حد طول کشید. متن را کوتاه‌تر کنید یا دوباره تلاش کنید.",
 errorTooLong:"حجم ورودی خیلی زیاد است. لطفاً متن را کوتاه‌تر کنید.",
 errorFileRead:"خواندن فایل با مشکل روبه‌رو شد. لطفاً دوباره امتحان کنید.",
@@ -983,6 +1058,18 @@ textPlaceholder:"Enter your word list here or paste a text/file…",
 dropHint:"Type your words or drag & drop a .txt/.srt file.",
 modeWordlist:"Mode: Word list",
 modeText:"Mode: Text/File",
+exampleLabel:"Example",
+errorInvalidJson:"The server response was not valid JSON.",
+errorDetailsLabel:"Details",
+errorStatusLabel:"Error code",
+errorUnexpected:"An unexpected error occurred.",
+errorApiServer:"API or proxy-server issue: the target service did not return a successful response.",
+errorRateLimit:"API limit issue: too many requests were sent or the service quota has been reached.",
+errorApiAuth:"API access issue: the API key or permission is invalid, or access was denied.",
+errorBadRequest:"Invalid request: the text or request format could not be processed by the server.",
+errorNetwork:"Connection/Internet issue: the request did not reach the server. Check your internet connection, firewall/VPN, or whether the app URL is reachable.",
+interfaceLanguageTitle:"Interface language",
+backToTop:"Back to top",
 errorTimeout:"The response took too long. Please shorten the text or try again.",
 errorTooLong:"The input is too long. Please shorten the text.",
 errorFileRead:"Could not read the file. Please try again.",
@@ -1053,6 +1140,18 @@ textPlaceholder:"Wortliste eingeben oder Text/Datei einfügen…",
 dropHint:"Wörter tippen oder .txt/.srt ziehen und ablegen.",
 modeWordlist:"Modus: Wortliste",
 modeText:"Modus: Text/Datei",
+exampleLabel:"Beispiel",
+errorInvalidJson:"Die Serverantwort war kein gültiges JSON.",
+errorDetailsLabel:"Details",
+errorStatusLabel:"Fehlercode",
+errorUnexpected:"Ein unerwarteter Fehler ist aufgetreten.",
+errorApiServer:"API- oder Proxy-Serverproblem: Der Zieldienst hat keine erfolgreiche Antwort geliefert.",
+errorRateLimit:"API-Limit: Zu viele Anfragen oder Kontingent erreicht.",
+errorApiAuth:"API-Zugriffsproblem: API-Schlüssel oder Berechtigung ist ungültig oder der Zugriff wurde verweigert.",
+errorBadRequest:"Ungültige Anfrage: Text oder Anfrageformat konnte vom Server nicht verarbeitet werden.",
+errorNetwork:"Verbindungs-/Internetproblem: Die Anfrage hat den Server nicht erreicht. Prüfe Internet, Firewall/VPN oder ob die App-URL erreichbar ist.",
+interfaceLanguageTitle:"Sprache der Oberfläche",
+backToTop:"Nach oben",
 errorTimeout:"Die Antwort hat zu lange gedauert. Bitte kürze den Text oder versuche es erneut.",
 errorTooLong:"Die Eingabe ist zu lang. Bitte kürze den Text.",
 errorFileRead:"Die Datei konnte nicht gelesen werden. Bitte erneut versuchen.",
@@ -1123,6 +1222,18 @@ textPlaceholder:"Entrez votre liste ou collez un texte/fichier…",
 dropHint:"Saisir des mots ou glisser-déposer un .txt/.srt.",
 modeWordlist:"Mode : Liste de mots",
 modeText:"Mode : Texte/Fichier",
+exampleLabel:"Exemple",
+errorInvalidJson:"La réponse du serveur n’était pas un JSON valide.",
+errorDetailsLabel:"Détails",
+errorStatusLabel:"Code d’erreur",
+errorUnexpected:"Une erreur inattendue est survenue.",
+errorApiServer:"Problème API ou serveur proxy : le service cible n’a pas renvoyé de réponse réussie.",
+errorRateLimit:"Limite API : trop de requêtes ou quota atteint.",
+errorApiAuth:"Problème d’accès API : la clé ou les autorisations sont invalides, ou l’accès a été refusé.",
+errorBadRequest:"Requête invalide : le texte ou le format envoyé n’a pas pu être traité par le serveur.",
+errorNetwork:"Problème de connexion/Internet : la requête n’a pas atteint le serveur. Vérifiez Internet, le pare-feu/VPN ou l’accessibilité de l’URL.",
+interfaceLanguageTitle:"Langue de l’interface",
+backToTop:"Retour en haut",
 errorTimeout:"La réponse a pris trop de temps. Raccourcissez le texte ou réessayez.",
 errorTooLong:"L’entrée est trop longue. Veuillez raccourcir le texte.",
 errorFileRead:"Impossible de lire le fichier. Veuillez réessayer.",
@@ -1193,6 +1304,18 @@ textPlaceholder:"Introduce tu lista o pega un texto/archivo…",
 dropHint:"Escribe palabras o arrastra y suelta un .txt/.srt archivo.",
 modeWordlist:"Modo: Lista de palabras",
 modeText:"Modo: Texto/Archivo",
+exampleLabel:"Ejemplo",
+errorInvalidJson:"La respuesta del servidor no era JSON válido.",
+errorDetailsLabel:"Detalles",
+errorStatusLabel:"Código de error",
+errorUnexpected:"Ocurrió un error inesperado.",
+errorApiServer:"Problema de API o servidor proxy: el servicio de destino no respondió correctamente.",
+errorRateLimit:"Límite de API: demasiadas solicitudes o cuota agotada.",
+errorApiAuth:"Problema de acceso a la API: la clave o los permisos no son válidos, o se denegó el acceso.",
+errorBadRequest:"Solicitud no válida: el texto o el formato enviado no pudo ser procesado por el servidor.",
+errorNetwork:"Problema de conexión/Internet: la solicitud no llegó al servidor. Revisa internet, firewall/VPN o si la URL de la app está disponible.",
+interfaceLanguageTitle:"Idioma de la interfaz",
+backToTop:"Volver arriba",
 errorTimeout:"La respuesta tardó demasiado. Acorta el texto o inténtalo de nuevo.",
 errorTooLong:"La entrada es demasiado larga. Acorta el texto.",
 errorFileRead:"No se pudo leer el archivo. Inténtalo de nuevo.",
@@ -1263,6 +1386,18 @@ textPlaceholder:"在此输入单词列表或粘贴文本/文件…",
 dropHint:"输入单词或拖拽 .txt/.srt 文件。",
 modeWordlist:"模式：单词列表",
 modeText:"模式：文本/文件",
+exampleLabel:"例句",
+errorInvalidJson:"服务器响应不是有效的 JSON。",
+errorDetailsLabel:"详情",
+errorStatusLabel:"错误代码",
+errorUnexpected:"发生未知错误。",
+errorApiServer:"API 或代理服务器问题：目标服务未返回成功响应。",
+errorRateLimit:"API 限制：请求过多或服务配额已用完。",
+errorApiAuth:"API 访问问题：API 密钥或权限无效，或访问被拒绝。",
+errorBadRequest:"请求无效：服务器无法处理文本或请求格式。",
+errorNetwork:"连接/网络问题：请求未到达服务器。请检查网络、防火墙/VPN，或应用地址是否可访问。",
+interfaceLanguageTitle:"界面语言",
+backToTop:"返回顶部",
 errorTimeout:"响应时间过长，请缩短文本或重试。",
 errorTooLong:"输入太长，请缩短文本。",
 errorFileRead:"无法读取文件，请重试。",
@@ -1333,6 +1468,18 @@ textPlaceholder:"Kelime listenizi yazın veya metin/dosya yapıştırın…",
 dropHint:".txt/.srt dosyasını sürükleyip bırakabilirsiniz.",
 modeWordlist:"Mod: Kelime listesi",
 modeText:"Mod: Metin/Dosya",
+exampleLabel:"Örnek",
+errorInvalidJson:"Sunucu yanıtı geçerli JSON değildi.",
+errorDetailsLabel:"Detaylar",
+errorStatusLabel:"Hata kodu",
+errorUnexpected:"Beklenmeyen bir hata oluştu.",
+errorApiServer:"API veya proxy sunucu sorunu: hedef servis başarılı yanıt döndürmedi.",
+errorRateLimit:"API limit sorunu: çok fazla istek gönderildi veya servis kotası doldu.",
+errorApiAuth:"API erişim sorunu: API anahtarı veya izin geçersiz ya da erişim reddedildi.",
+errorBadRequest:"Geçersiz istek: metin veya istek biçimi sunucu tarafından işlenemedi.",
+errorNetwork:"Bağlantı/İnternet sorunu: istek sunucuya ulaşmadı. İnternet bağlantısını, güvenlik duvarı/VPN’i veya uygulama URL’sinin erişilebilirliğini kontrol edin.",
+interfaceLanguageTitle:"Arayüz dili",
+backToTop:"Yukarı dön",
 errorTimeout:"Yanıt çok uzun sürdü. Metni kısaltın veya tekrar deneyin.",
 errorTooLong:"Girdi çok uzun. Lütfen metni kısaltın.",
 errorFileRead:"Dosya okunamadı. Lütfen tekrar deneyin.",
@@ -1403,6 +1550,18 @@ textPlaceholder:"Inserisci la lista o incolla un testo/file…",
 dropHint:"Scrivi parole o trascina un .txt/.srt.",
 modeWordlist:"Modalità: Lista",
 modeText:"Modalità: Testo/File",
+exampleLabel:"Esempio",
+errorInvalidJson:"La risposta del server non era un JSON valido.",
+errorDetailsLabel:"Dettagli",
+errorStatusLabel:"Codice errore",
+errorUnexpected:"Si è verificato un errore imprevisto.",
+errorApiServer:"Problema API o server proxy: il servizio di destinazione non ha restituito una risposta valida.",
+errorRateLimit:"Limite API: troppe richieste o quota del servizio raggiunta.",
+errorApiAuth:"Problema di accesso API: chiave o permesso non valido, oppure accesso negato.",
+errorBadRequest:"Richiesta non valida: il testo o il formato inviato non poteva essere elaborato dal server.",
+errorNetwork:"Problema di connessione/Internet: la richiesta non ha raggiunto il server. Controlla internet, firewall/VPN o se l’URL dell’app è raggiungibile.",
+interfaceLanguageTitle:"Lingua dell’interfaccia",
+backToTop:"Torna su",
 errorTimeout:"La risposta ha impiegato troppo tempo. Accorcia il testo o riprova.",
 errorTooLong:"L’input è troppo lungo. Accorcia il testo.",
 errorFileRead:"Impossibile leggere il file. Riprova.",
@@ -1473,6 +1632,18 @@ textPlaceholder:"Введите список слов или вставьте т
 dropHint:"Введите слова или перетащите .txt/.srt.",
 modeWordlist:"Режим: список слов",
 modeText:"Режим: текст/файл",
+exampleLabel:"Пример",
+errorInvalidJson:"Ответ сервера не был корректным JSON.",
+errorDetailsLabel:"Детали",
+errorStatusLabel:"Код ошибки",
+errorUnexpected:"Произошла непредвиденная ошибка.",
+errorApiServer:"Проблема API или прокси-сервера: целевой сервис не вернул успешный ответ.",
+errorRateLimit:"Лимит API: слишком много запросов или квота сервиса исчерпана.",
+errorApiAuth:"Проблема доступа к API: ключ или разрешения недействительны, либо доступ запрещён.",
+errorBadRequest:"Некорректный запрос: сервер не смог обработать текст или формат запроса.",
+errorNetwork:"Проблема соединения/интернета: запрос не дошёл до сервера. Проверьте интернет, firewall/VPN или доступность URL приложения.",
+interfaceLanguageTitle:"Язык интерфейса",
+backToTop:"Наверх",
 errorTimeout:"Ответ занял слишком много времени. Сократите текст или попробуйте снова.",
 errorTooLong:"Ввод слишком длинный. Сократите текст.",
 errorFileRead:"Не удалось прочитать файл. Попробуйте снова.",
@@ -1505,6 +1676,19 @@ footerBuilder:`
 };
 
 
+
+
+const levelLocale = {
+  fa: { unspecified:'انتخاب نشده', a1:'A1 (مبتدی)', a2:'A2 (ابتدایی)', b1:'B1 (متوسط)', b2:'B2 (فوق متوسط)', c1:'C1 (پیشرفته)' },
+  en: { unspecified:'Unspecified', a1:'A1 (Beginner)', a2:'A2 (Elementary)', b1:'B1 (Intermediate)', b2:'B2 (Upper-Intermediate)', c1:'C1 (Advanced)' },
+  de: { unspecified:'Nicht angegeben', a1:'A1 (Anfänger)', a2:'A2 (Grundlegend)', b1:'B1 (Mittelstufe)', b2:'B2 (Fortgeschritten)', c1:'C1 (Fortgeschritten)' },
+  fr: { unspecified:'Non spécifié', a1:'A1 (Débutant)', a2:'A2 (Élémentaire)', b1:'B1 (Intermédiaire)', b2:'B2 (Intermédiaire+)', c1:'C1 (Avancé)' },
+  es: { unspecified:'Sin especificar', a1:'A1 (Principiante)', a2:'A2 (Elemental)', b1:'B1 (Intermedio)', b2:'B2 (Intermedio alto)', c1:'C1 (Avanzado)' },
+  zh: { unspecified:'未指定', a1:'A1（初学）', a2:'A2（基础）', b1:'B1（中级）', b2:'B2（中高级）', c1:'C1（高级）' },
+  tr: { unspecified:'Belirtilmedi', a1:'A1 (Başlangıç)', a2:'A2 (Temel)', b1:'B1 (Orta)', b2:'B2 (Orta üstü)', c1:'C1 (İleri)' },
+  it: { unspecified:'Non specificato', a1:'A1 (Principiante)', a2:'A2 (Elementare)', b1:'B1 (Intermedio)', b2:'B2 (Intermedio alto)', c1:'C1 (Avanzato)' },
+  ru: { unspecified:'Не указано', a1:'A1 (Начальный)', a2:'A2 (Базовый)', b1:'B1 (Средний)', b2:'B2 (Выше среднего)', c1:'C1 (Продвинутый)' }
+};
 
 const brandLocale = {
   fa: { title: 'زبان‌یار', kicker: 'LingoDeck', badge: 'LingoDeck Studio' },
@@ -1571,22 +1755,19 @@ document.querySelector('#process-btn > span').textContent = s.processBtn;
 document.getElementById('expand-all').innerHTML = `⬇️ ${s.expandAll}`;
 document.getElementById('collapse-all').innerHTML = `⬆️ ${s.collapseAll}`;
 document.getElementById('stop-tts').title = s.stopSpeech;
-document.getElementById('to-top').title = isRtl ? 'بازگشت به بالا' : 'Back to top';
+document.getElementById('to-top').title = s.backToTop || 'Back to top';
+const langPickerEl = document.getElementById('ui-lang-picker');
+if (langPickerEl) langPickerEl.title = s.interfaceLanguageTitle || 'Interface language';
 document.getElementById('text-input').placeholder = s.textPlaceholder;
 
 // Level options
-document.getElementById('level-unspecified').textContent = isRtl ? 'انتخاب نشده' :
-(lang==='fr'?'Non spécifié': lang==='de'?'Nicht angegeben': lang==='es'?'Sin especificar': lang==='it'?'Non specificato': lang==='ru'?'Не указано': 'Unspecified');
-document.getElementById('level-a1').textContent = isRtl ? 'A1 (مبتدی)' :
-(lang==='fr'?'A1 (Débutant)': lang==='de'?'A1 (Anfänger)': lang==='es'?'A1 (Principiante)': lang==='it'?'A1 (Principiante)': lang==='ru'?'A1 (Начальный)':'A1 (Beginner)');
-document.getElementById('level-a2').textContent = isRtl ? 'A2 (ابتدایی)' :
-(lang==='fr'?'A2 (Élémentaire)': lang==='de'?'A2 (Grundlegend)': lang==='es'?'A2 (Elemental)': lang==='it'?'A2 (Elementare)': lang==='ru'?'A2 (Базовый)':'A2 (Elementary)');
-document.getElementById('level-b1').textContent = isRtl ? 'B1 (متوسط)' :
-(lang==='fr'?'B1 (Intermédiaire)': lang==='de'?'B1 (Mittelstufe)': lang==='es'?'B1 (Intermedio)': lang==='it'?'B1 (Intermedio)': lang==='ru'?'B1 (Средний)':'B1 (Intermediate)');
-document.getElementById('level-b2').textContent = isRtl ? 'B2 (فوق متوسط)' :
-(lang==='fr'?'B2 (Intermédiaire+)': lang==='de'?'B2 (Fortgeschritten)': lang==='es'?'B2 (Intermedio alto)': lang==='it'?'B2 (Intermedio alto)': lang==='ru'?'B2 (Выше среднего)':'B2 (Upper-Intermediate)');
-document.getElementById('level-c1').textContent = isRtl ? 'C1 (پیشرفته)' :
-(lang==='fr'?'C1 (Avancé)': lang==='de'?'C1 (Fortgeschritten)': lang==='es'?'C1 (Avanzado)': lang==='it'?'C1 (Avanzato)': lang==='ru'?'C1 (Продвинутый)':'C1 (Advanced)');
+const levelText = levelLocale[lang] || levelLocale.en;
+document.getElementById('level-unspecified').textContent = levelText.unspecified;
+document.getElementById('level-a1').textContent = levelText.a1;
+document.getElementById('level-a2').textContent = levelText.a2;
+document.getElementById('level-b1').textContent = levelText.b1;
+document.getElementById('level-b2').textContent = levelText.b2;
+document.getElementById('level-c1').textContent = levelText.c1;
 
 const creatorMeta = creatorLocale[lang] || creatorLocale.en;
 const creatorKickerEl = document.getElementById('creator-kicker');
