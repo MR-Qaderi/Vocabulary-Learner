@@ -4,234 +4,365 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title id="app-title">یادگیری زبان با هوش مصنوعی</title>
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect width="64" height="64" rx="16" fill="white"/%3E%3Cpath d="M14 14h16c7 0 12 4 14 9 2-5 7-9 14-9h-8c-7 0-12 4-14 10v25l-6-5H14a6 6 0 0 1-6-6V20a6 6 0 0 1 6-6Z" fill="none" stroke="black" stroke-width="4" stroke-linejoin="round"/%3E%3Cpath d="M18 25h14M18 32h14M18 39h10" stroke="black" stroke-width="4" stroke-linecap="round"/%3E%3Ccircle cx="46" cy="31" r="3" fill="black"/%3E%3Ccircle cx="53" cy="24" r="2.5" fill="black"/%3E%3Ccircle cx="55" cy="38" r="2.5" fill="black"/%3E%3Cpath d="M48 29l4-4M49 32h5" stroke="black" stroke-width="3" stroke-linecap="round"/%3E%3C/svg%3E'>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
---bg: #f6f8fb; --surface: #ffffff; --text: #0f172a; --muted: #6b7280;
---border: rgba(15, 23, 42, 0.14); /* کمی پررنگ‌تر */
---border-strong: rgba(15, 23, 42, 0.25);
---shadow: 0 10px 30px -12px rgba(2,6,23,.18);
---shadow-strong: 0 18px 42px -14px rgba(2,6,23,.28);
---primary: #3b82f6; --primary-600:#2563eb;
---chip:#f8fafc; --chip-border:#e5e7eb;
---accent-1: #e0e7ff; --accent-2: #fce7f3; --accent-3: #ccfbf1; --accent-4: #fef3c7;
---ring: rgba(59,130,246,.35);
+:root{
+  --bg:#f5f7fb;
+  --surface:#ffffff;
+  --surface-2:#f8fafc;
+  --surface-3:#eef2f7;
+  --text:#0b1220;
+  --muted:#667085;
+  --muted-2:#98a2b3;
+  --border:rgba(15,23,42,.10);
+  --border-strong:rgba(15,23,42,.18);
+  --primary:#111827;
+  --primary-600:#000000;
+  --accent:#2563eb;
+  --accent-2:#7c3aed;
+  --success:#059669;
+  --warning:#d97706;
+  --danger:#dc2626;
+  --chip:#f8fafc;
+  --chip-border:#e5e7eb;
+  --ring:rgba(37,99,235,.22);
+  --shadow:0 18px 50px -30px rgba(15,23,42,.42);
+  --shadow-strong:0 30px 80px -38px rgba(15,23,42,.55);
+  --radius-lg:28px;
+  --radius-md:18px;
 }
 [data-theme="dark"]{
---bg:#0b1220; --surface:#0f172a; --text:#e5e7eb; --muted:#9ca3af;
---border:rgba(148,163,184,.22); --border-strong:rgba(148,163,184,.35);
---shadow:0 14px 42px -12px rgba(2,6,23,.6); --shadow-strong:0 24px 60px -18px rgba(2,6,23,.75);
---primary:#60a5fa; --primary-600:#3b82f6;
---chip:#0b1220; --chip-border:#1f2937;
---accent-1:#1e293b; --accent-2:#1f2540; --accent-3:#0f2f2b; --accent-4:#2a1f0f;
---ring: rgba(96,165,250,.45);
+  --bg:#070a12;
+  --surface:#0d1320;
+  --surface-2:#111827;
+  --surface-3:#172033;
+  --text:#eef2ff;
+  --muted:#a5adbd;
+  --muted-2:#7b8496;
+  --border:rgba(226,232,240,.10);
+  --border-strong:rgba(226,232,240,.20);
+  --primary:#ffffff;
+  --primary-600:#f8fafc;
+  --accent:#60a5fa;
+  --accent-2:#a78bfa;
+  --success:#34d399;
+  --warning:#fbbf24;
+  --danger:#f87171;
+  --chip:#111827;
+  --chip-border:#273449;
+  --ring:rgba(96,165,250,.28);
+  --shadow:0 22px 70px -34px rgba(0,0,0,.75);
+  --shadow-strong:0 35px 95px -35px rgba(0,0,0,.85);
 }
-html { scroll-behavior: smooth; }
-body {
-font-family:'Vazirmatn',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-background: var(--bg);
-background-image:
-radial-gradient(1200px 600px at 100% -10%, var(--accent-1), transparent 60%),
-radial-gradient(900px 500px at -10% 110%, var(--accent-2), transparent 60%);
-color: var(--text); min-height: 100vh;
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Vazirmatn',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  background:
+    radial-gradient(900px 520px at 8% -10%, color-mix(in oklab, var(--accent) 18%, transparent), transparent 60%),
+    radial-gradient(900px 520px at 98% 0%, color-mix(in oklab, var(--accent-2) 16%, transparent), transparent 58%),
+    linear-gradient(180deg, color-mix(in oklab, var(--bg) 94%, white), var(--bg));
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
 }
-.glass{ backdrop-filter:saturate(160%) blur(12px); background: color-mix(in oklab, var(--surface) 78%, transparent); border-bottom:1px solid var(--border); }
-.card{
-background: color-mix(in oklab, var(--surface) 94%, transparent);
-border:1px solid var(--border);
-border-radius:1.25rem;
-box-shadow:var(--shadow);
-transition: border-color .18s ease, box-shadow .18s ease, transform .12s ease;
+body::before{
+  content:"";
+  position:fixed; inset:0; pointer-events:none; z-index:-1;
+  background-image:linear-gradient(color-mix(in oklab, var(--text) 5%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--text) 5%, transparent) 1px, transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom, rgba(0,0,0,.55), transparent 55%);
 }
-.card:hover{ border-color: var(--border-strong); box-shadow: var(--shadow-strong); transform: translateY(-2px); }
-.ring-card{ position:relative; border-radius:1rem; overflow:hidden; background:var(--surface); }
-.ring-card::before{
-content:""; position:absolute; inset:-1px; border-radius:1rem; padding:1px;
-background: conic-gradient(from 180deg, #60a5fa, #a78bfa, #22d3ee, #60a5fa);
--webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
--webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none; animation:spin 8s linear infinite; opacity:.6;
+::selection{background:color-mix(in oklab, var(--accent) 22%, transparent)}
+.app-shell{min-height:100vh}
+.glass{
+  backdrop-filter:saturate(160%) blur(20px);
+  background:color-mix(in oklab, var(--surface) 78%, transparent);
+  border-bottom:1px solid var(--border);
 }
-@keyframes spin{ to{ transform:rotate(360deg) } }
-.result-header{ cursor:pointer; background: color-mix(in oklab, var(--surface) 88%, transparent); transition: background .2s ease, transform .15s ease; }
-.ring-card:hover .result-header{ transform:translateY(-1px) }
-.result-details{ max-height:0; overflow:hidden; transition:max-height .5s ease, padding .35s ease, border-color .35s ease; border-top:1px solid transparent; padding:0 1.25rem; background:var(--surface); }
-.result-details.open{ max-height:1600px; border-top-color:var(--border); padding:1rem 1.25rem 1.25rem; }
-.chip{ display:inline-flex; align-items:center; gap:.35rem; padding:.22rem .6rem; border-radius:999px; font-size:.78rem; font-weight:600; border:1px solid var(--chip-border); background:var(--chip); white-space:nowrap; }
-.chip .dot{ width:.5rem; height:.5rem; border-radius:999px; opacity:.85 }
+.logo-mark{
+  width:44px;height:44px;border-radius:16px;
+  display:grid;place-items:center;
+  background:linear-gradient(180deg, color-mix(in oklab, var(--surface) 82%, white), var(--surface));
+  border:1px solid var(--border-strong);
+  box-shadow:var(--shadow);
+  color:var(--primary-600);
+}
+.logo-mark svg{width:28px;height:28px;display:block}
+.control-surface,.card{
+  background:color-mix(in oklab, var(--surface) 92%, transparent);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  border-radius:var(--radius-lg);
+}
+.card{transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease}
+.card:hover{border-color:var(--border-strong);box-shadow:var(--shadow-strong);transform:translateY(-2px)}
+.hero-card{position:relative;overflow:hidden}
+.hero-card::before{
+  content:""; position:absolute; inset:-1px; pointer-events:none;
+  background:radial-gradient(520px 200px at 50% 0%, color-mix(in oklab, var(--accent) 15%, transparent), transparent 70%);
+}
+.hero-card>*{position:relative}
+.premium-badge,.pill{
+  display:inline-flex;align-items:center;gap:.45rem;
+  padding:.36rem .72rem;border-radius:999px;
+  font-weight:700;font-size:.78rem;white-space:nowrap;
+  border:1px solid var(--border);
+  background:color-mix(in oklab, var(--surface) 75%, transparent);
+  color:var(--text);
+}
+.step-card{
+  background:color-mix(in oklab, var(--surface) 82%, transparent);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:1rem;
+}
+.step-no{
+  width:32px;height:32px;border-radius:12px;display:grid;place-items:center;
+  background:var(--primary-600);color:var(--surface);font-weight:900;font-size:.9rem;flex:0 0 auto;
+}
+.field-label{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.45rem;font-size:.86rem;font-weight:800;color:var(--text)}
+.select-control,.textarea-control{
+  width:100%; border:1px solid var(--border); color:var(--text);
+  background:color-mix(in oklab, var(--surface) 92%, transparent);
+  border-radius:16px; outline:none; transition:border-color .15s, box-shadow .15s, background .15s;
+}
+.select-control{padding:.74rem .9rem}
+.textarea-control{padding:1rem; min-height:260px; resize:vertical; line-height:1.9}
+.select-control:focus,.textarea-control:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--ring)}
+.select-control:disabled{opacity:.55;cursor:not-allowed}
 .drop-zone{
-border:2px dashed var(--border);
-border-radius:1rem; transition:.2s;
-background: color-mix(in oklab, var(--surface) 80%, transparent);
+  border:1.5px dashed var(--border-strong);
+  border-radius:24px;
+  padding:1rem;
+  background:linear-gradient(180deg, color-mix(in oklab, var(--surface) 70%, transparent), color-mix(in oklab, var(--surface-2) 80%, transparent));
+  transition:border-color .18s, box-shadow .18s, transform .18s, background .18s;
 }
-.drop-zone.drag-over{ border-color:var(--primary); background: color-mix(in oklab, var(--surface) 92%, transparent); box-shadow: 0 0 0 4px var(--ring); }
-.btn{ border-radius:.85rem; font-weight:700; padding:.68rem 1.2rem; display:inline-flex; align-items:center; gap:.55rem; border:1px solid var(--border); transition: transform .08s, background .15s, border-color .15s, box-shadow .15s; }
-.btn:focus-visible{ outline: none; box-shadow: 0 0 0 4px var(--ring); }
-.btn:active{ transform: translateY(1px) }
-.btn-primary{ background:linear-gradient(180deg, var(--primary), var(--primary-600)); color:#fff; border-color:color-mix(in oklab, var(--primary-600) 60%, #0000); box-shadow:0 12px 28px -12px color-mix(in oklab, var(--primary) 60%, transparent); }
-.btn-secondary{ background:var(--surface); color:var(--text); }
-.btn-ghost{ background:transparent; border-color:transparent; }
-.muted{ color:var(--muted) }
-.skeleton{ background:linear-gradient(90deg, color-mix(in oklab, var(--surface) 75%, transparent) 25%, color-mix(in oklab, var(--surface) 95%, transparent) 37%, color-mix(in oklab, var(--surface) 75%, transparent) 63%); background-size:400% 100%; animation:shimmer 1.2s ease-in-out infinite; border-radius:.75rem; }
-@keyframes shimmer{ 0%{background-position:100% 0} 100%{background-position:0 0} }
-.toggle{ width:44px; height:26px; border-radius:999px; position:relative; border:1px solid var(--border); background: color-mix(in oklab, var(--surface) 86%, transparent); cursor:pointer; display:inline-flex; align-items:center; }
-.toggle .knob{ width:20px; height:20px; border-radius:999px; background:var(--primary); transition: transform .2s; transform:translateX(2px); }
-[data-theme="dark"] .toggle .knob{ transform:translateX(22px) }
-.floating-top{ position:fixed; bottom:20px; inset-inline-end:20px; z-index:50; backdrop-filter:blur(8px); background: color-mix(in oklab, var(--surface) 92%, transparent); border:1px solid var(--border); border-radius:999px; padding:.6rem .8rem; box-shadow:var(--shadow); display:none; }
-.floating-top.show{ display:inline-flex }
+.drop-zone.drag-over{border-color:var(--accent);box-shadow:0 0 0 5px var(--ring);transform:translateY(-1px)}
+.btn{
+  border-radius:16px; font-weight:900; padding:.76rem 1.12rem;
+  display:inline-flex;align-items:center;justify-content:center;gap:.55rem;
+  border:1px solid var(--border); transition:transform .08s, background .15s, border-color .15s, box-shadow .15s, opacity .15s;
+  user-select:none; white-space:nowrap;
+}
+.btn:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-primary{background:linear-gradient(180deg, var(--primary), var(--primary-600));color:var(--surface);border-color:color-mix(in oklab, var(--primary) 24%, transparent);box-shadow:0 18px 32px -20px var(--primary)}
+[data-theme="dark"] .btn-primary{color:#070a12;background:linear-gradient(180deg,#fff,#e5e7eb)}
+.btn-secondary{background:color-mix(in oklab, var(--surface) 88%, transparent);color:var(--text)}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--text)}
+.btn-icon{width:42px;height:42px;padding:0;border-radius:15px}
+.muted{color:var(--muted)}
+.micro{font-size:.76rem;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:.38rem;padding:.26rem .64rem;border-radius:999px;font-size:.78rem;font-weight:800;border:1px solid var(--chip-border);background:var(--chip);white-space:nowrap;color:var(--text)}
+.chip .dot{width:.5rem;height:.5rem;border-radius:999px;opacity:.9;background:var(--accent)}
+.status-bar{display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap;margin-top:.75rem}
+.status-item{display:inline-flex;align-items:center;gap:.45rem;color:var(--muted);font-size:.82rem}
+.warning-box{border:1px solid color-mix(in oklab, var(--warning) 35%, transparent);background:color-mix(in oklab, var(--warning) 12%, var(--surface));color:color-mix(in oklab, var(--warning) 80%, var(--text));border-radius:18px;padding:.85rem 1rem;font-weight:700}
+.error-box{border:1px solid color-mix(in oklab, var(--danger) 35%, transparent);background:color-mix(in oklab, var(--danger) 10%, var(--surface));color:var(--danger);border-radius:18px;padding:.85rem 1rem;font-weight:800}
+.toggle{width:48px;height:28px;border-radius:999px;position:relative;border:1px solid var(--border);background:color-mix(in oklab, var(--surface) 86%, transparent);cursor:pointer;display:inline-flex;align-items:center;padding:3px}
+.toggle .knob{width:20px;height:20px;border-radius:999px;background:var(--primary-600);transition:transform .2s;transform:translateX(0)}
+[data-theme="dark"] .toggle .knob{transform:translateX(20px);background:#fff}
+[dir="rtl"][data-theme="dark"] .toggle .knob{transform:translateX(-20px)}
+.skeleton{position:relative;overflow:hidden;background:color-mix(in oklab, var(--surface-3) 72%, transparent);border-radius:14px}
+.skeleton::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg, transparent, color-mix(in oklab, var(--surface) 72%, transparent), transparent);animation:shimmer 1.35s infinite}
+@keyframes shimmer{100%{transform:translateX(100%)}}
+.result-card{border-radius:24px;border:1px solid var(--border);background:color-mix(in oklab, var(--surface) 92%, transparent);box-shadow:var(--shadow);overflow:hidden;transition:border-color .18s, box-shadow .18s, transform .18s}
+.result-card:hover{border-color:var(--border-strong);box-shadow:var(--shadow-strong);transform:translateY(-2px)}
+.result-header{cursor:pointer;background:linear-gradient(180deg, color-mix(in oklab, var(--surface) 90%, transparent), color-mix(in oklab, var(--surface-2) 80%, transparent));transition:background .2s ease}
+.result-details{max-height:0;overflow:hidden;transition:max-height .45s ease,padding .32s ease,border-color .32s ease;border-top:1px solid transparent;padding:0 1.25rem;background:var(--surface)}
+.result-details.open{max-height:2600px;border-top-color:var(--border);padding:1.1rem 1.25rem 1.35rem}
+.info-tile{border:1px solid var(--border);border-radius:18px;background:color-mix(in oklab, var(--surface-2) 82%, transparent);padding:1rem;height:100%}
+.example-item{border:1px solid var(--border);border-radius:16px;padding:.85rem;background:color-mix(in oklab, var(--surface) 86%, transparent)}
+.floating-top{position:fixed;bottom:20px;inset-inline-end:20px;z-index:50;backdrop-filter:blur(10px);background:color-mix(in oklab, var(--surface) 92%, transparent);border:1px solid var(--border);border-radius:999px;padding:.7rem .85rem;box-shadow:var(--shadow);display:none}
+.floating-top.show{display:inline-flex}
+.footer-link{color:var(--text)}
+@media (max-width:640px){
+  .hero-title{font-size:2.25rem!important;line-height:1.25!important}
+  .textarea-control{min-height:220px}
+  .hide-mobile{display:none!important}
+}
 </style>
 </head>
 <body>
-<!-- Header -->
-<header class="sticky top-0 z-20 glass">
-<div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-<div class="flex items-center gap-3">
-<div class="size-9 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-500 to-cyan-400 grid place-items-center text-white shadow">
-<svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v4a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M12 18a3 3 0 0 0 3-3V9a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/></svg>
-</div>
-<div>
-<h1 id="main-title" class="text-xl md:text-2xl font-extrabold tracking-tight"></h1>
-<p id="header-subtitle" class="text-xs muted hidden sm:block"></p>
-</div>
-</div>
-
-<div class="flex items-center gap-3">
-<div class="flex items-center gap-2">
-<div class="relative flex items-center">
-<svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 rtl:right-3 rtl:left-auto size-4 pointer-events-none text-[var(--muted)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-<select id="ui-lang-switcher" class="appearance-none w-full pl-10 pr-4 rtl:pr-10 rtl:pl-4 py-1.5 rounded-lg border text-sm bg-[var(--surface)] border-[var(--border)]"></select>
-</div>
-<button id="theme-toggle" class="toggle" aria-label="toggle theme"><span class="knob"></span></button>
-<button id="stop-tts" class="btn btn-ghost p-2.5" title="توقف گفتار" aria-label="stop-tts">
-<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
-</button>
-</div>
-</div>
-</div>
+<div class="app-shell">
+<header class="sticky top-0 z-30 glass">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 14h16c7.7 0 13 4.3 15 10.3C46 18.3 51.3 14 59 14h-8.5C43.6 14 38 19.6 38 26.5V50l-7-5.5H13a6 6 0 0 1-6-6V20a6 6 0 0 1 6-6Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M17 25h15M17 32h15M17 39h10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="47" cy="31" r="3.5" fill="currentColor"/>
+          <circle cx="54" cy="24" r="2.7" fill="currentColor"/>
+          <circle cx="56" cy="38" r="2.7" fill="currentColor"/>
+          <path d="M49.5 28.7 52.5 25.5M50.5 32h4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="min-w-0">
+        <h1 id="main-title" class="text-lg md:text-xl font-black tracking-tight truncate"></h1>
+        <p id="header-subtitle" class="text-xs muted hidden sm:block"></p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 md:gap-3">
+      <div class="relative flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 rtl:right-3 rtl:left-auto size-4 pointer-events-none text-[var(--muted)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        <select id="ui-lang-switcher" class="select-control text-sm w-36 pl-10 pr-4 rtl:pr-10 rtl:pl-4 py-2"></select>
+      </div>
+      <button id="theme-toggle" class="toggle" aria-label="toggle theme"><span class="knob"></span></button>
+      <button id="stop-tts" class="btn btn-secondary btn-icon" title="توقف گفتار" aria-label="stop-tts">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+      </button>
+    </div>
+  </div>
 </header>
 
-<!-- Hero -->
-<section class="max-w-5xl mx-auto px-4 pt-8 pb-2">
-<div class="card p-6 md:p-8">
-<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-<div>
-<label id="source-lang-label" class="block text-sm font-medium mb-1"></label>
-<select id="source-lang" class="w-full p-2.5 rounded-xl border bg-[var(--surface)] border-[var(--border)]"></select>
-</div>
-<div>
-<label id="target-lang-label" class="block text-sm font-medium mb-1"></label>
-<select id="target-lang" class="w-full p-2.5 rounded-xl border bg-[var(--surface)] border-[var(--border)]"></select>
-</div>
-<div>
-<label id="user-level-label" class="block text-sm font-medium mb-1"></label>
-<select id="user-level" class="w-full p-2.5 rounded-xl border bg-[var(--surface)] border-[var(--border)]">
-<option id="level-unspecified" value="Unspecified"></option>
-<option id="level-a1" value="A1 (Beginner)"></option>
-<option id="level-a2" value="A2 (Elementary)"></option>
-<option id="level-b1" value="B1 (Intermediate)"></option>
-<option id="level-b2" value="B2 (Upper-Intermediate)"></option>
-<option id="level-c1" value="C1 (Advanced)"></option>
-</select>
-</div>
-<div class="hidden md:block"></div>
-</div>
+<section class="max-w-7xl mx-auto px-4 pt-8 md:pt-12 pb-6">
+  <div class="hero-card control-surface p-5 md:p-8 lg:p-10">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+      <aside class="lg:col-span-5 space-y-5">
+        <div class="premium-badge"><span>✦</span><span>AI Vocabulary Studio</span></div>
+        <div>
+          <h2 class="hero-title text-4xl md:text-5xl font-black leading-tight tracking-tight mb-4">از متن یا لیست، کارت یادگیری بساز.</h2>
+          <div id="big-desc" class="text-base md:text-lg leading-9 muted font-semibold"></div>
+        </div>
+        <div id="hint-container" class="step-card">
+          <div class="flex items-start gap-3">
+            <div class="step-no">؟</div>
+            <div id="hint" class="text-sm muted leading-8 space-y-1"></div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="step-card"><div class="flex items-center gap-3"><span class="step-no">1</span><div><div class="font-black text-sm">زبان‌ها</div><div class="micro">مبدأ و مقصد</div></div></div></div>
+          <div class="step-card"><div class="flex items-center gap-3"><span class="step-no">2</span><div><div class="font-black text-sm">ورودی</div><div class="micro">متن یا لیست</div></div></div></div>
+          <div class="step-card"><div class="flex items-center gap-3"><span class="step-no">3</span><div><div class="font-black text-sm">تحلیل</div><div class="micro">نتیجه آموزشی</div></div></div></div>
+        </div>
+      </aside>
 
-<!-- توضیح بزرگِ محصول -->
-<div id="big-desc" class="mb-5 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 md:p-6 text-lg md:text-xl leading-9 font-semibold"></div>
+      <div class="lg:col-span-7 space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label id="source-lang-label" class="field-label"></label>
+            <select id="source-lang" class="select-control"></select>
+          </div>
+          <div>
+            <label id="target-lang-label" class="field-label"></label>
+            <select id="target-lang" class="select-control"></select>
+          </div>
+          <div>
+            <label id="user-level-label" class="field-label"></label>
+            <select id="user-level" class="select-control">
+              <option id="level-unspecified" value="Unspecified"></option>
+              <option id="level-a1" value="A1 (Beginner)"></option>
+              <option id="level-a2" value="A2 (Elementary)"></option>
+              <option id="level-b1" value="B1 (Intermediate)"></option>
+              <option id="level-b2" value="B2 (Upper-Intermediate)"></option>
+              <option id="level-c1" value="C1 (Advanced)"></option>
+            </select>
+          </div>
+        </div>
 
-<!-- راهنمای استفاده (ادغام‌شده و شفاف) -->
-<div id="hint-container" class="mb-5 rounded-xl border border-[var(--border)] bg-[var(--surface)]">
-<div class="px-4 py-3 flex items-start gap-3">
-<div class="size-8 rounded-lg bg-[var(--accent-1)]/60 grid place-items-center mt-1">💡</div>
-<div id="hint" class="text-sm muted space-y-1"></div>
-</div>
-</div>
+        <div id="drop-zone" class="drop-zone">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <span id="drop-hint-icon" class="inline-grid place-items-center size-10 rounded-2xl bg-[var(--surface)] border border-[var(--border)]">📝</span>
+              <div class="min-w-0">
+                <div id="drop-hint-text" class="text-sm font-bold"></div>
+                <div id="input-status-title" class="micro mt-1">آماده دریافت متن یا فایل</div>
+              </div>
+            </div>
+            <div id="drag-drop-badge" class="pill"></div>
+          </div>
 
-<div id="drop-zone" class="drop-zone p-4">
-<div class="flex items-center justify-between mb-3">
-<div class="flex items-center gap-2">
-<span id="drop-hint-icon" class="inline-grid place-items-center size-8 rounded-lg bg-[var(--accent-3)]/50">📝</span>
-<span id="drop-hint-text" class="text-sm muted"></span>
-</div>
-<div id="drag-drop-badge" class="text-xs px-2 py-1 rounded-full bg-[var(--accent-2)]/40 border border-[var(--border)]"></div>
-</div>
+          <textarea id="text-input" rows="10" class="textarea-control" spellcheck="false"></textarea>
 
-<textarea id="text-input" rows="10" class="w-full p-3 rounded-xl border bg-[var(--surface)] border-[var(--border)] focus:outline-none"></textarea>
+          <div class="status-bar">
+            <div class="flex items-center gap-3 flex-wrap">
+              <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+                <input id="force-wordlist" type="checkbox" class="w-4 h-4 rounded accent-[var(--primary)]">
+                <span id="force-wordlist-label" class="text-sm font-bold"></span>
+              </label>
+              <span id="char-count" class="status-item">0 کاراکتر</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <label for="file-upload" class="cursor-pointer btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span id="upload-btn-text"></span>
+              </label>
+              <input id="file-upload" type="file" class="hidden" accept=".txt,.srt">
+              <span id="file-name" class="micro max-w-[220px] truncate"></span>
+            </div>
+          </div>
 
-<!-- چک‌باکس کنار باکس متن -->
-<div class="flex items-center gap-2 mt-3">
-<input id="force-wordlist" type="checkbox" class="w-4 h-4 rounded accent-[var(--primary)]">
-<label for="force-wordlist" id="force-wordlist-label" class="text-sm cursor-pointer"></label>
-</div>
+          <div id="level-warning" class="hidden warning-box mt-3"></div>
+          <p id="error-msg" class="hidden error-box mt-3 text-center"></p>
 
-<!-- هشدار انتخاب سطح -->
-<div id="level-warning" class="hidden mt-3 rounded-xl border border-yellow-300/60 bg-yellow-50/70 text-yellow-800 px-4 py-3 text-sm"></div>
-
-<div class="flex flex-col md:flex-row gap-3 md:items-center justify-between mt-4">
-<div class="flex items-center gap-2">
-<label for="file-upload" class="cursor-pointer btn btn-secondary">
-<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-<span id="upload-btn-text"></span>
-</label>
-<input id="file-upload" type="file" class="hidden" accept=".txt,.srt">
-<span id="file-name" class="text-sm muted"></span>
-</div>
-<button id="process-btn" class="btn btn-primary px-8">
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-<span class="select-none"></span>
-</button>
-</div>
-<p id="error-msg" class="text-red-500 text-sm mt-3 text-center hidden"></p>
-</div>
-</div>
+          <div class="flex flex-col sm:flex-row gap-3 sm:items-center justify-between mt-5">
+            <div class="micro leading-7">برای متن‌های بلند، انتخاب سطح کمک می‌کند خروجی دقیق‌تر و متناسب‌تر باشد.</div>
+            <button id="process-btn" class="btn btn-primary px-8 min-w-[170px]">
+              <svg class="process-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              <span class="select-none"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- Results -->
 <main class="max-w-7xl mx-auto px-4 pb-16">
-<section id="results-view" class="hidden mt-8">
-<div class="card p-4 md:p-5 flex flex-col md:flex-row gap-3 md:items-center justify-between mb-6">
-<h2 id="results-title" class="text-2xl md:text-3xl font-extrabold"></h2>
-<div class="flex gap-2">
-<button id="expand-all" class="btn btn-secondary text-sm"></button>
-<button id="collapse-all" class="btn btn-secondary text-sm"></button>
-<button id="start-over-btn" class="btn btn-secondary text-sm"></button>
-</div>
-</div>
+  <section id="results-view" class="hidden mt-6">
+    <div class="control-surface p-4 md:p-5 flex flex-col md:flex-row gap-3 md:items-center justify-between mb-5">
+      <div>
+        <div class="premium-badge mb-2"><span>●</span><span>Learning Output</span></div>
+        <h2 id="results-title" class="text-2xl md:text-3xl font-black"></h2>
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <button id="expand-all" class="btn btn-secondary text-sm"></button>
+        <button id="collapse-all" class="btn btn-secondary text-sm"></button>
+        <button id="start-over-btn" class="btn btn-secondary text-sm"></button>
+      </div>
+    </div>
 
-<div id="loader" class="grid gap-4 md:grid-cols-2 hidden">
-<div class="ring-card"><div class="card p-5"><div class="skeleton h-6 w-40 mb-3"></div><div class="skeleton h-4 w-72 mb-6"></div><div class="skeleton h-24"></div></div></div>
-<div class="ring-card"><div class="card p-5"><div class="skeleton h-6 w-40 mb-3"></div><div class="skeleton h-4 w-72 mb-6"></div><div class="skeleton h-24"></div></div></div>
-</div>
+    <div id="loader" class="grid gap-4 md:grid-cols-2 hidden">
+      <div class="result-card p-5"><div class="skeleton h-6 w-40 mb-4"></div><div class="skeleton h-4 w-72 max-w-full mb-6"></div><div class="skeleton h-28"></div></div>
+      <div class="result-card p-5"><div class="skeleton h-6 w-40 mb-4"></div><div class="skeleton h-4 w-72 max-w-full mb-6"></div><div class="skeleton h-28"></div></div>
+    </div>
 
-<div id="results-list" class="space-y-4"></div>
-</section>
+    <div id="results-list" class="space-y-4"></div>
+  </section>
 </main>
 
 <footer class="text-center p-8 mt-8 text-sm muted">
-<p id="footer-text-line2" class="mt-1"></p>
+  <p id="footer-text-line2" class="mt-1"></p>
 </footer>
 
 <button id="to-top" class="floating-top" aria-label="Back to top" title="بازگشت به بالا">⤴︎</button>
+</div>
 
 <script>
+
 const PROXY_URL = 'https://language-learner.qaderi.workers.dev/';
 
 const LANGS = [
-{ code:'fa', label:'فارسی',   en:'Persian',  tts:'fa-IR' },
-{ code:'en', label:'English', en:'English',  tts:'en-US' },
-{ code:'de', label:'Deutsch', en:'German',   tts:'de-DE' },
-{ code:'fr', label:'Français',en:'French',   tts:'fr-FR' },
-{ code:'es', label:'Español', en:'Spanish',  tts:'es-ES' },
-{ code:'zh', label:'中文',     en:'Chinese',  tts:'zh-CN' },
-{ code:'tr', label:'Türkçe',  en:'Turkish',  tts:'tr-TR' },
-{ code:'it', label:'Italiano',en:'Italian',  tts:'it-IT' },
-{ code:'ru', label:'Русский', en:'Russian',  tts:'ru-RU' },
+  { code:'fa', label:'فارسی',   en:'Persian',  tts:'fa-IR' },
+  { code:'en', label:'English', en:'English',  tts:'en-US' },
+  { code:'de', label:'Deutsch', en:'German',   tts:'de-DE' },
+  { code:'fr', label:'Français',en:'French',   tts:'fr-FR' },
+  { code:'es', label:'Español', en:'Spanish',  tts:'es-ES' },
+  { code:'zh', label:'中文',     en:'Chinese',  tts:'zh-CN' },
+  { code:'tr', label:'Türkçe',  en:'Turkish',  tts:'tr-TR' },
+  { code:'it', label:'Italiano',en:'Italian',  tts:'it-IT' },
+  { code:'ru', label:'Русский', en:'Russian',  tts:'ru-RU' },
 ];
 const RTL_LANGS = new Set(['fa']);
+const MAX_PROMPT_PREVIEW_LENGTH = 200000;
 
-// DOM refs
 const resultsView = document.getElementById('results-view');
 const processBtn = document.getElementById('process-btn');
 const startOverBtn = document.getElementById('start-over-btn');
@@ -253,23 +384,20 @@ const forceWordlist = document.getElementById('force-wordlist');
 const toTopBtn = document.getElementById('to-top');
 const themeToggle = document.getElementById('theme-toggle');
 const levelWarning = document.getElementById('level-warning');
+const charCountEl = document.getElementById('char-count');
+const inputStatusTitle = document.getElementById('input-status-title');
 
-// Theme
 const savedTheme = localStorage.getItem('ll-theme') || 'light';
 document.documentElement.setAttribute('data-theme', savedTheme);
+
 themeToggle.addEventListener('click', () => {
-const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-document.documentElement.setAttribute('data-theme', next);
-localStorage.setItem('ll-theme', next);
+  const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('ll-theme', next);
 });
 
-// Events
 processBtn.addEventListener('click', handleProcessRequest);
-startOverBtn.addEventListener('click', () => {
-resultsView.classList.add('hidden');
-textInput.value=''; fileUpload.value=''; fileNameEl.textContent=''; resultsList.innerHTML='';
-hideError(); hideLevelWarning(); window.scrollTo({top:0, behavior:'smooth'}); updateModeBadge();
-});
+startOverBtn.addEventListener('click', resetApp);
 expandAllBtn.addEventListener('click', () => toggleAll(true));
 collapseAllBtn.addEventListener('click', () => toggleAll(false));
 stopTTSBtn.addEventListener('click', () => speechSynthesis.cancel());
@@ -279,97 +407,172 @@ dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-ove
 dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('drag-over'); const f = e.dataTransfer.files[0]; if (f) handleFile(f); });
 
 uiLangSwitcher.addEventListener('change', (e) => {
-localStorage.setItem('ll-lang', e.target.value);
-setLanguage(e.target.value);
+  localStorage.setItem('ll-lang', e.target.value);
+  setLanguage(e.target.value);
 });
 
 forceWordlist.addEventListener('change', syncLevelRequirement);
 textInput.addEventListener('input', syncLevelRequirement);
-window.addEventListener('scroll', () => { toTopBtn.classList.toggle('show', window.scrollY > 800) });
+window.addEventListener('scroll', () => { toTopBtn.classList.toggle('show', window.scrollY > 800); });
 toTopBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
 
-// Refresh labels on source language change (without re-calling AI)
-sourceLangSelect?.addEventListener('change', () => {
-if (!resultsView.classList.contains('hidden') && resultsList.dataset.lastRaw) {
-renderResults(resultsList.dataset.lastRaw);
-}
+sourceLangSelect.addEventListener('change', () => {
+  if (!resultsView.classList.contains('hidden') && resultsList.dataset.lastRaw) {
+    renderResults(resultsList.dataset.lastRaw);
+  }
 });
 
-// File & helpers
-function handleFile(file){
-fileNameEl.textContent = file.name;
-const reader = new FileReader();
-reader.onload = (e) => {
-textInput.value = file.name.endsWith('.srt') ? cleanSRT(e.target.result || '') : (e.target.result || '');
-syncLevelRequirement();
-};
-reader.readAsText(file);
-}
-function cleanSRT(s){
-return s.replace(/\uFEFF/g,'').replace(/^\d+\s*$/gm,'')
-.replace(/\d{2}:\d{2}:\d{2},\d{3}\s+-->\s+\d{2}:\d{2}:\d{2},\d{3}.*/g,'')
-.replace(/<[^>]+>/g,'').replace(/[^\S\r\n]+/g,' ')
-.replace(/\n{2,}/g,'\n').trim();
+targetLangSelect.addEventListener('change', () => {
+  if (!resultsView.classList.contains('hidden') && resultsList.dataset.lastRaw) {
+    renderResults(resultsList.dataset.lastRaw);
+  }
+});
+
+resultsList.addEventListener('click', (event) => {
+  const speakBtn = event.target.closest('[data-speak]');
+  if (speakBtn) {
+    event.stopPropagation();
+    speakText(event, speakBtn.dataset.speak, speakBtn.dataset.tts || 'en-US');
+    return;
+  }
+
+  const header = event.target.closest('[data-result-index]');
+  if (header) {
+    toggleDetails(Number(header.dataset.resultIndex));
+  }
+});
+
+function resetApp(){
+  resultsView.classList.add('hidden');
+  textInput.value = '';
+  fileUpload.value = '';
+  fileNameEl.textContent = '';
+  resultsList.innerHTML = '';
+  resultsList.dataset.lastRaw = '';
+  hideError();
+  hideLevelWarning();
+  syncLevelRequirement();
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
-// Heuristic
+function handleFile(file){
+  const valid = /\.(txt|srt)$/i.test(file.name);
+  if (!valid) {
+    showError('فقط فایل‌های .txt و .srt پشتیبانی می‌شوند.');
+    return;
+  }
+
+  fileNameEl.textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    textInput.value = file.name.toLowerCase().endsWith('.srt') ? cleanSRT(e.target.result || '') : (e.target.result || '');
+    syncLevelRequirement();
+    hideError();
+  };
+  reader.onerror = () => showError('خواندن فایل با مشکل روبه‌رو شد. لطفاً دوباره امتحان کنید.');
+  reader.readAsText(file);
+}
+
+function cleanSRT(s){
+  return String(s || '')
+    .replace(/\uFEFF/g,'')
+    .replace(/^\d+\s*$/gm,'')
+    .replace(/\d{2}:\d{2}:\d{2},\d{3}\s+-->\s+\d{2}:\d{2}:\d{2},\d{3}.*/g,'')
+    .replace(/<[^>]+>/g,'')
+    .replace(/[^\S\r\n]+/g,' ')
+    .replace(/\n{2,}/g,'\n')
+    .trim();
+}
+
 function looksLikeWordList(text){
-const t = (text || '').trim();
-if (!t) return false;
-const lines = t.split(/\r?\n/).filter(l=>l.trim()!=='');
-if (lines.length>=2 && lines.every(l=>l.trim().length<=40)) return true;
-const tokens = t.split(/\s*-\s*/).filter(x=>x.trim()!=='');
-if (tokens.length>=2 && tokens.every(x=>x.trim().length<=40)) return true;
-return t.split(/\s+/).length < 30 && !t.includes('\n\n');
+  const t = (text || '').trim();
+  if (!t) return false;
+  const lines = t.split(/\r?\n/).filter(l => l.trim() !== '');
+  if (lines.length >= 2 && lines.every(l => l.trim().length <= 60)) return true;
+  const tokens = t.split(/\s*[-–—]\s*/).filter(x => x.trim() !== '');
+  if (tokens.length >= 2 && tokens.every(x => x.trim().length <= 60)) return true;
+  return t.split(/\s+/).length < 30 && !t.includes('\n\n');
 }
+
 function updateModeBadge(){
-const badge = document.getElementById('drag-drop-badge');
-const s = uiStrings[currentLang] || uiStrings.en;
-const isList = forceWordlist.checked || (looksLikeWordList(textInput.value.trim()) && !fileUpload.files[0]);
-badge.textContent = isList ? s.modeWordlist : s.modeText;
+  const badge = document.getElementById('drag-drop-badge');
+  const s = uiStrings[currentLang] || uiStrings.en;
+  const text = textInput.value.trim();
+  const isList = forceWordlist.checked || (looksLikeWordList(text) && !fileUpload.files[0]);
+  badge.textContent = isList ? s.modeWordlist : s.modeText;
+  badge.style.borderColor = isList ? 'color-mix(in oklab, var(--success) 32%, var(--border))' : 'var(--border)';
+  if (inputStatusTitle) {
+    inputStatusTitle.textContent = text ? (isList ? 'ورودی به‌عنوان لیست واژه تشخیص داده شد.' : 'ورودی به‌عنوان متن/فایل تحلیل می‌شود.') : 'آماده دریافت متن یا فایل';
+  }
 }
+
+function updateCharCount(){
+  const count = textInput.value.length;
+  if (!charCountEl) return;
+  charCountEl.textContent = `${count.toLocaleString()} کاراکتر`;
+  charCountEl.style.color = count > MAX_PROMPT_PREVIEW_LENGTH ? 'var(--danger)' : 'var(--muted)';
+}
+
 function syncLevelRequirement(){
-const isList = forceWordlist.checked || (looksLikeWordList(textInput.value.trim()) && !fileUpload.files[0]);
-userLevelSelect.disabled = isList;
-if (isList) hideLevelWarning();
-if (isList) userLevelSelect.value='Unspecified';
-updateModeBadge();
+  const text = textInput.value.trim();
+  const isList = forceWordlist.checked || (looksLikeWordList(text) && !fileUpload.files[0]);
+  userLevelSelect.disabled = isList;
+  if (isList) {
+    hideLevelWarning();
+    userLevelSelect.value = 'Unspecified';
+  }
+  updateCharCount();
+  updateModeBadge();
 }
-function showError(m){ errorMsg.textContent=m; errorMsg.classList.remove('hidden'); }
+
+function showError(m){
+  errorMsg.textContent = m;
+  errorMsg.classList.remove('hidden');
+}
 function hideError(){ errorMsg.classList.add('hidden'); }
 function showLevelWarning(m){ levelWarning.textContent = m; levelWarning.classList.remove('hidden'); }
 function hideLevelWarning(){ levelWarning.classList.add('hidden'); }
 
-// Process
-function handleProcessRequest(){
-const text = textInput.value.trim();
-const level = userLevelSelect.value;
-const isList = forceWordlist.checked || (looksLikeWordList(text) && !fileUpload.files[0]);
-const s = uiStrings[currentLang] || uiStrings.en;
-
-hideError(); hideLevelWarning();
-
-if (!text){ showError(s.errorText); return; }
-if (!isList && level==='Unspecified'){
-showLevelWarning(s.pleasePickLevel);
-return;
+function setBusy(isBusy){
+  const s = uiStrings[currentLang] || uiStrings.en;
+  processBtn.disabled = isBusy;
+  processBtn.querySelector('span').textContent = isBusy ? 'در حال تحلیل...' : s.processBtn;
+  processBtn.querySelector('.process-icon')?.classList.toggle('animate-pulse', isBusy);
 }
 
-resultsView.classList.remove('hidden');
-loader.classList.remove('hidden');
-resultsList.innerHTML='';
-callAI(text, isList);
-document.getElementById('results-view').scrollIntoView({ behavior: 'smooth', block: 'start' });
+function handleProcessRequest(){
+  const text = textInput.value.trim();
+  const level = userLevelSelect.value;
+  const isList = forceWordlist.checked || (looksLikeWordList(text) && !fileUpload.files[0]);
+  const s = uiStrings[currentLang] || uiStrings.en;
+
+  hideError();
+  hideLevelWarning();
+
+  if (!text){ showError(s.errorText); return; }
+  if (text.length > MAX_PROMPT_PREVIEW_LENGTH){ showError(`حجم ورودی خیلی زیاد است. لطفاً متن را کوتاه‌تر کنید.`); return; }
+  if (!isList && level === 'Unspecified'){
+    showLevelWarning(s.pleasePickLevel);
+    userLevelSelect.focus();
+    return;
+  }
+
+  resultsView.classList.remove('hidden');
+  loader.classList.remove('hidden');
+  resultsList.innerHTML = '';
+  setBusy(true);
+  callAI(text, isList);
+  resultsView.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function buildPrompt(text, isWordList){
-const src = LANGS.find(l=>l.code===sourceLangSelect.value)?.en || 'Persian';
-const tgt = LANGS.find(l=>l.code===targetLangSelect.value)?.en || 'English';
-const level = userLevelSelect.value;
-const taskDesc = isWordList
-? `You will analyze a USER-PROVIDED LIST of words/phrases in ${tgt}. For EACH item, produce a full analysis.`
-: `You will analyze a LONG TEXT in ${tgt}. Extract ALL useful, everyday words, idioms, and phrases for a ${level} learner. For EACH extracted item, produce a full analysis.`;
-const fieldSpec = `For EACH item, output EXACTLY the following template. Use "---" as a separator between items.
+  const src = LANGS.find(l => l.code === sourceLangSelect.value)?.en || 'Persian';
+  const tgt = LANGS.find(l => l.code === targetLangSelect.value)?.en || 'English';
+  const level = userLevelSelect.value;
+  const taskDesc = isWordList
+    ? `You will analyze a USER-PROVIDED LIST of words/phrases in ${tgt}. For EACH item, produce a full analysis.`
+    : `You will analyze a LONG TEXT in ${tgt}. Extract useful, everyday words, idioms, collocations, and phrases for a ${level} learner. For EACH extracted item, produce a full analysis.`;
+  const fieldSpec = `For EACH item, output EXACTLY the following template. Use "---" as a separator between items.
 
 Word: [the item in ${tgt}]
 Translation: [translation in ${src}; if multiple common meanings, separate with ";"]
@@ -381,23 +584,24 @@ Examples:
 2. [Example 2 in ${tgt}] - [${src} translation]
 Common Mistakes: ["nothing specific" OR a concrete pitfall (wrong preposition, false friend, etc.)]
 Context/Note:
-- Write 1–2 concise sentences on ONE of the following (most relevant): register/formality; synonym contrast; required prepositions/case; language-specific behavior (e.g., separable verb); usage frequency.
+- Write 1–2 concise sentences on ONE of the following (most relevant): register/formality; synonym contrast; required prepositions/case; language-specific behavior; usage frequency.
 - Never output "N/A". Default: "neutral register; general-use".
 Pronunciation: [IPA/Pinyin/phonetic if applicable; else "N/A"]
 Tags:
 - Choose 1–3 tags from the list (AT LEAST ONE required). Separate with semicolons.
 - Allowed: informal; formal; neutral; spoken; academic; business; travel; tech; slang; idiom; phrasal-verb; collocation; fixed-expression; false-friend; grammar; pronunciation; register; preposition; case; separable; aspect; measure-word; gender; article; tense; frequency-high; frequency-medium; frequency-low; level-a1; level-a2; level-b1; level-b2; level-c1
 ---`;
-const extraRules = isWordList
-? `INPUT MODE: WORD LIST. Treat each line or hyphen-separated token as ONE item.`
-: `INPUT MODE: LONG TEXT. "Example 1" MUST be the EXACT sentence from the source text. Add other natural examples. If an item is too basic/rare for ${level}, SKIP it.`;
-return `You are an expert language tutor AI. User's native: ${src}. Target: ${tgt}. ${isWordList ? '' : `Proficiency: ${level}.`}
+  const extraRules = isWordList
+    ? `INPUT MODE: WORD LIST. Treat each line or hyphen-separated token as ONE item. Keep the user's items unless they are clearly invalid.`
+    : `INPUT MODE: LONG TEXT. "Example 1" MUST be the EXACT sentence from the source text. Add other natural examples. If an item is too basic/rare for ${level}, SKIP it.`;
+  return `You are an expert language tutor AI. User's native: ${src}. Target: ${tgt}. ${isWordList ? '' : `Proficiency: ${level}.`}
 
 ${taskDesc}
 
 RULES:
 - Prioritize PRACTICAL usage.
 - Output MUST strictly follow the template. No extra commentary.
+- Do not use Markdown headings or bullet lists outside the required template.
 
 ${fieldSpec}
 
@@ -407,152 +611,201 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
 }
 
 async function callAI(text, isWordList){
-const prompt = buildPrompt(text, isWordList);
-try{
-const controller = new AbortController();
-setTimeout(()=>controller.abort(), 60000);
-const res = await fetch(PROXY_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ prompt }), signal: controller.signal });
-if(!res.ok) throw new Error(`Network error: ${res.status}`);
-const data = await res.json();
-const ai = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-if(!ai) throw new Error(uiStrings[currentLang].errorAIResponse);
+  const prompt = buildPrompt(text, isWordList);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 120000);
 
-resultsList.dataset.lastRaw = ai;
-renderResults(ai);
-}catch(err){
-console.error(err);
-resultsList.innerHTML = `<div class="card p-8 text-center text-red-500">${err.message || (uiStrings[currentLang].errorServer)}</div>`;
-}finally{
-loader.classList.add('hidden');
+  try{
+    const res = await fetch(PROXY_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ prompt }),
+      signal: controller.signal
+    });
+
+    const rawText = await res.text();
+    let data;
+    try {
+      data = rawText ? JSON.parse(rawText) : {};
+    } catch (jsonError) {
+      throw new Error(`پاسخ سرور JSON معتبر نبود. Status: ${res.status}`);
+    }
+
+    if(!res.ok){
+      const details = Array.isArray(data?.attempts) && data.attempts.length
+        ? data.attempts.map(a => `${a.model || 'model'}: ${a.message || a.errorType || a.status}`).join(' | ')
+        : '';
+      const message = data?.message || data?.error?.message || data?.error || `Network error: ${res.status}`;
+      throw new Error(details ? `${message} — ${details}` : message);
+    }
+
+    const ai = extractAIText(data);
+    if(!ai) throw new Error(uiStrings[currentLang].errorAIResponse);
+
+    resultsList.dataset.lastRaw = ai;
+    renderResults(ai);
+  }catch(err){
+    console.error(err);
+    const isAbort = err?.name === 'AbortError';
+    const message = isAbort ? 'زمان پاسخ‌گویی بیش از حد طول کشید. متن را کوتاه‌تر کنید یا دوباره تلاش کنید.' : (err.message || uiStrings[currentLang].errorServer);
+    resultsList.innerHTML = `<div class="error-box text-center leading-8">${escapeHTML(message)}</div>`;
+  }finally{
+    clearTimeout(timeoutId);
+    loader.classList.add('hidden');
+    setBusy(false);
+  }
 }
+
+function extractAIText(data){
+  const parts = data?.candidates?.[0]?.content?.parts || [];
+  const geminiText = parts.map(p => p.text || '').filter(Boolean).join('\n').trim();
+  return geminiText || data?.text || data?.response || data?.message || data?.choices?.[0]?.message?.content || data?.choices?.[0]?.text || '';
 }
 
 function parseAIResponse(s){
-return s.split('---').filter(x=>x.trim()).map(txt=>{
-const data = {}; let currentKey = '';
-txt.trim().split('\n').forEach(line => {
-const match = line.match(/^([a-zA-Z\s/]+):\s*(.*)/);
-if (match) {
-currentKey = match[1].trim().toLowerCase().replace(/[\s/]/g, '');
-data[currentKey] = match[2].trim();
-} else if (currentKey === 'examples' && /^\d+\./.test(line.trim())) {
-data.exampleslist = data.exampleslist || [];
-data.exampleslist.push(line.trim());
-} else if (currentKey === 'contextnote' && line.trim().startsWith('-')) {
-data[currentKey] = (data[currentKey] || '') + '\n' + line.trim();
-}
-});
-return data;
-});
+  return String(s || '').split(/^---\s*$/m).filter(x => x.trim()).map(txt => {
+    const data = {};
+    let currentKey = '';
+    txt.trim().split('\n').forEach(line => {
+      const match = line.match(/^([a-zA-Z\s/]+):\s*(.*)$/);
+      if (match) {
+        currentKey = match[1].trim().toLowerCase().replace(/[\s/]/g, '');
+        data[currentKey] = match[2].trim();
+      } else if (currentKey === 'examples' && /^\d+\./.test(line.trim())) {
+        data.exampleslist = data.exampleslist || [];
+        data.exampleslist.push(line.trim());
+      } else if (currentKey === 'contextnote' && line.trim()) {
+        const cleaned = line.trim().replace(/^[-•]\s*/, '');
+        data[currentKey] = (data[currentKey] ? data[currentKey] + '\n' : '') + cleaned;
+      }
+    });
+    return data;
+  });
 }
 
-function escapeHTML(s=''){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function speakText(ev, text, langCode){
-ev?.stopPropagation?.(); if(!text) return;
-speechSynthesis.cancel();
-const u = new SpeechSynthesisUtterance(text); u.lang = langCode; speechSynthesis.speak(u);
+function escapeHTML(s=''){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
-function tagPalette(i){ return ['#e0e7ff','#ccfbf1','#fef3c7','#fce7f3','#fee2e2'][i % 5]; }
+function escapeAttr(s=''){
+  return escapeHTML(s).replace(/`/g, '&#96;');
+}
+function speakText(ev, text, langCode){
+  ev?.stopPropagation?.();
+  if(!text) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = langCode;
+  speechSynthesis.speak(u);
+}
+function tagPalette(i){
+  return ['#2563eb','#059669','#d97706','#7c3aed','#dc2626','#0891b2'][i % 6];
+}
 
 function renderResults(ai){
-const parsed = parseAIResponse(ai);
-const sourceCode = (sourceLangSelect.value || '').trim() || currentLang;
-const strings = uiStrings[sourceCode] || uiStrings.en;
+  const parsed = parseAIResponse(ai);
+  const sourceCode = (sourceLangSelect.value || '').trim() || currentLang;
+  const strings = uiStrings[sourceCode] || uiStrings.en;
 
-if (parsed.length === 0 || parsed.every(x => !x.word)){
-resultsList.innerHTML = `<div class="card p-8 text-center muted">${strings.errorNoResults}</div>`;
-return;
-}
-const tts = (LANGS.find(l=>l.code===targetLangSelect.value)?.tts) || 'en-US';
+  if (parsed.length === 0 || parsed.every(x => !x.word)){
+    resultsList.innerHTML = `<div class="result-card p-8 text-center muted">${strings.errorNoResults}</div>`;
+    return;
+  }
 
-resultsList.innerHTML = parsed.map((it, idx)=>{
-const word = escapeHTML(it.word || '');
-const translation = escapeHTML(it.translation || '');
-const grammar = escapeHTML(it.grammar || strings.notApplicable);
-const collocRaw = (it.collocations || '').split(/,|،/).map(s => s.trim()).filter(Boolean);
-const tagsRaw = (it.tags || '').split(';').map(s=>s.trim()).filter(Boolean);
-const examplesHTML = (it.exampleslist || []).map(ex => {
-const splitAt = ex.lastIndexOf(' - ');
-let original = ex.slice(ex.indexOf('.') + 1).trim();
-let trans = '';
-if (splitAt > 1) {
-original = ex.slice(ex.indexOf('.') + 1, splitAt).trim();
-trans = ex.slice(splitAt + 3).trim();
-}
-return `<li>
-             <div class="flex items-center gap-2">
-               <p>${escapeHTML(original)}</p>
-               <button class="btn btn-ghost p-2" onclick="speakText(event,'${original.replace(/'/g, "\\'")}', '${tts}')" title="${strings.speakSentence}">🔊</button>
-             </div>
-             ${trans ? `<p class="text-sm muted">${escapeHTML(trans)}</p>`:''}
-           </li>`;
-}).join('');
+  const tts = (LANGS.find(l => l.code === targetLangSelect.value)?.tts) || 'en-US';
 
-return `<div class="ring-card">
-           <div class="card result-item">
-             <div class="result-header flex justify-between items-center p-4" onclick="toggleDetails(${idx})">
-               <div class="min-w-0">
-                 <div class="flex items-center gap-2 flex-wrap">
-                   <h3 class="text-xl font-extrabold text-[var(--primary-600)] truncate">${word || strings.wordNotFound}</h3>
-                   ${grammar && grammar!==strings.notApplicable ? `<span class="chip"><span class="dot" style="background:${tagPalette(idx)}"></span>${grammar}</span>`:''}
-                 </div>
-                 <p class="mt-1 muted">${translation}</p>
-               </div>
-               <div class="flex items-center gap-2">
-                 <button class="btn btn-ghost p-2.5" onclick="speakText(event,'${word.replace(/'/g,"\\'")}', '${tts}')" title="${strings.speakWord}">🔊</button>
-                 <span id="chevron-${idx}" class="text-xl transition-transform">▾</span>
-               </div>
-             </div>
-             <div id="details-${idx}" class="result-details">
-               <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 pt-2">
-                 <div>
-                   <div class="flex items-center gap-2 mb-2"><span>📘</span><strong>${strings.definition}:</strong></div>
-                   <p>${escapeHTML(it.definition || strings.notApplicable)}</p>
-                 </div>
-                 <div>
-                   <div class="flex items-center gap-2 mb-2"><span>🗣️</span><strong>${strings.pronunciation}:</strong></div>
-                   <p>${escapeHTML(it.pronunciation || strings.notApplicable)}</p>
-                 </div>
-                 <div class="md:col-span-2">
-                   <div class="flex items-center gap-2 mb-2"><span>🔗</span><strong>${strings.collocations}:</strong></div>
-                   <div class="flex flex-wrap gap-2">
-                     ${collocRaw.length ? collocRaw.map((c,i)=>`<span class="chip" style="background: color-mix(in oklab, ${tagPalette(i)} 60%, transparent)">${escapeHTML(c)}</span>`).join('') : `<span class="text-sm muted">${strings.notApplicable}</span>`}
-                   </div>
-                 </div>
-                 <div class="md:col-span-2">
-                   <div class="flex items-center gap-2 mb-2"><span>🏷️</span><strong>${strings.tags}:</strong></div>
-                   <div class="flex flex-wrap gap-2">
-                     ${tagsRaw.length ? tagsRaw.map((t,i)=>`<span class="chip" style="background: color-mix(in oklab, ${tagPalette(i+1)} 60%, transparent)">${escapeHTML(t)}</span>`).join('') : `<span class="text-sm muted">${strings.notApplicable}</span>`}
-                   </div>
-                 </div>
-                 <div class="md:col-span-2">
-                   <div class="flex items-center gap-2 mb-2"><span>✍️</span><strong>${strings.examples}:</strong></div>
-                   <ul class="space-y-3 pl-4 pr-4">${examplesHTML}</ul>
-                 </div>
-                 <div>
-                   <div class="flex items-center gap-2 mb-2"><span>⚠️</span><strong>${strings.commonMistakes}:</strong></div>
-                   <p>${escapeHTML(it.commonmistakes || strings.notApplicable)}</p>
-                 </div>
-                 <div>
-                   <div class="flex items-center gap-2 mb-2"><span>💡</span><strong>${strings.contextNote}:</strong></div>
-                   <p>${(it.contextnote || '').replace(/\n/g,'<br>') || strings.notApplicable}</p>
-                 </div>
-               </div>
-             </div>
-           </div>
-         </div>`;
-}).join('');
+  resultsList.innerHTML = parsed.map((it, idx) => {
+    const wordRaw = it.word || '';
+    const word = escapeHTML(wordRaw);
+    const translation = escapeHTML(it.translation || '');
+    const grammar = escapeHTML(it.grammar || strings.notApplicable);
+    const collocRaw = (it.collocations || '').split(/,|،/).map(s => s.trim()).filter(Boolean).filter(x => x.toLowerCase() !== 'n/a');
+    const tagsRaw = (it.tags || '').split(';').map(s => s.trim()).filter(Boolean);
+    const examplesHTML = (it.exampleslist || []).map((ex, exIdx) => {
+      const splitAt = ex.lastIndexOf(' - ');
+      let original = ex.slice(ex.indexOf('.') + 1).trim();
+      let trans = '';
+      if (splitAt > 1) {
+        original = ex.slice(ex.indexOf('.') + 1, splitAt).trim();
+        trans = ex.slice(splitAt + 3).trim();
+      }
+      return `<li class="example-item">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="micro mb-1">Example ${exIdx + 1}</div>
+            <p class="leading-8 font-semibold">${escapeHTML(original)}</p>
+            ${trans ? `<p class="text-sm muted leading-7 mt-1">${escapeHTML(trans)}</p>` : ''}
+          </div>
+          <button class="btn btn-ghost btn-icon shrink-0" data-speak="${escapeAttr(original)}" data-tts="${escapeAttr(tts)}" title="${escapeAttr(strings.speakSentence)}">🔊</button>
+        </div>
+      </li>`;
+    }).join('');
+
+    return `<article class="result-card">
+      <div class="result-header p-4 md:p-5" data-result-index="${idx}">
+        <div class="flex justify-between items-start gap-4">
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap mb-2">
+              <span class="chip"><span class="dot" style="background:${tagPalette(idx)}"></span>#${idx + 1}</span>
+              ${grammar && grammar !== strings.notApplicable ? `<span class="chip">${grammar}</span>` : ''}
+            </div>
+            <h3 class="text-2xl md:text-3xl font-black text-[var(--primary-600)] break-words">${word || strings.wordNotFound}</h3>
+            <p class="mt-2 muted text-base leading-7">${translation}</p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button class="btn btn-secondary btn-icon" data-speak="${escapeAttr(wordRaw)}" data-tts="${escapeAttr(tts)}" title="${escapeAttr(strings.speakWord)}">🔊</button>
+            <span id="chevron-${idx}" class="text-xl transition-transform muted">⌄</span>
+          </div>
+        </div>
+      </div>
+      <div id="details-${idx}" class="result-details">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="info-tile">
+            <div class="flex items-center gap-2 mb-2"><span>📘</span><strong>${strings.definition}</strong></div>
+            <p class="leading-8">${escapeHTML(it.definition || strings.notApplicable)}</p>
+          </div>
+          <div class="info-tile">
+            <div class="flex items-center gap-2 mb-2"><span>🗣️</span><strong>${strings.pronunciation}</strong></div>
+            <p class="leading-8">${escapeHTML(it.pronunciation || strings.notApplicable)}</p>
+          </div>
+          <div class="info-tile md:col-span-2">
+            <div class="flex items-center gap-2 mb-3"><span>🔗</span><strong>${strings.collocations}</strong></div>
+            <div class="flex flex-wrap gap-2">${collocRaw.length ? collocRaw.map((c,i) => `<span class="chip"><span class="dot" style="background:${tagPalette(i)}"></span>${escapeHTML(c)}</span>`).join('') : `<span class="text-sm muted">${strings.notApplicable}</span>`}</div>
+          </div>
+          <div class="info-tile md:col-span-2">
+            <div class="flex items-center gap-2 mb-3"><span>🏷️</span><strong>${strings.tags}</strong></div>
+            <div class="flex flex-wrap gap-2">${tagsRaw.length ? tagsRaw.map((t,i) => `<span class="chip"><span class="dot" style="background:${tagPalette(i+1)}"></span>${escapeHTML(t)}</span>`).join('') : `<span class="text-sm muted">${strings.notApplicable}</span>`}</div>
+          </div>
+          <div class="info-tile md:col-span-2">
+            <div class="flex items-center gap-2 mb-3"><span>✍️</span><strong>${strings.examples}</strong></div>
+            <ul class="space-y-3">${examplesHTML || `<li class="muted">${strings.notApplicable}</li>`}</ul>
+          </div>
+          <div class="info-tile">
+            <div class="flex items-center gap-2 mb-2"><span>⚠️</span><strong>${strings.commonMistakes}</strong></div>
+            <p class="leading-8">${escapeHTML(it.commonmistakes || strings.notApplicable)}</p>
+          </div>
+          <div class="info-tile">
+            <div class="flex items-center gap-2 mb-2"><span>💡</span><strong>${strings.contextNote}</strong></div>
+            <p class="leading-8">${escapeHTML(it.contextnote || strings.notApplicable).replace(/\n/g,'<br>')}</p>
+          </div>
+        </div>
+      </div>
+    </article>`;
+  }).join('');
 }
 
 function toggleDetails(i){
-const d=document.getElementById(`details-${i}`); const c=document.getElementById(`chevron-${i}`);
-d.classList.toggle('open'); if(c)c.style.transform=d.classList.contains('open')?'rotate(180deg)':'rotate(0deg)';
+  const d = document.getElementById(`details-${i}`);
+  const c = document.getElementById(`chevron-${i}`);
+  if (!d) return;
+  d.classList.toggle('open');
+  if(c) c.style.transform = d.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
 }
 function toggleAll(open){
-document.querySelectorAll('.result-details').forEach((d,idx)=>{
-const c=document.getElementById(`chevron-${idx}`);
-d.classList.toggle('open',open); if(c)c.style.transform=open?'rotate(180deg)':'rotate(0deg)';
-});
+  document.querySelectorAll('.result-details').forEach((d,idx) => {
+    const c = document.getElementById(`chevron-${idx}`);
+    d.classList.toggle('open', open);
+    if(c) c.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+  });
 }
 
 // i18n
@@ -1118,6 +1371,7 @@ sourceLangSelect.value = 'fa';
 targetLangSelect.value = 'en';
 updateModeBadge();
 });
+
 </script>
 </body>
 </html>
