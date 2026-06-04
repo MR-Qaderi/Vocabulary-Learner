@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title id="app-title">یادگیری زبان با هوش مصنوعی</title>
-<link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect width="64" height="64" rx="16" fill="white"/%3E%3Cpath d="M14 14h16c7 0 12 4 14 9 2-5 7-9 14-9h-8c-7 0-12 4-14 10v25l-6-5H14a6 6 0 0 1-6-6V20a6 6 0 0 1 6-6Z" fill="none" stroke="black" stroke-width="4" stroke-linejoin="round"/%3E%3Cpath d="M18 25h14M18 32h14M18 39h10" stroke="black" stroke-width="4" stroke-linecap="round"/%3E%3Ccircle cx="46" cy="31" r="3" fill="black"/%3E%3Ccircle cx="53" cy="24" r="2.5" fill="black"/%3E%3Ccircle cx="55" cy="38" r="2.5" fill="black"/%3E%3Cpath d="M48 29l4-4M49 32h5" stroke="black" stroke-width="3" stroke-linecap="round"/%3E%3C/svg%3E'>
+<title id="app-title">زبان‌یار | LingoDeck</title>
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22white%22/%3E%0A%3Cpath%20d%3D%22M10%2015h19c4%200%207%202%209%205%202-3%205-5%209-5h7v34h-7c-4%200-7%201.2-9%204-2-2.8-5-4-9-4H10z%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%223.2%22%20stroke-linejoin%3D%22round%22/%3E%0A%3Cpath%20d%3D%22M38%2020v33%22%20stroke%3D%22black%22%20stroke-width%3D%223.2%22%20stroke-linecap%3D%22round%22/%3E%0A%3Ctext%20x%3D%2215%22%20y%3D%2237%22%20font-family%3D%22Arial%2C%20Helvetica%2C%20sans-serif%22%20font-size%3D%2213%22%20font-weight%3D%22800%22%20fill%3D%22black%22%3EABC%3C/text%3E%0A%3Ccircle%20cx%3D%2245%22%20cy%3D%2230%22%20r%3D%222.4%22%20fill%3D%22black%22/%3E%0A%3Ccircle%20cx%3D%2252%22%20cy%3D%2225%22%20r%3D%222.1%22%20fill%3D%22black%22/%3E%0A%3Ccircle%20cx%3D%2253%22%20cy%3D%2237%22%20r%3D%222.1%22%20fill%3D%22black%22/%3E%0A%3Ccircle%20cx%3D%2247%22%20cy%3D%2240%22%20r%3D%222.1%22%20fill%3D%22black%22/%3E%0A%3Cpath%20d%3D%22M47%2029l3.5-2.5M47%2031l4%205M49%2039l2-1.3M47%2039l4-13%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22/%3E%0A%3C/svg%3E'>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -160,6 +160,19 @@ body::after{
   .hero-intro{max-width:100%}
 }
 
+
+/* Brand refresh */
+.logo-mark{width:58px;height:58px;border-radius:20px}
+.logo-mark svg{width:39px;height:39px}
+.brand-subtitle{display:inline-flex;align-items:center;gap:.45rem}
+#brand-kicker{color:var(--accent);letter-spacing:.13em}
+.select-control{font-variant-emoji:text}
+.lang-code{font-weight:950}
+@media (max-width:520px){
+  .logo-mark{width:50px;height:50px}
+  .logo-mark svg{width:34px;height:34px}
+}
+
 </style>
 </head>
 <body>
@@ -169,16 +182,18 @@ body::after{
     <div class="flex items-center gap-3 min-w-0">
       <div class="logo-mark" aria-hidden="true">
         <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M13 14h16c7.7 0 13 4.3 15 10.3C46 18.3 51.3 14 59 14h-8.5C43.6 14 38 19.6 38 26.5V50l-7-5.5H13a6 6 0 0 1-6-6V20a6 6 0 0 1 6-6Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
-          <path d="M17 25h15M17 32h15M17 39h10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-          <circle cx="47" cy="31" r="3.5" fill="currentColor"/>
-          <circle cx="54" cy="24" r="2.7" fill="currentColor"/>
-          <circle cx="56" cy="38" r="2.7" fill="currentColor"/>
-          <path d="M49.5 28.7 52.5 25.5M50.5 32h4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          <path d="M10 15h19c4 0 7 2 9 5 2-3 5-5 9-5h7v34h-7c-4 0-7 1.2-9 4-2-2.8-5-4-9-4H10z" stroke="currentColor" stroke-width="3.4" stroke-linejoin="round"/>
+          <path d="M38 20v33" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/>
+          <text x="15" y="37" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="800" fill="currentColor">ABC</text>
+          <circle cx="45" cy="30" r="2.5" fill="currentColor"/>
+          <circle cx="52" cy="25" r="2.2" fill="currentColor"/>
+          <circle cx="53" cy="37" r="2.2" fill="currentColor"/>
+          <circle cx="47" cy="40" r="2.2" fill="currentColor"/>
+          <path d="M47 29l3.5-2.5M47 31l4 5M49 39l2-1.3M47 39l4-13" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
         </svg>
       </div>
       <div class="min-w-0">
-        <div class="app-kicker text-[10px] font-black muted mb-1">AI LANGUAGE LAB</div>
+        <div id="brand-kicker" class="app-kicker text-[10px] font-black muted mb-1">LingoDeck</div>
         <h1 id="main-title" class="text-lg md:text-xl font-black tracking-tight truncate"></h1>
         <p id="header-subtitle" class="text-xs muted hidden sm:block"></p>
       </div>
@@ -202,7 +217,7 @@ body::after{
 
       <!-- Intro / guidance column -->
       <aside class="lg:col-span-5 space-y-5">
-        <div class="premium-badge"><span class="spark"></span><span>AI Vocabulary Studio</span></div>
+        <div class="premium-badge"><span class="spark"></span><span id="hero-badge-label">LingoDeck Studio</span></div>
 
         <div class="hero-intro">
           <h2 id="hero-title" class="hero-title text-4xl md:text-6xl font-black leading-tight tracking-tight mb-4">
@@ -368,15 +383,15 @@ body::after{
 const PROXY_URL = 'https://language-learner.qaderi.workers.dev/';
 
 const LANGS = [
-  { code:'fa', flag:'🇮🇷', label:'فارسی',   en:'Persian',  tts:'fa-IR' },
-  { code:'en', flag:'🇺🇸', label:'English', en:'English',  tts:'en-US' },
-  { code:'de', flag:'🇩🇪', label:'Deutsch', en:'German',   tts:'de-DE' },
-  { code:'fr', flag:'🇫🇷', label:'Français',en:'French',   tts:'fr-FR' },
-  { code:'es', flag:'🇪🇸', label:'Español', en:'Spanish',  tts:'es-ES' },
-  { code:'zh', flag:'🇨🇳', label:'中文',     en:'Chinese',  tts:'zh-CN' },
-  { code:'tr', flag:'🇹🇷', label:'Türkçe',  en:'Turkish',  tts:'tr-TR' },
-  { code:'it', flag:'🇮🇹', label:'Italiano',en:'Italian',  tts:'it-IT' },
-  { code:'ru', flag:'🇷🇺', label:'Русский', en:'Russian',  tts:'ru-RU' },
+  { code:'fa', flag:'FA', label:'فارسی',   en:'Persian',  tts:'fa-IR' },
+  { code:'en', flag:'EN', label:'English', en:'English',  tts:'en-US' },
+  { code:'de', flag:'DE', label:'Deutsch', en:'German',   tts:'de-DE' },
+  { code:'fr', flag:'FR', label:'Français',en:'French',   tts:'fr-FR' },
+  { code:'es', flag:'ES', label:'Español', en:'Spanish',  tts:'es-ES' },
+  { code:'zh', flag:'ZH', label:'中文',     en:'Chinese',  tts:'zh-CN' },
+  { code:'tr', flag:'TR', label:'Türkçe',  en:'Turkish',  tts:'tr-TR' },
+  { code:'it', flag:'IT', label:'Italiano',en:'Italian',  tts:'it-IT' },
+  { code:'ru', flag:'RU', label:'Русский', en:'Russian',  tts:'ru-RU' },
 ];
 const RTL_LANGS = new Set(['fa']);
 const MAX_PROMPT_PREVIEW_LENGTH = 200000;
@@ -554,7 +569,7 @@ function hideLevelWarning(){ levelWarning.classList.add('hidden'); }
 function setBusy(isBusy){
   const s = uiStrings[currentLang] || uiStrings.en;
   processBtn.disabled = isBusy;
-  processBtn.querySelector('span').textContent = isBusy ? 'در حال تحلیل...' : s.processBtn;
+  processBtn.querySelector('span').textContent = isBusy ? (s.analyzingText || 'Analyzing...') : s.processBtn;
   processBtn.querySelector('.process-icon')?.classList.toggle('animate-pulse', isBusy);
 }
 
@@ -837,10 +852,10 @@ const instagramSVG = '<svg aria-hidden="true" width="16" height="16" viewBox="0 
 
 const uiStrings = {
 fa:{
-appTitle:"یادگیری زبان با هوش مصنوعی",
-mainTitle:"یادگیری لغات جدید زبان",
-heroTitle:"از متن خام تا کارت یادگیری حرفه‌ای.",
-headerSubtitle:"",
+appTitle:"زبان‌یار | LingoDeck",
+mainTitle:"زبان‌یار",
+heroTitle:"از متن خام تا کارت یادگیری حرفه‌ای!",
+headerSubtitle:"LingoDeck",
 bigDesc:"🔍 چی کار می‌کنیم؟ <span class='font-bold'>از متن یا لیست شما</span> اصطلاحات و کلمات کاربردی را جدا می‌کنیم و <span class='font-bold'>معنی، مثال، گرامر و تلفظ</span> را نمایش می‌دهیم تا یادگیری زبان برایتان سریع‌تر و هدفمندتر شود.",
 sourceLangLabel:"زبان مادری من",
 targetLangLabel:"زبانی که یاد می‌گیرم",
@@ -851,7 +866,7 @@ hintStatic:`
                 <p>به دو روش می‌توانید از این برنامه استفاده کنید:</p>
               
                 <p>🧾 <strong>تحلیل و استخراج لغات کاربردی از متن:</strong><br>
-                سطح زبان‌تان را انتخاب کنید، سپس یک متن (خبر، داستان، زیرنویس فیلم و …) را در باکس زیر قرار دهید.<br>
+                سطح زبان‌تان را انتخاب کنید، سپس یک متن (خبر، داستان، زیرنویس فیلم و …) را در باکس روبه‌رو قرار دهید.<br>
                 برنامه به‌صورت هوشمند و متناسب با سطح زبان شما، لغات کاربردی متن را استخراج کرده و برای هر کلمه معنی، گرامر، مثال و تلفظ نمایش می‌دهد.</p>
               
                 <p>🗒️ <strong>استفاده از لیستِ آمادهٔ خودتان:</strong><br>
@@ -862,6 +877,7 @@ hintStatic:`
          </div>`,
 uploadBtnText:"آپلود فایل (.txt, .srt)",
 processBtn:"تحلیل کن",
+analyzingText:"در حال تحلیل...",
 resultsTitle:"نتایج تحلیل",
 startOverBtn:"شروع دوباره",
 expandAll:"باز کردن همه",
@@ -903,10 +919,10 @@ footerBuilder:`
          </span>`
 },
 en:{
-appTitle:"AI Language Learner",
-mainTitle:"Learn New Vocabulary",
-heroTitle:"Turn raw text into polished learning cards.",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"From raw text to polished learning cards!",
+headerSubtitle:"Language learning cards",
 bigDesc:"🔍 What we do: from <span class='font-bold'>your text or your word list</span>, we extract useful items and show <span class='font-bold'>meaning, examples, grammar, and pronunciation</span> so you learn faster and smarter.",
 sourceLangLabel:"My Native Language",
 targetLangLabel:"Language I'm Learning",
@@ -923,6 +939,7 @@ hintStatic:`
          </div>`,
 uploadBtnText:"Upload File (.txt, .srt)",
 processBtn:"Analyze",
+analyzingText:"Analyzing...",
 resultsTitle:"Analysis Results",
 startOverBtn:"Start Over",
 expandAll:"Expand All",
@@ -964,9 +981,11 @@ footerBuilder:`
          </span>`
 },
 de:{
-appTitle:"KI Sprachlerner",
-mainTitle:"Neue Vokabeln lernen",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"Vom Rohtext zu professionellen Lernkarten!",
+
+headerSubtitle:"Lernkarten aus Texten",
 bigDesc:"🔍 Was wir tun: Aus <span class='font-bold'>deinem Text oder deiner Wortliste</span> extrahieren wir nützliche Einträge und zeigen <span class='font-bold'>Bedeutung, Beispiele, Grammatik, Aussprache</span> für schnelleres Lernen.",
 sourceLangLabel:"Meine Muttersprache",
 targetLangLabel:"Lernsprache",
@@ -1016,9 +1035,11 @@ footerBuilder:`
          </span>`
 },
 fr:{
-appTitle:"Apprenant de langues IA",
-mainTitle:"Apprendre de nouveaux mots",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"Du texte brut aux cartes d’apprentissage professionnelles !",
+
+headerSubtitle:"Cartes d’apprentissage",
 bigDesc:"🔍 Ce que nous faisons : à partir de <span class='font-bold'>votre texte ou votre liste</span>, nous extrayons des éléments utiles et affichons <span class='font-bold'>sens, exemples, grammaire et prononciation</span> pour apprendre plus vite.",
 sourceLangLabel:"Ma langue maternelle",
 targetLangLabel:"Langue que j'apprends",
@@ -1068,9 +1089,11 @@ footerBuilder:`
          </span>`
 },
 es:{
-appTitle:"Aprendiz de idiomas con IA",
-mainTitle:"Aprender vocabulario nuevo",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"¡De texto sin procesar a tarjetas de aprendizaje profesionales!",
+
+headerSubtitle:"Tarjetas de aprendizaje",
 bigDesc:"🔍 Qué hacemos: a partir de <span class='font-bold'>tu texto o tu lista</span> extraemos elementos útiles y mostramos <span class='font-bold'>significado, ejemplos, gramática y pronunciación</span> para aprender más rápido.",
 sourceLangLabel:"Mi lengua materna",
 targetLangLabel:"Idioma que aprendo",
@@ -1120,9 +1143,11 @@ footerBuilder:`
          </span>`
 },
 zh:{
-appTitle:"AI 语言学习助手",
-mainTitle:"学习新词汇",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"从原始文本到专业学习卡片！",
+
+headerSubtitle:"语言学习卡片",
 bigDesc:"🔍 我们会从<span class='font-bold'>你的文本或词表</span>中提取有用条目，并提供<span class='font-bold'>释义、例句、语法与发音</span>，帮助更快更聪明地学习。",
 sourceLangLabel:"母语",
 targetLangLabel:"正在学习的语言",
@@ -1172,15 +1197,17 @@ footerBuilder:`
          </span>`
 },
 tr:{
-appTitle:"YZ Dil Öğrenici",
-mainTitle:"Yeni kelimeler öğren",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"Ham metinden profesyonel öğrenme kartlarına!",
+
+headerSubtitle:"Dil öğrenme kartları",
 bigDesc:"🔍 Ne yapıyoruz: <span class='font-bold'>metninizden veya listenizden</span> faydalı maddeleri çıkarır, <span class='font-bold'>anlam, örnek, dil bilgisi ve telaffuz</span> gösteririz.",
 sourceLangLabel:"Anadilim",
 targetLangLabel:"Öğrendiğim dil",
 userLevelLabel:"Seviyem",
 forceWordlistLabel:"Bu bir kelime listesi",
-hintStatic:`<div class="space-y-2 leading-7"><div>🧭 <b>İki kullanım:</b></div><ol class="list-decimal pl-5 space-y-2"><li>🧾 <b>Metin analizi</b>: seviyeni seç; uygun maddeleri çıkarıp <b>çeviri, örnek, dil bilgisi, telaffuz</b> gösteririz.</li><li>🗒️ <b>Hazır listen</</b>: satır satır ya da “-” ile; <b>“Bu bir kelime listesi”</b>ni işaretle.</li></ol><div>✨ <i>İpucu:</i> Listede seviye seçimi gerekmez.</div></div>`,
+hintStatic:`<div class="space-y-2 leading-7"><div>🧭 <b>İki kullanım:</b></div><ol class="list-decimal pl-5 space-y-2"><li>🧾 <b>Metin analizi</b>: seviyeni seç; uygun maddeleri çıkarıp <b>çeviri, örnek, dil bilgisi, telaffuz</b> gösteririz.</li><li>🗒️ <b>Hazır listen</b>: satır satır ya da “-” ile; <b>“Bu bir kelime listesi”</b>ni işaretle.</li></ol><div>✨ <i>İpucu:</i> Listede seviye seçimi gerekmez.</div></div>`,
 uploadBtnText:"Dosya yükle (.txt, .srt)",
 processBtn:"Analiz et",
 resultsTitle:"Analiz Sonuçları",
@@ -1224,9 +1251,11 @@ footerBuilder:`
          </span>`
 },
 it:{
-appTitle:"Apprendimento lingue con IA",
-mainTitle:"Impara nuovo vocabolario",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"Dal testo grezzo a schede di apprendimento professionali!",
+
+headerSubtitle:"Schede di apprendimento",
 bigDesc:"🔍 Cosa facciamo: da <span class='font-bold'>tuo testo o lista</span> estraiamo elementi utili e mostriamo <span class='font-bold'>significato, esempi, grammatica e pronuncia</span> per imparare più rapidamente.",
 sourceLangLabel:"Lingua madre",
 targetLangLabel:"Lingua che sto imparando",
@@ -1276,9 +1305,11 @@ footerBuilder:`
          </span>`
 },
 ru:{
-appTitle:"Изучение языков с ИИ",
-mainTitle:"Учите новые слова",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"От сырого текста к профессиональным учебным карточкам!",
+
+headerSubtitle:"Карточки для изучения языка",
 bigDesc:"🔍 Что мы делаем: из <span class='font-bold'>вашего текста или списка</span> извлекаем полезные единицы и показываем <span class='font-bold'>значение, примеры, грамматику и произношение</span> для более быстрого обучения.",
 sourceLangLabel:"Родной язык",
 targetLangLabel:"Изучаемый язык",
@@ -1330,6 +1361,19 @@ footerBuilder:`
 };
 
 
+
+const brandLocale = {
+  fa: { title: 'زبان‌یار', kicker: 'LingoDeck', badge: 'LingoDeck Studio' },
+  en: { title: 'LingoDeck', kicker: 'Language Learning Cards', badge: 'LingoDeck Studio' },
+  de: { title: 'LingoDeck', kicker: 'Sprachkarten', badge: 'LingoDeck Studio' },
+  fr: { title: 'LingoDeck', kicker: 'Cartes de langue', badge: 'Studio LingoDeck' },
+  es: { title: 'LingoDeck', kicker: 'Tarjetas de idioma', badge: 'LingoDeck Studio' },
+  zh: { title: 'LingoDeck', kicker: '语言卡片', badge: 'LingoDeck Studio' },
+  tr: { title: 'LingoDeck', kicker: 'Dil kartları', badge: 'LingoDeck Studio' },
+  it: { title: 'LingoDeck', kicker: 'Schede lingua', badge: 'Studio LingoDeck' },
+  ru: { title: 'LingoDeck', kicker: 'Языковые карточки', badge: 'LingoDeck Studio' }
+};
+
 const creatorLocale = {
   fa: { kicker: 'طراحی و توسعه توسط', role: 'تحلیل‌گر سیستم و کسب‌وکار' },
   en: { kicker: 'Designed & Built by', role: 'Business & Systems Analyst' },
@@ -1345,6 +1389,7 @@ const creatorLocale = {
 function setLanguage(lang){
 currentLang = lang;
 const s = uiStrings[lang] || uiStrings.en;
+const brand = brandLocale[lang] || brandLocale.en;
 const isRtl = RTL_LANGS.has(lang);
 document.documentElement.lang = lang;
 document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
@@ -1352,7 +1397,9 @@ document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
 const heroTitle = s.heroTitle || (isRtl ? 'از متن یا لیست، کارت یادگیری بساز.' : 'Turn any text into a learning deck.');
 const map = {
 'hero-title': heroTitle,
-'main-title':s.mainTitle,
+'main-title':brand.title || s.mainTitle,
+'brand-kicker':brand.kicker,
+'hero-badge-label':brand.badge,
 'header-subtitle':s.headerSubtitle,
 'big-desc':s.bigDesc,
 'source-lang-label':s.sourceLangLabel,
@@ -1402,7 +1449,7 @@ updateModeBadge();
 
 document.addEventListener('DOMContentLoaded', ()=> {
 [uiLangSwitcher, sourceLangSelect, targetLangSelect].forEach(sel => {
-sel.innerHTML = LANGS.map(l => `<option value="${l.code}">${l.flag} ${l.label}</option>`).join('');
+sel.innerHTML = LANGS.map(l => `<option value="${l.code}">${l.flag} · ${l.label}</option>`).join('');
 });
 const lang = localStorage.getItem('ll-lang') || 'fa';
 setLanguage(lang);
