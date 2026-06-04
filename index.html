@@ -141,6 +141,25 @@ body::after{
 [dir="ltr"] #process-btn.is-loading .process-icon{animation:btnPulseLtr 1s ease-in-out infinite}
 @keyframes btnPulseLtr{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
 
+
+/* Final layout correction */
+.hero-intro{max-width:620px}
+#hint-container{margin-top:1.15rem}
+.hero-card .grid{position:relative}
+.input-panel{min-width:0}
+.input-panel>.drop-zone{position:relative;z-index:1}
+.workflow-card{min-width:0}
+@media (min-width:1024px){
+  .hero-card .lg\:col-span-5{grid-column:span 5 / span 5}
+  .hero-card .lg\:col-span-7{grid-column:span 7 / span 7}
+  .hero-title{max-width:620px}
+  .textarea-control{min-height:300px}
+}
+@media (max-width:1023px){
+  .hero-title{text-align:inherit}
+  .hero-intro{max-width:100%}
+}
+
 </style>
 </head>
 <body>
@@ -180,27 +199,48 @@ body::after{
 <section class="max-w-7xl mx-auto px-4 pt-8 md:pt-12 pb-6">
   <div class="hero-card control-surface p-5 md:p-8 lg:p-10">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+
+      <!-- Intro / guidance column -->
       <aside class="lg:col-span-5 space-y-5">
         <div class="premium-badge"><span class="spark"></span><span>AI Vocabulary Studio</span></div>
-        <div>
-          <h2 id="hero-title" class="hero-title text-4xl md:text-6xl font-black leading-tight tracking-tight mb-4">از متن یا لیست، کارت یادگیری بساز.</h2>
+
+        <div class="hero-intro">
+          <h2 id="hero-title" class="hero-title text-4xl md:text-6xl font-black leading-tight tracking-tight mb-4">
+            از متن یا لیست، کارت یادگیری بساز.
+          </h2>
           <div id="big-desc" class="text-base md:text-lg leading-9 muted font-semibold max-w-2xl"></div>
         </div>
-</div>
 
-        <div id="hint-container" class="step-card workflow-card mt-1">
+        <div id="hint-container" class="step-card workflow-card">
           <div class="flex items-start gap-3">
             <div class="step-no">؟</div>
             <div id="hint" class="text-sm muted leading-8 space-y-1"></div>
           </div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div class="step-card workflow-card"><div class="flex items-center gap-3"><span class="step-no">1</span><div><div class="font-black text-sm">زبان‌ها</div><div class="micro">مبدأ و مقصد</div></div></div></div>
-          <div class="step-card workflow-card"><div class="flex items-center gap-3"><span class="step-no">2</span><div><div class="font-black text-sm">ورودی</div><div class="micro">متن یا لیست</div></div></div></div>
-          <div class="step-card workflow-card"><div class="flex items-center gap-3"><span class="step-no">3</span><div><div class="font-black text-sm">تحلیل</div><div class="micro">نتیجه آموزشی</div></div></div></div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3 gap-3">
+          <div class="step-card workflow-card">
+            <div class="flex items-center gap-3">
+              <span class="step-no">1</span>
+              <div><div class="font-black text-sm">زبان‌ها</div><div class="micro">مبدأ و مقصد</div></div>
+            </div>
+          </div>
+          <div class="step-card workflow-card">
+            <div class="flex items-center gap-3">
+              <span class="step-no">2</span>
+              <div><div class="font-black text-sm">ورودی</div><div class="micro">متن یا لیست</div></div>
+            </div>
+          </div>
+          <div class="step-card workflow-card">
+            <div class="flex items-center gap-3">
+              <span class="step-no">3</span>
+              <div><div class="font-black text-sm">تحلیل</div><div class="micro">نتیجه آموزشی</div></div>
+            </div>
+          </div>
         </div>
       </aside>
 
+      <!-- Main input column -->
       <div class="lg:col-span-7 space-y-4 input-panel">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
@@ -268,6 +308,7 @@ body::after{
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
