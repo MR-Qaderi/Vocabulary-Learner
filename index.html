@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title id="app-title">یادگیری زبان با هوش مصنوعی</title>
-<link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect width="64" height="64" rx="16" fill="white"/%3E%3Cpath d="M14 14h16c7 0 12 4 14 9 2-5 7-9 14-9h-8c-7 0-12 4-14 10v25l-6-5H14a6 6 0 0 1-6-6V20a6 6 0 0 1 6-6Z" fill="none" stroke="black" stroke-width="4" stroke-linejoin="round"/%3E%3Cpath d="M18 25h14M18 32h14M18 39h10" stroke="black" stroke-width="4" stroke-linecap="round"/%3E%3Ccircle cx="46" cy="31" r="3" fill="black"/%3E%3Ccircle cx="53" cy="24" r="2.5" fill="black"/%3E%3Ccircle cx="55" cy="38" r="2.5" fill="black"/%3E%3Cpath d="M48 29l4-4M49 32h5" stroke="black" stroke-width="3" stroke-linecap="round"/%3E%3C/svg%3E'>
+<title id="app-title">زبان‌یار | LingoDeck</title>
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22white%22/%3E%3Cpath%20d%3D%22M14%2014h16c7%200%2012%204%2014%209%202-5%207-9%2014-9h-8c-7%200-12%204-14%2010v25l-6-5H14a6%206%200%200%201-6-6V20a6%206%200%200%201%206-6Z%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%224%22%20stroke-linejoin%3D%22round%22/%3E%3Cpath%20d%3D%22M18%2025h14M18%2032h14M18%2039h10%22%20stroke%3D%22black%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22/%3E%3Ccircle%20cx%3D%2246%22%20cy%3D%2231%22%20r%3D%223%22%20fill%3D%22black%22/%3E%3Ccircle%20cx%3D%2253%22%20cy%3D%2224%22%20r%3D%222.5%22%20fill%3D%22black%22/%3E%3Ccircle%20cx%3D%2255%22%20cy%3D%2238%22%20r%3D%222.5%22%20fill%3D%22black%22/%3E%3Cpath%20d%3D%22M48%2029l4-4M49%2032h5%22%20stroke%3D%22black%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E'>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -160,6 +160,19 @@ body::after{
   .hero-intro{max-width:100%}
 }
 
+
+/* Brand refresh */
+.logo-mark{width:52px;height:52px;border-radius:18px}
+.logo-mark svg{width:32px;height:32px}
+.brand-subtitle{display:inline-flex;align-items:center;gap:.45rem}
+#brand-kicker{color:var(--accent);letter-spacing:.13em}
+.select-control{font-variant-emoji:text}
+.lang-code{font-weight:950}
+@media (max-width:520px){
+  .logo-mark{width:46px;height:46px}
+  .logo-mark svg{width:30px;height:30px}
+}
+
 </style>
 </head>
 <body>
@@ -178,9 +191,9 @@ body::after{
         </svg>
       </div>
       <div class="min-w-0">
-        <div class="app-kicker text-[10px] font-black muted mb-1">AI LANGUAGE LAB</div>
+        <div id="brand-kicker" class="app-kicker text-[10px] font-black muted mb-1">LingoDeck</div>
         <h1 id="main-title" class="text-lg md:text-xl font-black tracking-tight truncate"></h1>
-        <p id="header-subtitle" class="text-xs muted hidden sm:block"></p>
+        <p id="header-subtitle" class="text-xs muted hidden sm:block">یادگیری سریع اصطلاحات زبان‌های مختلف</p>
       </div>
     </div>
     <div class="control-cluster">
@@ -202,7 +215,7 @@ body::after{
 
       <!-- Intro / guidance column -->
       <aside class="lg:col-span-5 space-y-5">
-        <div class="premium-badge"><span class="spark"></span><span>AI Vocabulary Studio</span></div>
+        <div class="premium-badge"><span class="spark"></span><span id="hero-badge-label">LingoDeck Studio</span></div>
 
         <div class="hero-intro">
           <h2 id="hero-title" class="hero-title text-4xl md:text-6xl font-black leading-tight tracking-tight mb-4">
@@ -222,19 +235,19 @@ body::after{
           <div class="step-card workflow-card">
             <div class="flex items-center gap-3">
               <span class="step-no">1</span>
-              <div><div class="font-black text-sm">زبان‌ها</div><div class="micro">مبدأ و مقصد</div></div>
+              <div><div id="step1-title" class="font-black text-sm">زبان‌ها</div><div id="step1-desc" class="micro">مبدأ و مقصد</div></div>
             </div>
           </div>
           <div class="step-card workflow-card">
             <div class="flex items-center gap-3">
               <span class="step-no">2</span>
-              <div><div class="font-black text-sm">ورودی</div><div class="micro">متن یا لیست</div></div>
+              <div><div id="step2-title" class="font-black text-sm">ورودی</div><div id="step2-desc" class="micro">متن یا لیست</div></div>
             </div>
           </div>
           <div class="step-card workflow-card">
             <div class="flex items-center gap-3">
               <span class="step-no">3</span>
-              <div><div class="font-black text-sm">تحلیل</div><div class="micro">نتیجه آموزشی</div></div>
+              <div><div id="step3-title" class="font-black text-sm">تحلیل</div><div id="step3-desc" class="micro">نتیجه آموزشی</div></div>
             </div>
           </div>
         </div>
@@ -300,7 +313,7 @@ body::after{
           <p id="error-msg" class="hidden error-box mt-3 text-center"></p>
 
           <div class="flex flex-col sm:flex-row gap-3 sm:items-center justify-between mt-5">
-            <div class="micro leading-7">برای متن‌های بلند، انتخاب سطح کمک می‌کند خروجی دقیق‌تر و متناسب‌تر باشد.</div>
+            <div id="input-help-text" class="micro leading-7">برای متن‌های بلند، انتخاب سطح کمک می‌کند خروجی دقیق‌تر و متناسب‌تر باشد.</div>
             <button id="process-btn" class="btn btn-primary px-8 min-w-[170px]">
               <svg class="process-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               <span class="select-none"></span>
@@ -317,7 +330,7 @@ body::after{
   <section id="results-view" class="hidden mt-6">
     <div class="control-surface p-4 md:p-5 flex flex-col md:flex-row gap-3 md:items-center justify-between mb-5">
       <div>
-        <div class="premium-badge mb-2"><span>●</span><span>Learning Output</span></div>
+        <div class="premium-badge mb-2"><span>●</span><span id="results-badge-label">Learning Output</span></div>
         <h2 id="results-title" class="text-2xl md:text-3xl font-black"></h2>
       </div>
       <div class="flex gap-2 flex-wrap">
@@ -476,7 +489,7 @@ function resetApp(){
 function handleFile(file){
   const valid = /\.(txt|srt)$/i.test(file.name);
   if (!valid) {
-    showError('فقط فایل‌های .txt و .srt پشتیبانی می‌شوند.');
+    showError((uiStrings[currentLang] || uiStrings.en).errorFileType);
     return;
   }
 
@@ -487,7 +500,7 @@ function handleFile(file){
     syncLevelRequirement();
     hideError();
   };
-  reader.onerror = () => showError('خواندن فایل با مشکل روبه‌رو شد. لطفاً دوباره امتحان کنید.');
+  reader.onerror = () => showError((uiStrings[currentLang] || uiStrings.en).errorFileRead);
   reader.readAsText(file);
 }
 
@@ -520,14 +533,15 @@ function updateModeBadge(){
   badge.textContent = isList ? s.modeWordlist : s.modeText;
   badge.style.borderColor = isList ? 'color-mix(in oklab, var(--success) 32%, var(--border))' : 'var(--border)';
   if (inputStatusTitle) {
-    inputStatusTitle.textContent = text ? (isList ? 'ورودی به‌عنوان لیست واژه تشخیص داده شد.' : 'ورودی به‌عنوان متن/فایل تحلیل می‌شود.') : 'آماده دریافت متن یا فایل';
+    inputStatusTitle.textContent = text ? (isList ? s.inputStatusWordlist : s.inputStatusText) : s.inputStatusReady;
   }
 }
 
 function updateCharCount(){
+  const s = uiStrings[currentLang] || uiStrings.en;
   const count = textInput.value.length;
   if (!charCountEl) return;
-  charCountEl.textContent = `${count.toLocaleString()} کاراکتر`;
+  charCountEl.textContent = `${count.toLocaleString()} ${s.charCountLabel || 'characters'}`;
   charCountEl.style.color = count > MAX_PROMPT_PREVIEW_LENGTH ? 'var(--danger)' : 'var(--muted)';
 }
 
@@ -540,7 +554,8 @@ function syncLevelRequirement(){
     userLevelSelect.value = 'Unspecified';
   }
   updateCharCount();
-  updateModeBadge();
+  updateCharCount();
+updateModeBadge();
 }
 
 function showError(m){
@@ -554,7 +569,7 @@ function hideLevelWarning(){ levelWarning.classList.add('hidden'); }
 function setBusy(isBusy){
   const s = uiStrings[currentLang] || uiStrings.en;
   processBtn.disabled = isBusy;
-  processBtn.querySelector('span').textContent = isBusy ? 'در حال تحلیل...' : s.processBtn;
+  processBtn.querySelector('span').textContent = isBusy ? (s.analyzingText || 'Analyzing...') : s.processBtn;
   processBtn.querySelector('.process-icon')?.classList.toggle('animate-pulse', isBusy);
 }
 
@@ -568,7 +583,7 @@ function handleProcessRequest(){
   hideLevelWarning();
 
   if (!text){ showError(s.errorText); return; }
-  if (text.length > MAX_PROMPT_PREVIEW_LENGTH){ showError(`حجم ورودی خیلی زیاد است. لطفاً متن را کوتاه‌تر کنید.`); return; }
+  if (text.length > MAX_PROMPT_PREVIEW_LENGTH){ showError(s.errorTooLong); return; }
   if (!isList && level === 'Unspecified'){
     showLevelWarning(s.pleasePickLevel);
     userLevelSelect.focus();
@@ -665,7 +680,7 @@ async function callAI(text, isWordList){
   }catch(err){
     console.error(err);
     const isAbort = err?.name === 'AbortError';
-    const message = isAbort ? 'زمان پاسخ‌گویی بیش از حد طول کشید. متن را کوتاه‌تر کنید یا دوباره تلاش کنید.' : (err.message || uiStrings[currentLang].errorServer);
+    const message = isAbort ? ((uiStrings[currentLang] || uiStrings.en).errorTimeout) : (err.message || uiStrings[currentLang].errorServer);
     resultsList.innerHTML = `<div class="error-box text-center leading-8">${escapeHTML(message)}</div>`;
   }finally{
     clearTimeout(timeoutId);
@@ -837,10 +852,10 @@ const instagramSVG = '<svg aria-hidden="true" width="16" height="16" viewBox="0 
 
 const uiStrings = {
 fa:{
-appTitle:"یادگیری زبان با هوش مصنوعی",
-mainTitle:"یادگیری لغات جدید زبان",
-heroTitle:"از متن خام تا کارت یادگیری حرفه‌ای.",
-headerSubtitle:"",
+appTitle:"زبان‌یار | LingoDeck",
+mainTitle:"زبان‌یار",
+heroTitle:"از متن خام تا کارت یادگیری حرفه‌ای!",
+headerSubtitle:"یادگیری سریع اصطلاحات زبان‌های مختلف",
 bigDesc:"🔍 چی کار می‌کنیم؟ <span class='font-bold'>از متن یا لیست شما</span> اصطلاحات و کلمات کاربردی را جدا می‌کنیم و <span class='font-bold'>معنی، مثال، گرامر و تلفظ</span> را نمایش می‌دهیم تا یادگیری زبان برایتان سریع‌تر و هدفمندتر شود.",
 sourceLangLabel:"زبان مادری من",
 targetLangLabel:"زبانی که یاد می‌گیرم",
@@ -851,7 +866,7 @@ hintStatic:`
                 <p>به دو روش می‌توانید از این برنامه استفاده کنید:</p>
               
                 <p>🧾 <strong>تحلیل و استخراج لغات کاربردی از متن:</strong><br>
-                سطح زبان‌تان را انتخاب کنید، سپس یک متن (خبر، داستان، زیرنویس فیلم و …) را در باکس زیر قرار دهید.<br>
+                سطح زبان‌تان را انتخاب کنید، سپس یک متن (خبر، داستان، زیرنویس فیلم و …) را در باکس روبه‌رو قرار دهید.<br>
                 برنامه به‌صورت هوشمند و متناسب با سطح زبان شما، لغات کاربردی متن را استخراج کرده و برای هر کلمه معنی، گرامر، مثال و تلفظ نمایش می‌دهد.</p>
               
                 <p>🗒️ <strong>استفاده از لیستِ آمادهٔ خودتان:</strong><br>
@@ -862,6 +877,7 @@ hintStatic:`
          </div>`,
 uploadBtnText:"آپلود فایل (.txt, .srt)",
 processBtn:"تحلیل کن",
+analyzingText:"در حال تحلیل...",
 resultsTitle:"نتایج تحلیل",
 startOverBtn:"شروع دوباره",
 expandAll:"باز کردن همه",
@@ -889,6 +905,22 @@ textPlaceholder:"لیست کلمات خود را اینجا وارد کنید ی
 dropHint:"می‌توانید کلمات را تایپ کنید یا فایل .txt/.srt را بکشید و رها کنید.",
 modeWordlist:"حالت: لیست کلمات",
 modeText:"حالت: متن/فایل",
+errorTimeout:"زمان پاسخ‌گویی بیش از حد طول کشید. متن را کوتاه‌تر کنید یا دوباره تلاش کنید.",
+errorTooLong:"حجم ورودی خیلی زیاد است. لطفاً متن را کوتاه‌تر کنید.",
+errorFileRead:"خواندن فایل با مشکل روبه‌رو شد. لطفاً دوباره امتحان کنید.",
+errorFileType:"فقط فایل‌های .txt و .srt پشتیبانی می‌شوند.",
+resultsBadge:"خروجی یادگیری",
+charCountLabel:"کاراکتر",
+inputStatusText:"ورودی به‌عنوان متن/فایل تحلیل می‌شود.",
+inputStatusWordlist:"ورودی به‌عنوان لیست واژه تشخیص داده شد.",
+inputStatusReady:"آماده دریافت متن یا فایل",
+inputHelpText:"برای متن‌های بلند، انتخاب سطح کمک می‌کند خروجی دقیق‌تر و متناسب‌تر باشد.",
+step3Desc:"نتیجه آموزشی",
+step3Title:"تحلیل",
+step2Desc:"متن یا لیست",
+step2Title:"ورودی",
+step1Desc:"مبدأ و مقصد",
+step1Title:"زبان‌ها",
 footerBuilder:`
          <span>سازنده:</span>
          <span class="font-semibold"> ${FOOTER_NAME}</span>
@@ -903,10 +935,10 @@ footerBuilder:`
          </span>`
 },
 en:{
-appTitle:"AI Language Learner",
-mainTitle:"Learn New Vocabulary",
-heroTitle:"Turn raw text into polished learning cards.",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"From raw text to polished learning cards!",
+headerSubtitle:"Quickly learn useful expressions in different languages",
 bigDesc:"🔍 What we do: from <span class='font-bold'>your text or your word list</span>, we extract useful items and show <span class='font-bold'>meaning, examples, grammar, and pronunciation</span> so you learn faster and smarter.",
 sourceLangLabel:"My Native Language",
 targetLangLabel:"Language I'm Learning",
@@ -923,6 +955,7 @@ hintStatic:`
          </div>`,
 uploadBtnText:"Upload File (.txt, .srt)",
 processBtn:"Analyze",
+analyzingText:"Analyzing...",
 resultsTitle:"Analysis Results",
 startOverBtn:"Start Over",
 expandAll:"Expand All",
@@ -950,6 +983,22 @@ textPlaceholder:"Enter your word list here or paste a text/file…",
 dropHint:"Type your words or drag & drop a .txt/.srt file.",
 modeWordlist:"Mode: Word list",
 modeText:"Mode: Text/File",
+errorTimeout:"The response took too long. Please shorten the text or try again.",
+errorTooLong:"The input is too long. Please shorten the text.",
+errorFileRead:"Could not read the file. Please try again.",
+errorFileType:"Only .txt and .srt files are supported.",
+resultsBadge:"Learning Output",
+charCountLabel:"characters",
+inputStatusText:"Input will be analyzed as text/file.",
+inputStatusWordlist:"Input detected as a word list.",
+inputStatusReady:"Ready for text or file",
+inputHelpText:"For longer texts, selecting your level helps make the output more accurate and relevant.",
+step3Desc:"Learning output",
+step3Title:"Analyze",
+step2Desc:"Text or list",
+step2Title:"Input",
+step1Desc:"Native & target",
+step1Title:"Languages",
 footerBuilder:`
          <span>Built by</span>
          <span class="font-semibold"> ${FOOTER_NAME}</span>
@@ -964,9 +1013,11 @@ footerBuilder:`
          </span>`
 },
 de:{
-appTitle:"KI Sprachlerner",
-mainTitle:"Neue Vokabeln lernen",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"Vom Rohtext zu professionellen Lernkarten!",
+
+headerSubtitle:"Schnell nützliche Ausdrücke in verschiedenen Sprachen lernen",
 bigDesc:"🔍 Was wir tun: Aus <span class='font-bold'>deinem Text oder deiner Wortliste</span> extrahieren wir nützliche Einträge und zeigen <span class='font-bold'>Bedeutung, Beispiele, Grammatik, Aussprache</span> für schnelleres Lernen.",
 sourceLangLabel:"Meine Muttersprache",
 targetLangLabel:"Lernsprache",
@@ -1002,6 +1053,22 @@ textPlaceholder:"Wortliste eingeben oder Text/Datei einfügen…",
 dropHint:"Wörter tippen oder .txt/.srt ziehen und ablegen.",
 modeWordlist:"Modus: Wortliste",
 modeText:"Modus: Text/Datei",
+errorTimeout:"Die Antwort hat zu lange gedauert. Bitte kürze den Text oder versuche es erneut.",
+errorTooLong:"Die Eingabe ist zu lang. Bitte kürze den Text.",
+errorFileRead:"Die Datei konnte nicht gelesen werden. Bitte erneut versuchen.",
+errorFileType:"Nur .txt- und .srt-Dateien werden unterstützt.",
+resultsBadge:"Lernergebnis",
+charCountLabel:"Zeichen",
+inputStatusText:"Eingabe wird als Text/Datei analysiert.",
+inputStatusWordlist:"Eingabe als Wortliste erkannt.",
+inputStatusReady:"Bereit für Text oder Datei",
+inputHelpText:"Bei längeren Texten hilft die Niveauauswahl, die Ausgabe genauer und passender zu machen.",
+step3Desc:"Lernergebnis",
+step3Title:"Analyse",
+step2Desc:"Text oder Liste",
+step2Title:"Eingabe",
+step1Desc:"Ausgangs- & Zielsprache",
+step1Title:"Sprachen",
 footerBuilder:`
          <span>Erstellt von</span>
          <span class="font-semibold"> ${FOOTER_NAME}</span>
@@ -1016,9 +1083,11 @@ footerBuilder:`
          </span>`
 },
 fr:{
-appTitle:"Apprenant de langues IA",
-mainTitle:"Apprendre de nouveaux mots",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"Du texte brut aux cartes d’apprentissage professionnelles !",
+
+headerSubtitle:"Apprendre rapidement des expressions utiles dans plusieurs langues",
 bigDesc:"🔍 Ce que nous faisons : à partir de <span class='font-bold'>votre texte ou votre liste</span>, nous extrayons des éléments utiles et affichons <span class='font-bold'>sens, exemples, grammaire et prononciation</span> pour apprendre plus vite.",
 sourceLangLabel:"Ma langue maternelle",
 targetLangLabel:"Langue que j'apprends",
@@ -1054,6 +1123,22 @@ textPlaceholder:"Entrez votre liste ou collez un texte/fichier…",
 dropHint:"Saisir des mots ou glisser-déposer un .txt/.srt.",
 modeWordlist:"Mode : Liste de mots",
 modeText:"Mode : Texte/Fichier",
+errorTimeout:"La réponse a pris trop de temps. Raccourcissez le texte ou réessayez.",
+errorTooLong:"L’entrée est trop longue. Veuillez raccourcir le texte.",
+errorFileRead:"Impossible de lire le fichier. Veuillez réessayer.",
+errorFileType:"Seuls les fichiers .txt et .srt sont pris en charge.",
+resultsBadge:"Résultat pédagogique",
+charCountLabel:"caractères",
+inputStatusText:"Entrée analysée comme texte/fichier.",
+inputStatusWordlist:"Entrée détectée comme liste de mots.",
+inputStatusReady:"Prêt pour un texte ou un fichier",
+inputHelpText:"Pour les textes longs, choisir le niveau rend la sortie plus précise et plus pertinente.",
+step3Desc:"Résultat pédagogique",
+step3Title:"Analyse",
+step2Desc:"Texte ou liste",
+step2Title:"Entrée",
+step1Desc:"Source & cible",
+step1Title:"Langues",
 footerBuilder:`
          <span>Réalisé par</span>
          <span class="font-semibold"> ${FOOTER_NAME}</span>
@@ -1068,9 +1153,11 @@ footerBuilder:`
          </span>`
 },
 es:{
-appTitle:"Aprendiz de idiomas con IA",
-mainTitle:"Aprender vocabulario nuevo",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"¡De texto sin procesar a tarjetas de aprendizaje profesionales!",
+
+headerSubtitle:"Aprende rápido expresiones útiles en distintos idiomas",
 bigDesc:"🔍 Qué hacemos: a partir de <span class='font-bold'>tu texto o tu lista</span> extraemos elementos útiles y mostramos <span class='font-bold'>significado, ejemplos, gramática y pronunciación</span> para aprender más rápido.",
 sourceLangLabel:"Mi lengua materna",
 targetLangLabel:"Idioma que aprendo",
@@ -1106,6 +1193,22 @@ textPlaceholder:"Introduce tu lista o pega un texto/archivo…",
 dropHint:"Escribe palabras o arrastra y suelta un .txt/.srt archivo.",
 modeWordlist:"Modo: Lista de palabras",
 modeText:"Modo: Texto/Archivo",
+errorTimeout:"La respuesta tardó demasiado. Acorta el texto o inténtalo de nuevo.",
+errorTooLong:"La entrada es demasiado larga. Acorta el texto.",
+errorFileRead:"No se pudo leer el archivo. Inténtalo de nuevo.",
+errorFileType:"Solo se admiten archivos .txt y .srt.",
+resultsBadge:"Resultado de aprendizaje",
+charCountLabel:"caracteres",
+inputStatusText:"La entrada se analizará como texto/archivo.",
+inputStatusWordlist:"Entrada detectada como lista de palabras.",
+inputStatusReady:"Listo para texto o archivo",
+inputHelpText:"Para textos largos, elegir tu nivel ayuda a obtener resultados más precisos y relevantes.",
+step3Desc:"Resultado de aprendizaje",
+step3Title:"Analizar",
+step2Desc:"Texto o lista",
+step2Title:"Entrada",
+step1Desc:"Origen y destino",
+step1Title:"Idiomas",
 footerBuilder:`
          <span>Hecho por</span>
          <span class="font-semibold"> ${FOOTER_NAME}</span>
@@ -1120,9 +1223,11 @@ footerBuilder:`
          </span>`
 },
 zh:{
-appTitle:"AI 语言学习助手",
-mainTitle:"学习新词汇",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"从原始文本到专业学习卡片！",
+
+headerSubtitle:"快速学习多种语言的实用表达",
 bigDesc:"🔍 我们会从<span class='font-bold'>你的文本或词表</span>中提取有用条目，并提供<span class='font-bold'>释义、例句、语法与发音</span>，帮助更快更聪明地学习。",
 sourceLangLabel:"母语",
 targetLangLabel:"正在学习的语言",
@@ -1158,6 +1263,22 @@ textPlaceholder:"在此输入单词列表或粘贴文本/文件…",
 dropHint:"输入单词或拖拽 .txt/.srt 文件。",
 modeWordlist:"模式：单词列表",
 modeText:"模式：文本/文件",
+errorTimeout:"响应时间过长，请缩短文本或重试。",
+errorTooLong:"输入太长，请缩短文本。",
+errorFileRead:"无法读取文件，请重试。",
+errorFileType:"仅支持 .txt 和 .srt 文件。",
+resultsBadge:"学习结果",
+charCountLabel:"字符",
+inputStatusText:"输入将作为文本/文件分析。",
+inputStatusWordlist:"输入被识别为词表。",
+inputStatusReady:"准备接收文本或文件",
+inputHelpText:"对于较长文本，选择水平可以让输出更准确、更相关。",
+step3Desc:"学习结果",
+step3Title:"分析",
+step2Desc:"文本或列表",
+step2Title:"输入",
+step1Desc:"母语与目标语",
+step1Title:"语言",
 footerBuilder:`
          <span>制作：</span>
          <span class="font-semibold"> ${FOOTER_NAME}</span>
@@ -1172,15 +1293,17 @@ footerBuilder:`
          </span>`
 },
 tr:{
-appTitle:"YZ Dil Öğrenici",
-mainTitle:"Yeni kelimeler öğren",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"Ham metinden profesyonel öğrenme kartlarına!",
+
+headerSubtitle:"Farklı dillerdeki kullanışlı ifadeleri hızlı öğren",
 bigDesc:"🔍 Ne yapıyoruz: <span class='font-bold'>metninizden veya listenizden</span> faydalı maddeleri çıkarır, <span class='font-bold'>anlam, örnek, dil bilgisi ve telaffuz</span> gösteririz.",
 sourceLangLabel:"Anadilim",
 targetLangLabel:"Öğrendiğim dil",
 userLevelLabel:"Seviyem",
 forceWordlistLabel:"Bu bir kelime listesi",
-hintStatic:`<div class="space-y-2 leading-7"><div>🧭 <b>İki kullanım:</b></div><ol class="list-decimal pl-5 space-y-2"><li>🧾 <b>Metin analizi</b>: seviyeni seç; uygun maddeleri çıkarıp <b>çeviri, örnek, dil bilgisi, telaffuz</b> gösteririz.</li><li>🗒️ <b>Hazır listen</</b>: satır satır ya da “-” ile; <b>“Bu bir kelime listesi”</b>ni işaretle.</li></ol><div>✨ <i>İpucu:</i> Listede seviye seçimi gerekmez.</div></div>`,
+hintStatic:`<div class="space-y-2 leading-7"><div>🧭 <b>İki kullanım:</b></div><ol class="list-decimal pl-5 space-y-2"><li>🧾 <b>Metin analizi</b>: seviyeni seç; uygun maddeleri çıkarıp <b>çeviri, örnek, dil bilgisi, telaffuz</b> gösteririz.</li><li>🗒️ <b>Hazır listen</b>: satır satır ya da “-” ile; <b>“Bu bir kelime listesi”</b>ni işaretle.</li></ol><div>✨ <i>İpucu:</i> Listede seviye seçimi gerekmez.</div></div>`,
 uploadBtnText:"Dosya yükle (.txt, .srt)",
 processBtn:"Analiz et",
 resultsTitle:"Analiz Sonuçları",
@@ -1210,6 +1333,22 @@ textPlaceholder:"Kelime listenizi yazın veya metin/dosya yapıştırın…",
 dropHint:".txt/.srt dosyasını sürükleyip bırakabilirsiniz.",
 modeWordlist:"Mod: Kelime listesi",
 modeText:"Mod: Metin/Dosya",
+errorTimeout:"Yanıt çok uzun sürdü. Metni kısaltın veya tekrar deneyin.",
+errorTooLong:"Girdi çok uzun. Lütfen metni kısaltın.",
+errorFileRead:"Dosya okunamadı. Lütfen tekrar deneyin.",
+errorFileType:"Yalnızca .txt ve .srt dosyaları desteklenir.",
+resultsBadge:"Öğrenme çıktısı",
+charCountLabel:"karakter",
+inputStatusText:"Girdi metin/dosya olarak analiz edilecek.",
+inputStatusWordlist:"Girdi kelime listesi olarak algılandı.",
+inputStatusReady:"Metin veya dosya için hazır",
+inputHelpText:"Uzun metinlerde seviye seçmek çıktıyı daha doğru ve uygun hale getirir.",
+step3Desc:"Öğrenme çıktısı",
+step3Title:"Analiz",
+step2Desc:"Metin veya liste",
+step2Title:"Girdi",
+step1Desc:"Ana dil ve hedef",
+step1Title:"Diller",
 footerBuilder:`
          <span>Hazırlayan:</span>
          <span class="font-semibold"> ${FOOTER_NAME}</span>
@@ -1224,9 +1363,11 @@ footerBuilder:`
          </span>`
 },
 it:{
-appTitle:"Apprendimento lingue con IA",
-mainTitle:"Impara nuovo vocabolario",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"Dal testo grezzo a schede di apprendimento professionali!",
+
+headerSubtitle:"Impara rapidamente espressioni utili in lingue diverse",
 bigDesc:"🔍 Cosa facciamo: da <span class='font-bold'>tuo testo o lista</span> estraiamo elementi utili e mostriamo <span class='font-bold'>significato, esempi, grammatica e pronuncia</span> per imparare più rapidamente.",
 sourceLangLabel:"Lingua madre",
 targetLangLabel:"Lingua che sto imparando",
@@ -1262,6 +1403,22 @@ textPlaceholder:"Inserisci la lista o incolla un testo/file…",
 dropHint:"Scrivi parole o trascina un .txt/.srt.",
 modeWordlist:"Modalità: Lista",
 modeText:"Modalità: Testo/File",
+errorTimeout:"La risposta ha impiegato troppo tempo. Accorcia il testo o riprova.",
+errorTooLong:"L’input è troppo lungo. Accorcia il testo.",
+errorFileRead:"Impossibile leggere il file. Riprova.",
+errorFileType:"Sono supportati solo file .txt e .srt.",
+resultsBadge:"Risultato didattico",
+charCountLabel:"caratteri",
+inputStatusText:"L’input sarà analizzato come testo/file.",
+inputStatusWordlist:"Input rilevato come lista di parole.",
+inputStatusReady:"Pronto per testo o file",
+inputHelpText:"Per testi lunghi, scegliere il livello rende l’output più preciso e pertinente.",
+step3Desc:"Risultato didattico",
+step3Title:"Analisi",
+step2Desc:"Testo o lista",
+step2Title:"Input",
+step1Desc:"Madrelingua e target",
+step1Title:"Lingue",
 footerBuilder:`
          <span>Creato da</span>
          <span class="font-semibold"> ${FOOTER_NAME}</span>
@@ -1276,9 +1433,11 @@ footerBuilder:`
          </span>`
 },
 ru:{
-appTitle:"Изучение языков с ИИ",
-mainTitle:"Учите новые слова",
-headerSubtitle:"",
+appTitle:"LingoDeck",
+mainTitle:"LingoDeck",
+heroTitle:"От сырого текста к профессиональным учебным карточкам!",
+
+headerSubtitle:"Быстро учите полезные выражения на разных языках",
 bigDesc:"🔍 Что мы делаем: из <span class='font-bold'>вашего текста или списка</span> извлекаем полезные единицы и показываем <span class='font-bold'>значение, примеры, грамматику и произношение</span> для более быстрого обучения.",
 sourceLangLabel:"Родной язык",
 targetLangLabel:"Изучаемый язык",
@@ -1314,6 +1473,22 @@ textPlaceholder:"Введите список слов или вставьте т
 dropHint:"Введите слова или перетащите .txt/.srt.",
 modeWordlist:"Режим: список слов",
 modeText:"Режим: текст/файл",
+errorTimeout:"Ответ занял слишком много времени. Сократите текст или попробуйте снова.",
+errorTooLong:"Ввод слишком длинный. Сократите текст.",
+errorFileRead:"Не удалось прочитать файл. Попробуйте снова.",
+errorFileType:"Поддерживаются только файлы .txt и .srt.",
+resultsBadge:"Учебный результат",
+charCountLabel:"символов",
+inputStatusText:"Ввод будет проанализирован как текст/файл.",
+inputStatusWordlist:"Ввод распознан как список слов.",
+inputStatusReady:"Готово для текста или файла",
+inputHelpText:"Для длинных текстов выбор уровня помогает сделать результат точнее и полезнее.",
+step3Desc:"Учебный результат",
+step3Title:"Анализ",
+step2Desc:"Текст или список",
+step2Title:"Ввод",
+step1Desc:"Родной и целевой",
+step1Title:"Языки",
 footerBuilder:`
          <span>Автор:</span>
          <span class="font-semibold"> ${FOOTER_NAME}</span>
@@ -1330,6 +1505,19 @@ footerBuilder:`
 };
 
 
+
+const brandLocale = {
+  fa: { title: 'زبان‌یار', kicker: 'LingoDeck', badge: 'LingoDeck Studio' },
+  en: { title: 'LingoDeck', kicker: 'Language Learning Cards', badge: 'LingoDeck Studio' },
+  de: { title: 'LingoDeck', kicker: 'Sprachkarten', badge: 'LingoDeck Studio' },
+  fr: { title: 'LingoDeck', kicker: 'Cartes de langue', badge: 'Studio LingoDeck' },
+  es: { title: 'LingoDeck', kicker: 'Tarjetas de idioma', badge: 'LingoDeck Studio' },
+  zh: { title: 'LingoDeck', kicker: '语言卡片', badge: 'LingoDeck Studio' },
+  tr: { title: 'LingoDeck', kicker: 'Dil kartları', badge: 'LingoDeck Studio' },
+  it: { title: 'LingoDeck', kicker: 'Schede lingua', badge: 'Studio LingoDeck' },
+  ru: { title: 'LingoDeck', kicker: 'Языковые карточки', badge: 'LingoDeck Studio' }
+};
+
 const creatorLocale = {
   fa: { kicker: 'طراحی و توسعه توسط', role: 'تحلیل‌گر سیستم و کسب‌وکار' },
   en: { kicker: 'Designed & Built by', role: 'Business & Systems Analyst' },
@@ -1345,6 +1533,7 @@ const creatorLocale = {
 function setLanguage(lang){
 currentLang = lang;
 const s = uiStrings[lang] || uiStrings.en;
+const brand = brandLocale[lang] || brandLocale.en;
 const isRtl = RTL_LANGS.has(lang);
 document.documentElement.lang = lang;
 document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
@@ -1352,7 +1541,9 @@ document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
 const heroTitle = s.heroTitle || (isRtl ? 'از متن یا لیست، کارت یادگیری بساز.' : 'Turn any text into a learning deck.');
 const map = {
 'hero-title': heroTitle,
-'main-title':s.mainTitle,
+'main-title':brand.title || s.mainTitle,
+'brand-kicker':brand.kicker,
+'hero-badge-label':brand.badge,
 'header-subtitle':s.headerSubtitle,
 'big-desc':s.bigDesc,
 'source-lang-label':s.sourceLangLabel,
@@ -1363,11 +1554,19 @@ const map = {
 'upload-btn-text':s.uploadBtnText,
 'results-title':s.resultsTitle,
 'start-over-btn':s.startOverBtn,
-'drop-hint-text':s.dropHint
+'drop-hint-text':s.dropHint,
+'input-help-text':s.inputHelpText,
+'step1-title':s.step1Title,
+'step1-desc':s.step1Desc,
+'step2-title':s.step2Title,
+'step2-desc':s.step2Desc,
+'step3-title':s.step3Title,
+'step3-desc':s.step3Desc,
+'results-badge-label':s.resultsBadge
 };
 for(const id in map){ const el = document.getElementById(id); if(el) el.innerHTML = map[id]; }
 
-document.title = s.appTitle;
+document.title = s.appTitle || (brand.title ? `${brand.title} | LingoDeck` : 'LingoDeck');
 document.querySelector('#process-btn > span').textContent = s.processBtn;
 document.getElementById('expand-all').innerHTML = `⬇️ ${s.expandAll}`;
 document.getElementById('collapse-all').innerHTML = `⬆️ ${s.collapseAll}`;
