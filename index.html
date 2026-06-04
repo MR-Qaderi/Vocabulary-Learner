@@ -11,182 +11,112 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f5f7fb;
+  color-scheme: light;
+  --bg:#f3f5f9;
   --surface:#ffffff;
   --surface-2:#f8fafc;
   --surface-3:#eef2f7;
-  --text:#0b1220;
-  --muted:#667085;
-  --muted-2:#98a2b3;
+  --text:#0a0f1a;
+  --muted:#647083;
+  --muted-2:#94a3b8;
   --border:rgba(15,23,42,.10);
-  --border-strong:rgba(15,23,42,.18);
-  --primary:#111827;
-  --primary-600:#000000;
+  --border-strong:rgba(15,23,42,.22);
+  --primary:#0f172a;
+  --primary-600:#020617;
   --accent:#2563eb;
   --accent-2:#7c3aed;
+  --accent-3:#06b6d4;
   --success:#059669;
   --warning:#d97706;
   --danger:#dc2626;
   --chip:#f8fafc;
   --chip-border:#e5e7eb;
   --ring:rgba(37,99,235,.22);
-  --shadow:0 18px 50px -30px rgba(15,23,42,.42);
-  --shadow-strong:0 30px 80px -38px rgba(15,23,42,.55);
-  --radius-lg:28px;
+  --shadow:0 18px 60px -36px rgba(15,23,42,.45);
+  --shadow-strong:0 30px 100px -45px rgba(15,23,42,.62);
+  --inner:inset 0 1px 0 rgba(255,255,255,.72);
+  --radius-xl:34px;
+  --radius-lg:26px;
   --radius-md:18px;
 }
 [data-theme="dark"]{
-  --bg:#070a12;
-  --surface:#0d1320;
+  color-scheme: dark;
+  --bg:#050816;
+  --surface:#0c1220;
   --surface-2:#111827;
   --surface-3:#172033;
   --text:#eef2ff;
-  --muted:#a5adbd;
-  --muted-2:#7b8496;
-  --border:rgba(226,232,240,.10);
-  --border-strong:rgba(226,232,240,.20);
-  --primary:#ffffff;
-  --primary-600:#f8fafc;
+  --muted:#a6b0c3;
+  --muted-2:#76839a;
+  --border:rgba(226,232,240,.11);
+  --border-strong:rgba(226,232,240,.22);
+  --primary:#f8fafc;
+  --primary-600:#ffffff;
   --accent:#60a5fa;
-  --accent-2:#a78bfa;
+  --accent-2:#c084fc;
+  --accent-3:#22d3ee;
   --success:#34d399;
   --warning:#fbbf24;
-  --danger:#f87171;
+  --danger:#fb7185;
   --chip:#111827;
-  --chip-border:#273449;
+  --chip-border:#283347;
   --ring:rgba(96,165,250,.28);
-  --shadow:0 22px 70px -34px rgba(0,0,0,.75);
-  --shadow-strong:0 35px 95px -35px rgba(0,0,0,.85);
+  --shadow:0 22px 70px -34px rgba(0,0,0,.78);
+  --shadow-strong:0 40px 110px -45px rgba(0,0,0,.9);
+  --inner:inset 0 1px 0 rgba(255,255,255,.08);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
   font-family:'Vazirmatn',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-  background:
-    radial-gradient(900px 520px at 8% -10%, color-mix(in oklab, var(--accent) 18%, transparent), transparent 60%),
-    radial-gradient(900px 520px at 98% 0%, color-mix(in oklab, var(--accent-2) 16%, transparent), transparent 58%),
-    linear-gradient(180deg, color-mix(in oklab, var(--bg) 94%, white), var(--bg));
-  color:var(--text);
   min-height:100vh;
+  color:var(--text);
   overflow-x:hidden;
+  background:
+    radial-gradient(900px 560px at 10% -12%, color-mix(in oklab, var(--accent) 24%, transparent), transparent 62%),
+    radial-gradient(820px 520px at 92% 2%, color-mix(in oklab, var(--accent-2) 22%, transparent), transparent 58%),
+    radial-gradient(760px 560px at 50% 116%, color-mix(in oklab, var(--accent-3) 16%, transparent), transparent 60%),
+    linear-gradient(180deg, color-mix(in oklab, var(--bg) 88%, #fff), var(--bg));
+  -webkit-font-smoothing:antialiased;
 }
 body::before{
   content:"";
-  position:fixed; inset:0; pointer-events:none; z-index:-1;
-  background-image:linear-gradient(color-mix(in oklab, var(--text) 5%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--text) 5%, transparent) 1px, transparent 1px);
-  background-size:44px 44px;
-  mask-image:linear-gradient(to bottom, rgba(0,0,0,.55), transparent 55%);
+  position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--text) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg,color-mix(in oklab, var(--text) 5%, transparent) 1px, transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom, rgba(0,0,0,.78), rgba(0,0,0,.18) 56%, transparent 88%);
 }
-::selection{background:color-mix(in oklab, var(--accent) 22%, transparent)}
-.app-shell{min-height:100vh}
-.glass{
-  backdrop-filter:saturate(160%) blur(20px);
-  background:color-mix(in oklab, var(--surface) 78%, transparent);
-  border-bottom:1px solid var(--border);
+body::after{
+  content:"";
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255,255,255,.65), transparent 12%),
+    radial-gradient(circle at 74% 20%, rgba(255,255,255,.35), transparent 10%);
+  opacity:.42;
+  mix-blend-mode:soft-light;
 }
-.logo-mark{
-  width:44px;height:44px;border-radius:16px;
-  display:grid;place-items:center;
-  background:linear-gradient(180deg, color-mix(in oklab, var(--surface) 82%, white), var(--surface));
-  border:1px solid var(--border-strong);
-  box-shadow:var(--shadow);
-  color:var(--primary-600);
-}
-.logo-mark svg{width:28px;height:28px;display:block}
-.control-surface,.card{
-  background:color-mix(in oklab, var(--surface) 92%, transparent);
-  border:1px solid var(--border);
-  box-shadow:var(--shadow);
-  border-radius:var(--radius-lg);
-}
-.card{transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease}
-.card:hover{border-color:var(--border-strong);box-shadow:var(--shadow-strong);transform:translateY(-2px)}
-.hero-card{position:relative;overflow:hidden}
-.hero-card::before{
-  content:""; position:absolute; inset:-1px; pointer-events:none;
-  background:radial-gradient(520px 200px at 50% 0%, color-mix(in oklab, var(--accent) 15%, transparent), transparent 70%);
-}
-.hero-card>*{position:relative}
-.premium-badge,.pill{
-  display:inline-flex;align-items:center;gap:.45rem;
-  padding:.36rem .72rem;border-radius:999px;
-  font-weight:700;font-size:.78rem;white-space:nowrap;
-  border:1px solid var(--border);
-  background:color-mix(in oklab, var(--surface) 75%, transparent);
-  color:var(--text);
-}
-.step-card{
-  background:color-mix(in oklab, var(--surface) 82%, transparent);
-  border:1px solid var(--border);
-  border-radius:22px;
-  padding:1rem;
-}
-.step-no{
-  width:32px;height:32px;border-radius:12px;display:grid;place-items:center;
-  background:var(--primary-600);color:var(--surface);font-weight:900;font-size:.9rem;flex:0 0 auto;
-}
-.field-label{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.45rem;font-size:.86rem;font-weight:800;color:var(--text)}
-.select-control,.textarea-control{
-  width:100%; border:1px solid var(--border); color:var(--text);
-  background:color-mix(in oklab, var(--surface) 92%, transparent);
-  border-radius:16px; outline:none; transition:border-color .15s, box-shadow .15s, background .15s;
-}
-.select-control{padding:.74rem .9rem}
-.textarea-control{padding:1rem; min-height:260px; resize:vertical; line-height:1.9}
-.select-control:focus,.textarea-control:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--ring)}
-.select-control:disabled{opacity:.55;cursor:not-allowed}
-.drop-zone{
-  border:1.5px dashed var(--border-strong);
-  border-radius:24px;
-  padding:1rem;
-  background:linear-gradient(180deg, color-mix(in oklab, var(--surface) 70%, transparent), color-mix(in oklab, var(--surface-2) 80%, transparent));
-  transition:border-color .18s, box-shadow .18s, transform .18s, background .18s;
-}
-.drop-zone.drag-over{border-color:var(--accent);box-shadow:0 0 0 5px var(--ring);transform:translateY(-1px)}
-.btn{
-  border-radius:16px; font-weight:900; padding:.76rem 1.12rem;
-  display:inline-flex;align-items:center;justify-content:center;gap:.55rem;
-  border:1px solid var(--border); transition:transform .08s, background .15s, border-color .15s, box-shadow .15s, opacity .15s;
-  user-select:none; white-space:nowrap;
-}
-.btn:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
-.btn:active{transform:translateY(1px)}
-.btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.btn-primary{background:linear-gradient(180deg, var(--primary), var(--primary-600));color:var(--surface);border-color:color-mix(in oklab, var(--primary) 24%, transparent);box-shadow:0 18px 32px -20px var(--primary)}
-[data-theme="dark"] .btn-primary{color:#070a12;background:linear-gradient(180deg,#fff,#e5e7eb)}
-.btn-secondary{background:color-mix(in oklab, var(--surface) 88%, transparent);color:var(--text)}
-.btn-ghost{background:transparent;border-color:transparent;color:var(--text)}
-.btn-icon{width:42px;height:42px;padding:0;border-radius:15px}
-.muted{color:var(--muted)}
-.micro{font-size:.76rem;color:var(--muted)}
-.chip{display:inline-flex;align-items:center;gap:.38rem;padding:.26rem .64rem;border-radius:999px;font-size:.78rem;font-weight:800;border:1px solid var(--chip-border);background:var(--chip);white-space:nowrap;color:var(--text)}
-.chip .dot{width:.5rem;height:.5rem;border-radius:999px;opacity:.9;background:var(--accent)}
-.status-bar{display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap;margin-top:.75rem}
-.status-item{display:inline-flex;align-items:center;gap:.45rem;color:var(--muted);font-size:.82rem}
-.warning-box{border:1px solid color-mix(in oklab, var(--warning) 35%, transparent);background:color-mix(in oklab, var(--warning) 12%, var(--surface));color:color-mix(in oklab, var(--warning) 80%, var(--text));border-radius:18px;padding:.85rem 1rem;font-weight:700}
-.error-box{border:1px solid color-mix(in oklab, var(--danger) 35%, transparent);background:color-mix(in oklab, var(--danger) 10%, var(--surface));color:var(--danger);border-radius:18px;padding:.85rem 1rem;font-weight:800}
-.toggle{width:48px;height:28px;border-radius:999px;position:relative;border:1px solid var(--border);background:color-mix(in oklab, var(--surface) 86%, transparent);cursor:pointer;display:inline-flex;align-items:center;padding:3px}
-.toggle .knob{width:20px;height:20px;border-radius:999px;background:var(--primary-600);transition:transform .2s;transform:translateX(0)}
-[data-theme="dark"] .toggle .knob{transform:translateX(20px);background:#fff}
-[dir="rtl"][data-theme="dark"] .toggle .knob{transform:translateX(-20px)}
-.skeleton{position:relative;overflow:hidden;background:color-mix(in oklab, var(--surface-3) 72%, transparent);border-radius:14px}
-.skeleton::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg, transparent, color-mix(in oklab, var(--surface) 72%, transparent), transparent);animation:shimmer 1.35s infinite}
-@keyframes shimmer{100%{transform:translateX(100%)}}
-.result-card{border-radius:24px;border:1px solid var(--border);background:color-mix(in oklab, var(--surface) 92%, transparent);box-shadow:var(--shadow);overflow:hidden;transition:border-color .18s, box-shadow .18s, transform .18s}
-.result-card:hover{border-color:var(--border-strong);box-shadow:var(--shadow-strong);transform:translateY(-2px)}
-.result-header{cursor:pointer;background:linear-gradient(180deg, color-mix(in oklab, var(--surface) 90%, transparent), color-mix(in oklab, var(--surface-2) 80%, transparent));transition:background .2s ease}
-.result-details{max-height:0;overflow:hidden;transition:max-height .45s ease,padding .32s ease,border-color .32s ease;border-top:1px solid transparent;padding:0 1.25rem;background:var(--surface)}
-.result-details.open{max-height:2600px;border-top-color:var(--border);padding:1.1rem 1.25rem 1.35rem}
-.info-tile{border:1px solid var(--border);border-radius:18px;background:color-mix(in oklab, var(--surface-2) 82%, transparent);padding:1rem;height:100%}
-.example-item{border:1px solid var(--border);border-radius:16px;padding:.85rem;background:color-mix(in oklab, var(--surface) 86%, transparent)}
-.floating-top{position:fixed;bottom:20px;inset-inline-end:20px;z-index:50;backdrop-filter:blur(10px);background:color-mix(in oklab, var(--surface) 92%, transparent);border:1px solid var(--border);border-radius:999px;padding:.7rem .85rem;box-shadow:var(--shadow);display:none}
-.floating-top.show{display:inline-flex}
-.footer-link{color:var(--text)}
-@media (max-width:640px){
-  .hero-title{font-size:2.25rem!important;line-height:1.25!important}
-  .textarea-control{min-height:220px}
-  .hide-mobile{display:none!important}
-}
+::selection{background:color-mix(in oklab, var(--accent) 25%, transparent)}
+.app-shell{min-height:100vh;position:relative}.app-shell::before{content:"";position:fixed;inset-inline-start:6%;top:18%;width:230px;height:230px;border-radius:999px;background:color-mix(in oklab,var(--accent) 14%,transparent);filter:blur(55px);z-index:-1;animation:floatOrb 9s ease-in-out infinite}.app-shell::after{content:"";position:fixed;inset-inline-end:9%;top:55%;width:260px;height:260px;border-radius:999px;background:color-mix(in oklab,var(--accent-2) 12%,transparent);filter:blur(65px);z-index:-1;animation:floatOrb 11s ease-in-out infinite reverse}@keyframes floatOrb{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-18px) scale(1.06)}}
+.glass{backdrop-filter:saturate(180%) blur(22px);background:color-mix(in oklab,var(--surface) 72%,transparent);border-bottom:1px solid var(--border);box-shadow:0 1px 0 rgba(255,255,255,.24)}
+.logo-mark{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(180deg,color-mix(in oklab,var(--surface) 88%,#fff),color-mix(in oklab,var(--surface-2) 92%,transparent));border:1px solid var(--border-strong);box-shadow:var(--shadow),var(--inner);color:var(--primary-600);position:relative;overflow:hidden}.logo-mark::after{content:"";position:absolute;inset:-60% -20%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.5),transparent);transform:translateX(-70%) rotate(8deg);animation:shine 5.5s ease-in-out infinite}.logo-mark svg{width:32px;height:32px;display:block;position:relative;z-index:1}@keyframes shine{0%,75%{transform:translateX(-90%) rotate(8deg)}100%{transform:translateX(120%) rotate(8deg)}}
+.control-cluster{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;justify-content:flex-end}.lang-picker{display:flex;align-items:center;gap:.55rem;padding:.42rem .5rem;border:1px solid var(--border);background:color-mix(in oklab,var(--surface) 82%,transparent);border-radius:18px;box-shadow:var(--inner)}.lang-picker-label{display:inline-flex;align-items:center;gap:.35rem;font-size:.72rem;font-weight:900;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}.lang-picker .select-control{width:152px;border-radius:13px;padding:.62rem .75rem;font-weight:900;background:color-mix(in oklab,var(--surface) 94%,transparent)}
+.control-surface,.card{background:linear-gradient(180deg,color-mix(in oklab,var(--surface) 92%,transparent),color-mix(in oklab,var(--surface-2) 78%,transparent));border:1px solid var(--border);box-shadow:var(--shadow),var(--inner);border-radius:var(--radius-xl)}.card{transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}.card:hover{border-color:var(--border-strong);box-shadow:var(--shadow-strong);transform:translateY(-3px)}
+.hero-card{position:relative;overflow:hidden;isolation:isolate}.hero-card::before{content:"";position:absolute;inset:-2px;pointer-events:none;background:radial-gradient(600px 260px at 50% 0%,color-mix(in oklab,var(--accent) 18%,transparent),transparent 70%),linear-gradient(120deg,transparent 0%,color-mix(in oklab,var(--accent-2) 9%,transparent) 46%,transparent 68%);z-index:-1}.hero-card::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,color-mix(in oklab,var(--surface) 38%,transparent),transparent);transform:translateX(-120%);animation:panelSweep 8s ease-in-out infinite}@keyframes panelSweep{0%,76%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.hero-visual{border:1px solid var(--border);background:color-mix(in oklab,var(--surface) 72%,transparent);border-radius:26px;padding:1rem;box-shadow:var(--inner);position:relative;overflow:hidden}.hero-visual::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 10%,color-mix(in oklab,var(--accent) 16%,transparent),transparent 36%);pointer-events:none}.mini-output{position:relative;border:1px solid var(--border);background:color-mix(in oklab,var(--surface) 88%,transparent);border-radius:22px;padding:1rem}.mini-line{height:10px;border-radius:999px;background:color-mix(in oklab,var(--text) 12%,transparent);margin:.55rem 0}.mini-line.w1{width:58%}.mini-line.w2{width:76%}.mini-line.w3{width:42%}.node-map{position:absolute;inset-inline-end:1rem;top:1rem;width:86px;height:86px;border:1px solid var(--border);border-radius:24px;background:color-mix(in oklab,var(--surface-2) 76%,transparent);display:grid;place-items:center}.node-map svg{width:56px;height:56px;overflow:visible}.node-map circle{fill:var(--primary-600)}.node-map path{stroke:var(--primary-600)}
+.premium-badge,.pill{display:inline-flex;align-items:center;gap:.48rem;padding:.42rem .78rem;border-radius:999px;font-weight:900;font-size:.76rem;white-space:nowrap;border:1px solid var(--border);background:color-mix(in oklab,var(--surface) 74%,transparent);color:var(--text);box-shadow:var(--inner)}.premium-badge{letter-spacing:.04em;text-transform:uppercase}.premium-badge .spark{width:8px;height:8px;border-radius:999px;background:var(--accent);box-shadow:0 0 0 5px color-mix(in oklab,var(--accent) 13%,transparent)}
+.hero-title{letter-spacing:-.045em;background:linear-gradient(135deg,var(--primary-600),color-mix(in oklab,var(--primary-600) 62%,var(--accent)));-webkit-background-clip:text;background-clip:text;color:transparent}.field-label{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.5rem;font-size:.82rem;font-weight:950;color:var(--text)}.select-control,.textarea-control{width:100%;border:1px solid var(--border);color:var(--text);background:color-mix(in oklab,var(--surface) 90%,transparent);border-radius:18px;outline:none;transition:border-color .16s,box-shadow .16s,background .16s,transform .16s}.select-control{padding:.82rem .9rem;font-weight:850}.textarea-control{padding:1.08rem;min-height:272px;resize:vertical;line-height:1.92;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}.select-control:focus,.textarea-control:focus{border-color:var(--accent);box-shadow:0 0 0 5px var(--ring);background:var(--surface)}.select-control:disabled{opacity:.52;cursor:not-allowed}.input-panel{position:relative}.input-panel::before{content:"";position:absolute;inset:10px;z-index:-1;border-radius:26px;background:linear-gradient(140deg,color-mix(in oklab,var(--accent) 11%,transparent),transparent 35%,color-mix(in oklab,var(--accent-2) 10%,transparent));filter:blur(20px)}
+.step-card{background:color-mix(in oklab,var(--surface) 78%,transparent);border:1px solid var(--border);border-radius:24px;padding:1rem;box-shadow:var(--inner);transition:transform .18s,border-color .18s,box-shadow .18s}.step-card:hover{transform:translateY(-3px);border-color:var(--border-strong);box-shadow:var(--shadow)}.step-no{width:34px;height:34px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(180deg,var(--primary),var(--primary-600));color:var(--surface);font-weight:950;font-size:.9rem;flex:0 0 auto}[data-theme="dark"] .step-no{color:#050816}.workflow-card{position:relative;overflow:hidden}.workflow-card::after{content:"";position:absolute;inset-inline-end:-28px;top:-28px;width:78px;height:78px;border-radius:999px;background:color-mix(in oklab,var(--accent) 9%,transparent)}
+.drop-zone{border:1.5px dashed var(--border-strong);border-radius:28px;padding:1rem;background:linear-gradient(180deg,color-mix(in oklab,var(--surface) 72%,transparent),color-mix(in oklab,var(--surface-2) 84%,transparent));transition:border-color .18s,box-shadow .18s,transform .18s,background .18s;position:relative;overflow:hidden}.drop-zone::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,transparent,color-mix(in oklab,var(--accent) 8%,transparent),transparent);opacity:0;transition:opacity .18s}.drop-zone.drag-over{border-color:var(--accent);box-shadow:0 0 0 6px var(--ring);transform:translateY(-2px)}.drop-zone.drag-over::after{opacity:1}
+.btn{border-radius:17px;font-weight:950;padding:.82rem 1.18rem;display:inline-flex;align-items:center;justify-content:center;gap:.55rem;border:1px solid var(--border);transition:transform .1s,background .16s,border-color .16s,box-shadow .16s,opacity .16s;user-select:none;white-space:nowrap;position:relative;overflow:hidden}.btn:focus-visible{outline:none;box-shadow:0 0 0 5px var(--ring)}.btn:active{transform:translateY(1px)}.btn:disabled{opacity:.62;cursor:not-allowed;transform:none}.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-600));color:var(--surface);border-color:color-mix(in oklab,var(--primary) 24%,transparent);box-shadow:0 20px 42px -24px var(--primary)}.btn-primary::after{content:"";position:absolute;inset:-1px;background:linear-gradient(120deg,transparent,rgba(255,255,255,.28),transparent);transform:translateX(-120%);transition:transform .55s}.btn-primary:hover::after{transform:translateX(120%)}[data-theme="dark"] .btn-primary{color:#050816;background:linear-gradient(180deg,#fff,#e5e7eb)}.btn-secondary{background:color-mix(in oklab,var(--surface) 86%,transparent);color:var(--text);box-shadow:var(--inner)}.btn-secondary:hover{border-color:var(--border-strong);transform:translateY(-2px)}.btn-ghost{background:transparent;border-color:transparent;color:var(--text)}.btn-icon{width:44px;height:44px;padding:0;border-radius:16px}.muted{color:var(--muted)}.micro{font-size:.76rem;color:var(--muted)}.chip{display:inline-flex;align-items:center;gap:.38rem;padding:.29rem .7rem;border-radius:999px;font-size:.78rem;font-weight:900;border:1px solid var(--chip-border);background:var(--chip);white-space:nowrap;color:var(--text)}.chip .dot{width:.5rem;height:.5rem;border-radius:999px;opacity:.95;background:var(--accent)}.status-bar{display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap;margin-top:.85rem}.status-item{display:inline-flex;align-items:center;gap:.45rem;color:var(--muted);font-size:.82rem}.warning-box{border:1px solid color-mix(in oklab,var(--warning) 35%,transparent);background:color-mix(in oklab,var(--warning) 12%,var(--surface));color:color-mix(in oklab,var(--warning) 82%,var(--text));border-radius:18px;padding:.86rem 1rem;font-weight:850}.error-box{border:1px solid color-mix(in oklab,var(--danger) 35%,transparent);background:color-mix(in oklab,var(--danger) 10%,var(--surface));color:var(--danger);border-radius:18px;padding:.88rem 1rem;font-weight:900}.toggle{width:52px;height:30px;border-radius:999px;position:relative;border:1px solid var(--border);background:color-mix(in oklab,var(--surface) 86%,transparent);cursor:pointer;display:inline-flex;align-items:center;padding:3px;box-shadow:var(--inner)}.toggle .knob{width:22px;height:22px;border-radius:999px;background:var(--primary-600);transition:transform .22s,background .22s;transform:translateX(0)}[data-theme="dark"] .toggle .knob{transform:translateX(22px);background:#fff}[dir="rtl"][data-theme="dark"] .toggle .knob{transform:translateX(-22px)}
+.skeleton{position:relative;overflow:hidden;background:color-mix(in oklab,var(--surface-3) 72%,transparent);border-radius:14px}.skeleton::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,color-mix(in oklab,var(--surface) 78%,transparent),transparent);animation:shimmer 1.35s infinite}@keyframes shimmer{100%{transform:translateX(100%)}}
+.result-card{border-radius:26px;border:1px solid var(--border);background:linear-gradient(180deg,color-mix(in oklab,var(--surface) 92%,transparent),color-mix(in oklab,var(--surface-2) 72%,transparent));box-shadow:var(--shadow),var(--inner);overflow:hidden;transition:border-color .18s,box-shadow .18s,transform .18s;position:relative}.result-card::before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--accent),var(--accent-2));opacity:.9}.result-card:hover{border-color:var(--border-strong);box-shadow:var(--shadow-strong);transform:translateY(-3px)}.result-header{cursor:pointer;background:linear-gradient(180deg,color-mix(in oklab,var(--surface) 92%,transparent),color-mix(in oklab,var(--surface-2) 82%,transparent));transition:background .2s}.result-details{max-height:0;overflow:hidden;transition:max-height .45s ease,padding .32s ease,border-color .32s ease;border-top:1px solid transparent;padding:0 1.25rem;background:color-mix(in oklab,var(--surface) 92%,transparent)}.result-details.open{max-height:2800px;border-top-color:var(--border);padding:1.15rem 1.25rem 1.4rem}.info-tile{border:1px solid var(--border);border-radius:20px;background:color-mix(in oklab,var(--surface-2) 82%,transparent);padding:1rem;height:100%;box-shadow:var(--inner)}.example-item{border:1px solid var(--border);border-radius:18px;padding:.9rem;background:color-mix(in oklab,var(--surface) 86%,transparent);transition:transform .16s,border-color .16s}.example-item:hover{transform:translateX(-2px);border-color:var(--border-strong)}[dir="ltr"] .example-item:hover{transform:translateX(2px)}
+.floating-top{position:fixed;bottom:20px;inset-inline-end:20px;z-index:50;backdrop-filter:blur(12px);background:color-mix(in oklab,var(--surface) 92%,transparent);border:1px solid var(--border);border-radius:999px;padding:.74rem .9rem;box-shadow:var(--shadow);display:none}.floating-top.show{display:inline-flex}.creator-footer{max-width:1120px;margin:2rem auto 0;padding:0 1rem 3rem}.creator-card{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;border:1px solid var(--border);border-radius:28px;background:linear-gradient(135deg,color-mix(in oklab,var(--surface) 92%,transparent),color-mix(in oklab,var(--surface-2) 78%,transparent));box-shadow:var(--shadow),var(--inner);padding:1rem 1.1rem}.creator-id{display:flex;align-items:center;gap:.9rem}.creator-avatar{width:50px;height:50px;border-radius:18px;display:grid;place-items:center;background:var(--primary-600);color:var(--surface);font-weight:950;letter-spacing:-.04em}[data-theme="dark"] .creator-avatar{color:#050816}.creator-kicker{font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:950}.creator-name{font-size:1.08rem;font-weight:950;color:var(--text);text-decoration:none}.creator-name:hover{color:var(--accent)}.creator-role{font-size:.8rem;color:var(--muted);font-weight:750}.creator-socials{display:flex;align-items:center;gap:.55rem}.social-btn{display:inline-flex;align-items:center;gap:.45rem;padding:.67rem .85rem;border-radius:16px;border:1px solid var(--border);background:color-mix(in oklab,var(--surface) 80%,transparent);color:var(--text);text-decoration:none;font-weight:900;font-size:.78rem;transition:transform .16s,border-color .16s,background .16s}.social-btn:hover{transform:translateY(-2px);border-color:var(--border-strong);background:color-mix(in oklab,var(--accent) 10%,var(--surface))}.footer-link{color:var(--text)}#footer-text-line2{display:none}.lang-flag{font-size:1.05rem}.app-kicker{letter-spacing:.18em;text-transform:uppercase}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media (max-width:768px){.control-cluster{justify-content:flex-start}.lang-picker{flex:1}.lang-picker .select-control{width:100%}.hero-title{font-size:2.55rem!important;line-height:1.2!important}.textarea-control{min-height:220px}.creator-card{align-items:flex-start}.creator-socials{width:100%;justify-content:flex-start}.hide-mobile{display:none!important}}
+@media (max-width:520px){.logo-mark{width:46px;height:46px}.hero-title{font-size:2.2rem!important}.control-cluster{gap:.45rem}.btn{width:100%}.btn-icon{width:44px}.status-bar{align-items:flex-start}.creator-socials{flex-direction:column;align-items:stretch}.social-btn{justify-content:center}}
+
 </style>
 </head>
 <body>
@@ -205,14 +135,15 @@ body::before{
         </svg>
       </div>
       <div class="min-w-0">
+        <div class="app-kicker text-[10px] font-black muted mb-1">AI LANGUAGE LAB</div>
         <h1 id="main-title" class="text-lg md:text-xl font-black tracking-tight truncate"></h1>
         <p id="header-subtitle" class="text-xs muted hidden sm:block"></p>
       </div>
     </div>
-    <div class="flex items-center gap-2 md:gap-3">
-      <div class="relative flex items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 rtl:right-3 rtl:left-auto size-4 pointer-events-none text-[var(--muted)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-        <select id="ui-lang-switcher" class="select-control text-sm w-36 pl-10 pr-4 rtl:pr-10 rtl:pl-4 py-2"></select>
+    <div class="control-cluster">
+      <div class="lang-picker" title="Interface language">
+        <span class="lang-picker-label"><span>🌐</span><span class="hide-mobile">UI</span></span>
+        <select id="ui-lang-switcher" class="select-control text-sm"></select>
       </div>
       <button id="theme-toggle" class="toggle" aria-label="toggle theme"><span class="knob"></span></button>
       <button id="stop-tts" class="btn btn-secondary btn-icon" title="توقف گفتار" aria-label="stop-tts">
@@ -226,25 +157,41 @@ body::before{
   <div class="hero-card control-surface p-5 md:p-8 lg:p-10">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
       <aside class="lg:col-span-5 space-y-5">
-        <div class="premium-badge"><span>✦</span><span>AI Vocabulary Studio</span></div>
+        <div class="premium-badge"><span class="spark"></span><span>AI Vocabulary Studio</span></div>
         <div>
-          <h2 class="hero-title text-4xl md:text-5xl font-black leading-tight tracking-tight mb-4">از متن یا لیست، کارت یادگیری بساز.</h2>
-          <div id="big-desc" class="text-base md:text-lg leading-9 muted font-semibold"></div>
+          <h2 id="hero-title" class="hero-title text-4xl md:text-6xl font-black leading-tight tracking-tight mb-4">از متن یا لیست، کارت یادگیری بساز.</h2>
+          <div id="big-desc" class="text-base md:text-lg leading-9 muted font-semibold max-w-2xl"></div>
         </div>
-        <div id="hint-container" class="step-card">
+
+        <div class="hero-visual">
+          <div class="mini-output">
+            <div class="micro font-black mb-3">LIVE LEARNING PIPELINE</div>
+            <div class="mini-line w1"></div>
+            <div class="mini-line w2"></div>
+            <div class="mini-line w3"></div>
+            <div class="node-map" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M26 32L42 18M26 32h22M26 32l16 16" stroke-width="5" stroke-linecap="round"/>
+                <circle cx="24" cy="32" r="8"/><circle cx="45" cy="18" r="5"/><circle cx="50" cy="32" r="5"/><circle cx="45" cy="48" r="5"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div id="hint-container" class="step-card workflow-card">
           <div class="flex items-start gap-3">
             <div class="step-no">؟</div>
             <div id="hint" class="text-sm muted leading-8 space-y-1"></div>
           </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div class="step-card"><div class="flex items-center gap-3"><span class="step-no">1</span><div><div class="font-black text-sm">زبان‌ها</div><div class="micro">مبدأ و مقصد</div></div></div></div>
-          <div class="step-card"><div class="flex items-center gap-3"><span class="step-no">2</span><div><div class="font-black text-sm">ورودی</div><div class="micro">متن یا لیست</div></div></div></div>
-          <div class="step-card"><div class="flex items-center gap-3"><span class="step-no">3</span><div><div class="font-black text-sm">تحلیل</div><div class="micro">نتیجه آموزشی</div></div></div></div>
+          <div class="step-card workflow-card"><div class="flex items-center gap-3"><span class="step-no">1</span><div><div class="font-black text-sm">زبان‌ها</div><div class="micro">مبدأ و مقصد</div></div></div></div>
+          <div class="step-card workflow-card"><div class="flex items-center gap-3"><span class="step-no">2</span><div><div class="font-black text-sm">ورودی</div><div class="micro">متن یا لیست</div></div></div></div>
+          <div class="step-card workflow-card"><div class="flex items-center gap-3"><span class="step-no">3</span><div><div class="font-black text-sm">تحلیل</div><div class="micro">نتیجه آموزشی</div></div></div></div>
         </div>
       </aside>
 
-      <div class="lg:col-span-7 space-y-4">
+      <div class="lg:col-span-7 space-y-4 input-panel">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label id="source-lang-label" class="field-label"></label>
@@ -338,7 +285,27 @@ body::before{
   </section>
 </main>
 
-<footer class="text-center p-8 mt-8 text-sm muted">
+<footer class="creator-footer">
+  <div class="creator-card">
+    <div class="creator-id">
+      <div class="creator-avatar">MR</div>
+      <div>
+        <div class="creator-kicker">Designed & Built by</div>
+        <a class="creator-name" href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener">MohammadReza Qaderi</a>
+        <div class="creator-role">Business & Systems Analyst · AI-assisted tools</div>
+      </div>
+    </div>
+    <div class="creator-socials">
+      <a class="social-btn" href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+        <span>LinkedIn</span>
+      </a>
+      <a class="social-btn" href="https://www.instagram.com/qaderi.mr?igsh=MTlnYzhwdGpmdnR4ag==" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.9.2 2.3.4.6.2 1 .4 1.5.9.5.5.7.9.9 1.5.2.4.3 1.1.4 2.3.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.9-.4 2.3-.2.6-.4 1-.9 1.5-.5.5-.9.7-1.5.9-.4.2-1.1.3-2.3.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.9-.2-2.3-.4-.6-.2-1-.4-1.5-.9-.5-.5-.7-.9-.9-1.5-.2-.4-.3-1.1-.4-2.3C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.2-1.9.4-2.3.2-.6.4-1 .9-1.5.5-.5.9-.7 1.5-.9.4-.2 1.1-.3 2.3-.4C8.4 2.2 8.8 2.2 12 2.2m0-2.2C8.7 0 8.3 0 7 0 5.7 0 4.8.1 4 .3c-.9.2-1.7.5-2.5 1.3C.7 2.3.4 3.1.3 4 .1 4.8 0 5.7 0 7c0 1.3 0 1.7 0 5s0 3.7.3 5c.1.8.4 1.7 1.2 2.5.8.8 1.6 1.1 2.5 1.3.8.2 1.7.3 3 .3s1.7 0 5 0 3.7 0 5-.3c.8-.1 1.7-.4 2.5-1.2.8-.8 1.1-1.6 1.3-2.5.2-.8.3-1.7.3-3s0-1.7 0-5 0-3.7-.3-5c-.1-.8-.4-1.7-1.2-2.5C21.7.7 20.9.4 20 .3 19.2.1 18.3 0 17 0s-1.7 0-5 0z"/><path d="M12 5.8A6.2 6.2 0 1 0 18.2 12 6.2 6.2 0 0 0 12 5.8m0 10.2A4 4 0 1 1 16 12a4 4 0 0 1-4 4z"/><circle cx="18.4" cy="5.6" r="1.3"/></svg>
+        <span>Instagram</span>
+      </a>
+    </div>
+  </div>
   <p id="footer-text-line2" class="mt-1"></p>
 </footer>
 
@@ -350,15 +317,15 @@ body::before{
 const PROXY_URL = 'https://language-learner.qaderi.workers.dev/';
 
 const LANGS = [
-  { code:'fa', label:'فارسی',   en:'Persian',  tts:'fa-IR' },
-  { code:'en', label:'English', en:'English',  tts:'en-US' },
-  { code:'de', label:'Deutsch', en:'German',   tts:'de-DE' },
-  { code:'fr', label:'Français',en:'French',   tts:'fr-FR' },
-  { code:'es', label:'Español', en:'Spanish',  tts:'es-ES' },
-  { code:'zh', label:'中文',     en:'Chinese',  tts:'zh-CN' },
-  { code:'tr', label:'Türkçe',  en:'Turkish',  tts:'tr-TR' },
-  { code:'it', label:'Italiano',en:'Italian',  tts:'it-IT' },
-  { code:'ru', label:'Русский', en:'Russian',  tts:'ru-RU' },
+  { code:'fa', flag:'🇮🇷', label:'فارسی',   en:'Persian',  tts:'fa-IR' },
+  { code:'en', flag:'🇺🇸', label:'English', en:'English',  tts:'en-US' },
+  { code:'de', flag:'🇩🇪', label:'Deutsch', en:'German',   tts:'de-DE' },
+  { code:'fr', flag:'🇫🇷', label:'Français',en:'French',   tts:'fr-FR' },
+  { code:'es', flag:'🇪🇸', label:'Español', en:'Spanish',  tts:'es-ES' },
+  { code:'zh', flag:'🇨🇳', label:'中文',     en:'Chinese',  tts:'zh-CN' },
+  { code:'tr', flag:'🇹🇷', label:'Türkçe',  en:'Turkish',  tts:'tr-TR' },
+  { code:'it', flag:'🇮🇹', label:'Italiano',en:'Italian',  tts:'it-IT' },
+  { code:'ru', flag:'🇷🇺', label:'Русский', en:'Russian',  tts:'ru-RU' },
 ];
 const RTL_LANGS = new Set(['fa']);
 const MAX_PROMPT_PREVIEW_LENGTH = 200000;
@@ -821,6 +788,7 @@ const uiStrings = {
 fa:{
 appTitle:"یادگیری زبان با هوش مصنوعی",
 mainTitle:"یادگیری لغات جدید زبان",
+heroTitle:"از متن خام تا کارت یادگیری حرفه‌ای.",
 headerSubtitle:"",
 bigDesc:"🔍 چی کار می‌کنیم؟ <span class='font-bold'>از متن یا لیست شما</span> اصطلاحات و کلمات کاربردی را جدا می‌کنیم و <span class='font-bold'>معنی، مثال، گرامر و تلفظ</span> را نمایش می‌دهیم تا یادگیری زبان برایتان سریع‌تر و هدفمندتر شود.",
 sourceLangLabel:"زبان مادری من",
@@ -886,6 +854,7 @@ footerBuilder:`
 en:{
 appTitle:"AI Language Learner",
 mainTitle:"Learn New Vocabulary",
+heroTitle:"Turn raw text into polished learning cards.",
 headerSubtitle:"",
 bigDesc:"🔍 What we do: from <span class='font-bold'>your text or your word list</span>, we extract useful items and show <span class='font-bold'>meaning, examples, grammar, and pronunciation</span> so you learn faster and smarter.",
 sourceLangLabel:"My Native Language",
@@ -1316,7 +1285,9 @@ const isRtl = RTL_LANGS.has(lang);
 document.documentElement.lang = lang;
 document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
 
+const heroTitle = s.heroTitle || (isRtl ? 'از متن یا لیست، کارت یادگیری بساز.' : 'Turn any text into a learning deck.');
 const map = {
+'hero-title': heroTitle,
 'main-title':s.mainTitle,
 'header-subtitle':s.headerSubtitle,
 'big-desc':s.bigDesc,
@@ -1361,7 +1332,7 @@ updateModeBadge();
 
 document.addEventListener('DOMContentLoaded', ()=> {
 [uiLangSwitcher, sourceLangSelect, targetLangSelect].forEach(sel => {
-sel.innerHTML = LANGS.map(l => `<option value="${l.code}">${l.label}</option>`).join('');
+sel.innerHTML = LANGS.map(l => `<option value="${l.code}">${l.flag} ${l.label}</option>`).join('');
 });
 const lang = localStorage.getItem('ll-lang') || 'fa';
 setLanguage(lang);
