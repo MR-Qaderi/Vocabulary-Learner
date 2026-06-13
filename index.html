@@ -796,23 +796,50 @@ function normalizeAnkiField(value){
   return String(value)
     .replace(/\r?\n/g, '<br>')
     .replace(/\t/g, ' ')
+    .replace(/\*\*/g, '')
+    .replace(/[`]/g, '')
     .replace(/[ ]{2,}/g, ' ')
     .trim();
+}
+
+function stripLeadingExampleNumber(value){
+  return String(value || '')
+    .replace(/^\s*Example\s*\d+\s*:\s*/i, '')
+    .replace(/^\s*\d+[.)]\s*/, '')
+    .trim();
+}
+
+function stripInlineTranslationForAnki(value){
+  // The on-page result may show examples as: "target sentence - native translation".
+  // For MohammadReza's Anki TXT format, the Examples field must keep only the example sentence.
+  const text = stripLeadingExampleNumber(value)
+    .replace(/\r?\n/g, ' ')
+    .replace(/\t/g, ' ')
+    .replace(/[ ]{2,}/g, ' ')
+    .trim();
+
+  const splitAt = text.lastIndexOf(' - ');
+  if (splitAt > 0) return text.slice(0, splitAt).trim();
+  return text;
 }
 
 function formatAnkiExamples(examples=[]){
   return (examples || [])
     .map((ex, idx) => {
-      const cleaned = String(ex || '')
-        .replace(/^\s*\d+\.\s*/, '')
-        .replace(/\r?\n/g, ' ')
-        .replace(/\t/g, ' ')
-        .replace(/[ ]{2,}/g, ' ')
-        .trim();
+      const cleaned = stripInlineTranslationForAnki(ex);
       return cleaned ? `Example ${idx + 1}: ${cleaned}` : '';
     })
     .filter(Boolean)
     .join('<br>');
+}
+
+function formatAnkiCollocations(value){
+  if (isAnkiBlankLike(value)) return '';
+  return String(value || '')
+    .split(/[,،;؛]/)
+    .map(x => x.trim())
+    .filter(x => x && !isAnkiBlankLike(x))
+    .join('; ');
 }
 
 function buildAnkiTxt(){
@@ -830,7 +857,7 @@ function buildAnkiTxt(){
       item.translation,
       item.definition,
       item.grammar,
-      item.collocations,
+      formatAnkiCollocations(item.collocations),
       formatAnkiExamples(item.exampleslist || []),
       item.commonmistakes,
       item.contextnote,
