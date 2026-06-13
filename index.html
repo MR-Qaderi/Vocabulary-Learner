@@ -350,6 +350,8 @@ body::after{
         <h2 id="results-title" class="text-2xl md:text-3xl font-black"></h2>
       </div>
       <div class="flex gap-2 flex-wrap">
+        <button id="download-anki-txt" class="btn btn-primary text-sm"></button>
+        <button id="copy-anki-txt" class="btn btn-secondary text-sm"></button>
         <button id="expand-all" class="btn btn-secondary text-sm"></button>
         <button id="collapse-all" class="btn btn-secondary text-sm"></button>
         <button id="start-over-btn" class="btn btn-secondary text-sm"></button>
@@ -425,6 +427,8 @@ const resultsList = document.getElementById('results-list');
 const uiLangSwitcher = document.getElementById('ui-lang-switcher');
 const dropZone = document.getElementById('drop-zone');
 const stopTTSBtn = document.getElementById('stop-tts');
+const downloadAnkiTxtBtn = document.getElementById('download-anki-txt');
+const copyAnkiTxtBtn = document.getElementById('copy-anki-txt');
 const expandAllBtn = document.getElementById('expand-all');
 const collapseAllBtn = document.getElementById('collapse-all');
 const forceWordlist = document.getElementById('force-wordlist');
@@ -445,6 +449,8 @@ themeToggle.addEventListener('click', () => {
 
 processBtn.addEventListener('click', handleProcessRequest);
 startOverBtn.addEventListener('click', resetApp);
+downloadAnkiTxtBtn.addEventListener('click', downloadAnkiTxt);
+copyAnkiTxtBtn.addEventListener('click', copyAnkiTxt);
 expandAllBtn.addEventListener('click', () => toggleAll(true));
 collapseAllBtn.addEventListener('click', () => toggleAll(false));
 stopTTSBtn.addEventListener('click', () => speechSynthesis.cancel());
@@ -779,6 +785,119 @@ function parseAIResponse(s){
   });
 }
 
+
+function isAnkiBlankLike(value){
+  const v = String(value || '').trim();
+  return !v || /^(n\/a|na|null|none|—|-|_)$/i.test(v);
+}
+
+function normalizeAnkiField(value){
+  if (isAnkiBlankLike(value)) return '';
+  return String(value)
+    .replace(/\r?\n/g, '<br>')
+    .replace(/\t/g, ' ')
+    .replace(/[ ]{2,}/g, ' ')
+    .trim();
+}
+
+function formatAnkiExamples(examples=[]){
+  return (examples || [])
+    .map((ex, idx) => {
+      const cleaned = String(ex || '')
+        .replace(/^\s*\d+\.\s*/, '')
+        .replace(/\r?\n/g, ' ')
+        .replace(/\t/g, ' ')
+        .replace(/[ ]{2,}/g, ' ')
+        .trim();
+      return cleaned ? `Example ${idx + 1}: ${cleaned}` : '';
+    })
+    .filter(Boolean)
+    .join('<br>');
+}
+
+function buildAnkiTxt(){
+  const s = uiStrings[currentLang] || uiStrings.en;
+  const raw = resultsList.dataset.lastRaw || '';
+  const parsed = parseAIResponse(raw).filter(item => item && item.word);
+
+  if (!parsed.length) {
+    throw new Error(s.ankiNoResults || s.errorNoResults || 'No results to export.');
+  }
+
+  return parsed.map(item => {
+    const fields = [
+      item.word,
+      item.translation,
+      item.definition,
+      item.grammar,
+      item.collocations,
+      formatAnkiExamples(item.exampleslist || []),
+      item.commonmistakes,
+      item.contextnote,
+      item.pronunciation
+    ];
+    return fields.map(normalizeAnkiField).join('\t');
+  }).join('\n');
+}
+
+function downloadTextFile(filename, content){
+  const blob = new Blob(['\uFEFF' + content], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function ankiFileName(){
+  const date = new Date().toISOString().slice(0, 10);
+  return `lingodeck-anki-${date}.txt`;
+}
+
+function downloadAnkiTxt(){
+  const s = uiStrings[currentLang] || uiStrings.en;
+  try {
+    const content = buildAnkiTxt();
+    downloadTextFile(ankiFileName(), content);
+  } catch (err) {
+    alert(err?.message || s.ankiNoResults || s.errorNoResults || 'No results to export.');
+  }
+}
+
+function fallbackCopyText(text){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  ta.style.pointerEvents = 'none';
+  document.body.appendChild(ta);
+  ta.select();
+  const ok = document.execCommand('copy');
+  ta.remove();
+  if (!ok) throw new Error('copy failed');
+}
+
+async function copyAnkiTxt(){
+  const s = uiStrings[currentLang] || uiStrings.en;
+  try {
+    const content = buildAnkiTxt();
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(content);
+    } else {
+      fallbackCopyText(content);
+    }
+    const old = copyAnkiTxtBtn.innerHTML;
+    copyAnkiTxtBtn.innerHTML = `✅ ${s.ankiCopied || 'Copied'}`;
+    setTimeout(() => { copyAnkiTxtBtn.innerHTML = old; }, 1400);
+  } catch (err) {
+    alert(err?.message || s.ankiCopyFailed || 'Could not copy.');
+  }
+}
+
 function escapeHTML(s=''){
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
@@ -945,6 +1064,11 @@ resultsTitle:"نتایج تحلیل",
 startOverBtn:"شروع دوباره",
 expandAll:"باز کردن همه",
 collapseAll:"بستن همه",
+downloadAnkiTxt:"دانلود TXT برای Anki",
+copyAnkiTxt:"کپی فرمت Anki",
+ankiNoResults:"هنوز نتیجه‌ای برای خروجی گرفتن وجود ندارد.",
+ankiCopied:"متن Anki کپی شد.",
+ankiCopyFailed:"کپی خودکار انجام نشد. از دکمه دانلود استفاده کنید.",
 errorText:"لطفاً ورودی معتبر وارد یا آپلود کنید.",
 errorLevel:"برای متن‌ها/فایل‌ها لطفاً سطح خود را انتخاب کنید.",
 errorAIResponse:"پاسخ معتبری از هوش مصنوعی دریافت نشد.",
@@ -1035,6 +1159,11 @@ resultsTitle:"Analysis Results",
 startOverBtn:"Start Over",
 expandAll:"Expand All",
 collapseAll:"Collapse All",
+downloadAnkiTxt:"Download Anki TXT",
+copyAnkiTxt:"Copy Anki Format",
+ankiNoResults:"There are no results to export yet.",
+ankiCopied:"Anki text copied.",
+ankiCopyFailed:"Auto-copy failed. Please use the download button.",
 errorText:"Please enter or upload valid input.",
 errorLevel:"For texts/files, please select your level.",
 errorAIResponse:"No valid AI response.",
@@ -1117,6 +1246,11 @@ resultsTitle:"Analyse-Ergebnisse",
 startOverBtn:"Neu starten",
 expandAll:"Alle öffnen",
 collapseAll:"Alle schließen",
+downloadAnkiTxt:"Anki-TXT herunterladen",
+copyAnkiTxt:"Anki-Format kopieren",
+ankiNoResults:"Es gibt noch keine Ergebnisse zum Exportieren.",
+ankiCopied:"Anki-Text kopiert.",
+ankiCopyFailed:"Automatisches Kopieren fehlgeschlagen. Bitte die Download-Schaltfläche verwenden.",
 errorText:"Bitte eine gültige Eingabe eingeben oder hochladen.",
 errorLevel:"Für Texte/Dateien bitte dein Niveau auswählen.",
 errorAIResponse:"Keine gültige KI-Antwort.",
@@ -1199,6 +1333,11 @@ resultsTitle:"Résultats d’analyse",
 startOverBtn:"Recommencer",
 expandAll:"Tout déplier",
 collapseAll:"Tout replier",
+downloadAnkiTxt:"Télécharger TXT Anki",
+copyAnkiTxt:"Copier le format Anki",
+ankiNoResults:"Aucun résultat à exporter pour le moment.",
+ankiCopied:"Texte Anki copié.",
+ankiCopyFailed:"La copie automatique a échoué. Utilisez le bouton de téléchargement.",
 errorText:"Veuillez saisir ou téléverser une entrée valide.",
 errorLevel:"Pour les textes/fichiers, choisissez votre niveau.",
 errorAIResponse:"Réponse IA invalide.",
@@ -1281,6 +1420,11 @@ resultsTitle:"Resultados del análisis",
 startOverBtn:"Empezar de nuevo",
 expandAll:"Expandir todo",
 collapseAll:"Contraer todo",
+downloadAnkiTxt:"Descargar TXT Anki",
+copyAnkiTxt:"Copiar formato Anki",
+ankiNoResults:"Todavía no hay resultados para exportar.",
+ankiCopied:"Texto Anki copiado.",
+ankiCopyFailed:"La copia automática falló. Usa el botón de descarga.",
 errorText:"Introduce o sube una entrada válida.",
 errorLevel:"Para textos/archivos, elige tu nivel.",
 errorAIResponse:"Respuesta de IA no válida.",
@@ -1363,6 +1507,11 @@ resultsTitle:"分析结果",
 startOverBtn:"重新开始",
 expandAll:"全部展开",
 collapseAll:"全部收起",
+downloadAnkiTxt:"下载 Anki TXT",
+copyAnkiTxt:"复制 Anki 格式",
+ankiNoResults:"还没有可导出的结果。",
+ankiCopied:"Anki 文本已复制。",
+ankiCopyFailed:"自动复制失败。请使用下载按钮。",
 errorText:"请输入或上传有效内容。",
 errorLevel:"对于文本/文件，请选择你的水平。",
 errorAIResponse:"无有效的 AI 响应。",
@@ -1445,6 +1594,11 @@ resultsTitle:"Analiz Sonuçları",
 startOverBtn:"Baştan başla",
 expandAll:"Tümünü aç",
 collapseAll:"Tümünü kapat",
+downloadAnkiTxt:"Anki TXT indir",
+copyAnkiTxt:"Anki formatını kopyala",
+ankiNoResults:"Dışa aktarılacak sonuç yok.",
+ankiCopied:"Anki metni kopyalandı.",
+ankiCopyFailed:"Otomatik kopyalama başarısız. Lütfen indirme düğmesini kullan.",
 errorText:"Lütfen geçerli bir giriş girin veya yükleyin.",
 errorLevel:"Metin/dosyalar için lütfen seviyeni seç.",
 errorAIResponse:"Geçerli YZ yanıtı yok.",
@@ -1527,6 +1681,11 @@ resultsTitle:"Risultati dell’analisi",
 startOverBtn:"Ricomincia",
 expandAll:"Espandi tutto",
 collapseAll:"Comprimi tutto",
+downloadAnkiTxt:"Scarica TXT Anki",
+copyAnkiTxt:"Copia formato Anki",
+ankiNoResults:"Non ci sono ancora risultati da esportare.",
+ankiCopied:"Testo Anki copiato.",
+ankiCopyFailed:"Copia automatica non riuscita. Usa il pulsante di download.",
 errorText:"Inserisci o carica un input valido.",
 errorLevel:"Per testi/file, scegli il tuo livello.",
 errorAIResponse:"Risposta IA non valida.",
@@ -1609,6 +1768,11 @@ resultsTitle:"Результаты анализа",
 startOverBtn:"Начать заново",
 expandAll:"Развернуть все",
 collapseAll:"Свернуть все",
+downloadAnkiTxt:"Скачать TXT для Anki",
+copyAnkiTxt:"Скопировать формат Anki",
+ankiNoResults:"Пока нет результатов для экспорта.",
+ankiCopied:"Текст Anki скопирован.",
+ankiCopyFailed:"Автокопирование не удалось. Используйте кнопку загрузки.",
 errorText:"Введите или загрузите корректные данные.",
 errorLevel:"Для текстов/файлов выберите уровень.",
 errorAIResponse:"Нет корректного ответа ИИ.",
@@ -1752,6 +1916,8 @@ for(const id in map){ const el = document.getElementById(id); if(el) el.innerHTM
 
 document.title = s.appTitle || (brand.title ? `${brand.title} | LingoDeck` : 'LingoDeck');
 document.querySelector('#process-btn > span').textContent = s.processBtn;
+document.getElementById('download-anki-txt').innerHTML = `⬇️ ${s.downloadAnkiTxt || 'Download Anki TXT'}`;
+document.getElementById('copy-anki-txt').innerHTML = `📋 ${s.copyAnkiTxt || 'Copy Anki Format'}`;
 document.getElementById('expand-all').innerHTML = `⬇️ ${s.expandAll}`;
 document.getElementById('collapse-all').innerHTML = `⬆️ ${s.collapseAll}`;
 document.getElementById('stop-tts').title = s.stopSpeech;
