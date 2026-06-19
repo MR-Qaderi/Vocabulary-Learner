@@ -256,6 +256,75 @@ body::after{
   [data-theme="light"] .theme-toggle-knob{inset-inline-start:32px}
 }
 
+/* Reference-safe creator footer polish: visual-only overrides, keeps the embedded photo and logic intact */
+.creator-card{
+  position:relative;
+  overflow:hidden;
+  padding:1.15rem 1.28rem;
+  border-radius:var(--radius-xl);
+  background:
+    radial-gradient(520px 150px at 20% 0%,color-mix(in oklab,var(--accent) 13%,transparent),transparent 62%),
+    linear-gradient(135deg,color-mix(in oklab,var(--surface) 94%,transparent),color-mix(in oklab,var(--surface-2) 76%,transparent));
+}
+.creator-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(115deg,transparent 0%,transparent 40%,color-mix(in oklab,var(--accent) 10%,transparent) 50%,transparent 62%,transparent 100%);
+  transform:translateX(-120%);
+  pointer-events:none;
+  opacity:.72;
+}
+.creator-card:hover::before{animation:panelSweep .95s ease both}
+.creator-card::after{
+  content:"";
+  position:absolute;
+  inset:auto -20% -82% -20%;
+  height:118%;
+  background:radial-gradient(circle at 50% 0%,color-mix(in oklab,var(--accent-2) 15%,transparent),transparent 58%);
+  pointer-events:none;
+  opacity:.82;
+}
+.creator-card>*{position:relative;z-index:1}
+.creator-avatar{
+  width:88px;
+  height:88px;
+  flex-basis:88px;
+  padding:3px;
+  overflow:visible;
+  border:0;
+  background:conic-gradient(from 180deg,var(--accent),var(--accent-2),var(--accent-3),var(--accent));
+  box-shadow:0 18px 38px -22px color-mix(in oklab,var(--accent) 55%,#000),0 0 0 7px color-mix(in oklab,var(--accent) 8%,transparent);
+  position:relative;
+}
+.creator-avatar::after{
+  content:"";
+  position:absolute;
+  inset:7px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.22);
+  pointer-events:none;
+}
+.creator-avatar img{
+  border-radius:999px;
+  background:var(--surface);
+  transition:transform .4s ease,filter .4s ease;
+}
+.creator-card:hover .creator-avatar img{
+  transform:scale(1.055);
+  filter:saturate(1.06) contrast(1.03);
+}
+.creator-name{letter-spacing:-.01em}
+.creator-role{margin-top:.16rem}
+.creator-socials{gap:.6rem}
+.social-btn{
+  border-radius:var(--radius-sm);
+  transition:transform .18s ease,border-color .18s ease,background .18s ease,color .18s ease;
+}
+.social-btn:hover{color:var(--accent)}
+.social-btn svg{transition:transform .18s ease}
+.social-btn:hover svg{transform:scale(1.12)}
+
 </style>
 </head>
 <body>
