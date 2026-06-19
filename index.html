@@ -325,6 +325,115 @@ body::after{
 .social-btn svg{transition:transform .18s ease}
 .social-btn:hover svg{transform:scale(1.12)}
 
+/* Safe premium visual layer: CSS-only, no behavior changes */
+body{
+  background:
+    radial-gradient(980px 560px at 8% -10%,color-mix(in oklab,var(--accent) 18%,transparent),transparent 62%),
+    radial-gradient(760px 520px at 98% 18%,color-mix(in oklab,var(--accent-2) 14%,transparent),transparent 60%),
+    radial-gradient(720px 520px at 52% 110%,color-mix(in oklab,var(--accent-3) 10%,transparent),transparent 64%),
+    var(--bg);
+}
+[data-theme="dark"] body{
+  background:
+    radial-gradient(980px 560px at 8% -10%,color-mix(in oklab,var(--accent) 20%,transparent),transparent 62%),
+    radial-gradient(780px 540px at 98% 20%,color-mix(in oklab,var(--accent-2) 16%,transparent),transparent 60%),
+    radial-gradient(760px 540px at 50% 112%,color-mix(in oklab,var(--accent-3) 12%,transparent),transparent 64%),
+    linear-gradient(180deg,#050712 0%,var(--bg) 44%,#050712 100%);
+}
+.glass{
+  box-shadow:0 1px 0 rgba(255,255,255,.06),0 18px 52px -42px rgba(0,0,0,.65);
+}
+.logo-mark{
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;
+}
+.logo-mark:hover{
+  transform:translateY(-2px) rotate(-2deg);
+  border-color:color-mix(in oklab,var(--accent) 34%,var(--border-strong));
+  box-shadow:var(--shadow-strong),0 0 0 6px color-mix(in oklab,var(--accent) 10%,transparent);
+}
+.hero-card{
+  box-shadow:
+    var(--shadow-strong),
+    var(--inner),
+    0 0 0 1px color-mix(in oklab,var(--accent) 6%,transparent);
+}
+.hero-card::before{
+  background:
+    radial-gradient(700px 320px at 8% 0%,color-mix(in oklab,var(--accent) 21%,transparent),transparent 64%),
+    radial-gradient(560px 340px at 100% 8%,color-mix(in oklab,var(--accent-3) 14%,transparent),transparent 60%),
+    linear-gradient(120deg,transparent 0%,color-mix(in oklab,var(--accent-2) 11%,transparent) 48%,transparent 72%);
+}
+.hero-title{
+  text-shadow:0 20px 55px color-mix(in oklab,var(--accent) 12%,transparent);
+}
+.premium-badge,.pill,.chip{
+  backdrop-filter:blur(10px);
+}
+.step-card,.drop-zone,.info-tile,.result-card,.control-surface{
+  backdrop-filter:blur(14px);
+}
+.step-card{
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease,background .2s ease;
+}
+.step-card:hover{
+  background:color-mix(in oklab,var(--surface) 88%,transparent);
+}
+.drop-zone{
+  box-shadow:var(--inner),0 24px 70px -52px color-mix(in oklab,var(--accent) 38%,#000);
+}
+.textarea-control{
+  background:
+    linear-gradient(180deg,color-mix(in oklab,var(--surface) 94%,transparent),color-mix(in oklab,var(--surface-2) 74%,transparent));
+}
+.textarea-control:focus,.select-control:focus{
+  transform:translateY(-1px);
+}
+.btn{
+  transition:transform .14s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease,opacity .18s ease;
+}
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 24px 50px -28px var(--primary),0 0 0 5px color-mix(in oklab,var(--primary) 8%,transparent);
+}
+.result-card{
+  box-shadow:var(--shadow),var(--inner),0 0 0 1px color-mix(in oklab,var(--accent) 4%,transparent);
+}
+.result-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:radial-gradient(520px 180px at 18% 0%,color-mix(in oklab,var(--accent) 8%,transparent),transparent 62%);
+  opacity:.75;
+}
+.result-card>*{position:relative;z-index:1}
+.result-header{
+  border-bottom:1px solid color-mix(in oklab,var(--border) 65%,transparent);
+}
+.result-details:not(.open){
+  border-bottom:0;
+}
+.example-item{
+  box-shadow:var(--inner);
+}
+.example-item:hover{
+  background:color-mix(in oklab,var(--surface) 96%,transparent);
+}
+.floating-top{
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.floating-top:hover{
+  transform:translateY(-3px);
+  border-color:var(--border-strong);
+  box-shadow:var(--shadow-strong);
+}
+@media (max-width:640px){
+  body{background-attachment:scroll}
+  .hero-card{border-radius:24px}
+  .drop-zone{border-radius:22px}
+  .creator-avatar{width:82px;height:82px;flex-basis:82px}
+}
+
 </style>
 </head>
 <body>
