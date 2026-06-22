@@ -434,6 +434,120 @@ body{
   .creator-avatar{width:82px;height:82px;flex-basis:82px}
 }
 
+
+/* Ecosystem cross-project spotlight */
+.ecosystem-link-section{
+  max-width:1120px;
+  margin:1.5rem auto 0;
+  padding:0 1rem;
+}
+.ecosystem-card{
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  text-decoration:none;
+  color:var(--text);
+  border:1px solid color-mix(in oklab,var(--accent-2) 34%,var(--border-strong));
+  border-radius:var(--radius-xl);
+  padding:1.05rem 1.2rem;
+  background:
+    radial-gradient(520px 190px at 15% 0%,color-mix(in oklab,var(--accent-2) 24%,transparent),transparent 62%),
+    radial-gradient(520px 190px at 92% 8%,color-mix(in oklab,var(--warning) 18%,transparent),transparent 64%),
+    linear-gradient(135deg,color-mix(in oklab,var(--surface) 95%,transparent),color-mix(in oklab,var(--surface-2) 74%,transparent));
+  box-shadow:var(--shadow-strong),var(--inner),0 0 0 8px color-mix(in oklab,var(--accent-2) 6%,transparent);
+  backdrop-filter:blur(18px);
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.ecosystem-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(115deg,transparent 0%,transparent 38%,rgba(255,255,255,.32) 49%,transparent 60%,transparent 100%);
+  transform:translateX(-125%);
+  animation:ecosystemShine 5.2s ease-in-out infinite;
+  pointer-events:none;
+}
+.ecosystem-card::after{
+  content:"";
+  position:absolute;
+  inset:auto -12% -75% -12%;
+  height:120%;
+  background:radial-gradient(circle at 50% 0%,color-mix(in oklab,var(--accent-3) 18%,transparent),transparent 58%);
+  opacity:.85;
+  pointer-events:none;
+}
+.ecosystem-card>*{position:relative;z-index:1}
+.ecosystem-card:hover{
+  transform:translateY(-4px);
+  border-color:color-mix(in oklab,var(--accent-2) 62%,var(--border-strong));
+  box-shadow:var(--shadow-strong),0 0 0 9px color-mix(in oklab,var(--accent-2) 10%,transparent),0 0 42px -22px var(--accent-2);
+}
+.ecosystem-main{
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  min-width:0;
+}
+.ecosystem-icon{
+  width:62px;
+  height:62px;
+  border-radius:22px;
+  display:grid;
+  place-items:center;
+  flex:0 0 auto;
+  font-size:1.55rem;
+  background:linear-gradient(135deg,color-mix(in oklab,var(--accent-2) 88%,#fff),color-mix(in oklab,var(--warning) 60%,var(--accent-3)));
+  color:#fff;
+  box-shadow:0 18px 38px -22px color-mix(in oklab,var(--accent-2) 76%,#000),inset 0 1px 0 rgba(255,255,255,.35);
+}
+.ecosystem-kicker{
+  color:color-mix(in oklab,var(--accent-2) 76%,var(--text));
+  font-size:.72rem;
+  font-weight:950;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  margin-bottom:.2rem;
+}
+.ecosystem-title{
+  font-size:1.18rem;
+  font-weight:950;
+  letter-spacing:-.025em;
+  margin:0;
+}
+.ecosystem-desc{
+  margin-top:.24rem;
+  color:var(--muted);
+  font-size:.84rem;
+  font-weight:750;
+  line-height:1.8;
+}
+.ecosystem-cta{
+  display:inline-flex;
+  align-items:center;
+  gap:.45rem;
+  flex:0 0 auto;
+  border-radius:18px;
+  padding:.78rem .95rem;
+  font-weight:950;
+  color:#050816;
+  background:linear-gradient(180deg,#fff,#e5e7eb);
+  box-shadow:0 18px 36px -26px rgba(0,0,0,.7),var(--inner);
+  white-space:nowrap;
+}
+@keyframes ecosystemShine{
+  0%,72%{transform:translateX(-125%)}
+  100%{transform:translateX(125%)}
+}
+@media (max-width:640px){
+  .ecosystem-card{align-items:flex-start;flex-direction:column;padding:1rem;border-radius:24px}
+  .ecosystem-main{align-items:flex-start}
+  .ecosystem-icon{width:54px;height:54px;border-radius:19px}
+  .ecosystem-cta{width:100%;justify-content:center}
+}
+
 </style>
 </head>
 <body>
@@ -615,6 +729,21 @@ body{
     <div id="results-list" class="space-y-4"></div>
   </section>
 </main>
+
+
+<section class="ecosystem-link-section" aria-label="Other project">
+  <a class="ecosystem-card" href="https://mr-qaderi.github.io/LingoPen/" target="_blank" rel="noopener">
+    <div class="ecosystem-main">
+      <div class="ecosystem-icon" aria-hidden="true">✒️</div>
+      <div class="min-w-0">
+        <div id="other-project-kicker" class="ecosystem-kicker">دیگر پروژه ما</div>
+        <h3 id="other-project-title" class="ecosystem-title">قلم‌یار | LingoPen</h3>
+        <p id="other-project-desc" class="ecosystem-desc">دستیار هوشمند نگارش برای اصلاح، طبیعی‌سازی و ارتقای متن‌های زبان‌آموزی.</p>
+      </div>
+    </div>
+    <span id="other-project-cta" class="ecosystem-cta">باز کردن قلم‌یار ↗</span>
+  </a>
+</section>
 
 <footer class="creator-footer">
   <div class="creator-card">
@@ -2166,6 +2295,64 @@ const creatorLocale = {
   ru: { kicker: 'Дизайн и разработка', role: 'Бизнес- и системный аналитик' }
 };
 
+
+const otherProjectLocale = {
+  fa: {
+    kicker: 'دیگر پروژه ما',
+    title: 'قلم‌یار | LingoPen',
+    desc: 'دستیار هوشمند نگارش برای اصلاح، طبیعی‌سازی و ارتقای متن‌های زبان‌آموزی.',
+    cta: 'باز کردن قلم‌یار ↗'
+  },
+  en: {
+    kicker: 'Our other project',
+    title: 'LingoPen | AI Writing Coach',
+    desc: 'A smart writing coach for correcting, polishing, and upgrading language-learning texts.',
+    cta: 'Open LingoPen ↗'
+  },
+  de: {
+    kicker: 'Unser anderes Projekt',
+    title: 'LingoPen | KI-Schreibcoach',
+    desc: 'Ein intelligenter Schreibcoach zum Korrigieren, Verfeinern und Verbessern von Lerntexten.',
+    cta: 'LingoPen öffnen ↗'
+  },
+  fr: {
+    kicker: 'Notre autre projet',
+    title: 'LingoPen | Coach d’écriture IA',
+    desc: 'Un coach d’écriture intelligent pour corriger, fluidifier et améliorer les textes d’apprentissage.',
+    cta: 'Ouvrir LingoPen ↗'
+  },
+  es: {
+    kicker: 'Nuestro otro proyecto',
+    title: 'LingoPen | Coach de escritura IA',
+    desc: 'Un asistente inteligente para corregir, pulir y mejorar textos de aprendizaje de idiomas.',
+    cta: 'Abrir LingoPen ↗'
+  },
+  zh: {
+    kicker: '我们的另一个项目',
+    title: 'LingoPen | AI 写作教练',
+    desc: '用于纠正、润色并提升语言学习文本的智能写作教练。',
+    cta: '打开 LingoPen ↗'
+  },
+  tr: {
+    kicker: 'Diğer projemiz',
+    title: 'LingoPen | Yapay zekâ yazma koçu',
+    desc: 'Dil öğrenme metinlerini düzeltmek, doğal hâle getirmek ve geliştirmek için akıllı yazma koçu.',
+    cta: 'LingoPen’i aç ↗'
+  },
+  it: {
+    kicker: 'Il nostro altro progetto',
+    title: 'LingoPen | Coach di scrittura AI',
+    desc: 'Un assistente intelligente per correggere, rifinire e migliorare testi per l’apprendimento linguistico.',
+    cta: 'Apri LingoPen ↗'
+  },
+  ru: {
+    kicker: 'Наш другой проект',
+    title: 'LingoPen | ИИ-тренер письма',
+    desc: 'Умный помощник для исправления, улучшения и естественного оформления учебных текстов.',
+    cta: 'Открыть LingoPen ↗'
+  }
+};
+
 function setLanguage(lang){
 currentLang = lang;
 const s = uiStrings[lang] || uiStrings.en;
@@ -2228,6 +2415,17 @@ const creatorKickerEl = document.getElementById('creator-kicker');
 const creatorRoleEl = document.getElementById('creator-role');
 if (creatorKickerEl) creatorKickerEl.textContent = creatorMeta.kicker;
 if (creatorRoleEl) creatorRoleEl.textContent = creatorMeta.role;
+
+const otherProjectMeta = otherProjectLocale[lang] || otherProjectLocale.en;
+const otherProjectKickerEl = document.getElementById('other-project-kicker');
+const otherProjectTitleEl = document.getElementById('other-project-title');
+const otherProjectDescEl = document.getElementById('other-project-desc');
+const otherProjectCtaEl = document.getElementById('other-project-cta');
+if (otherProjectKickerEl) otherProjectKickerEl.textContent = otherProjectMeta.kicker;
+if (otherProjectTitleEl) otherProjectTitleEl.textContent = otherProjectMeta.title;
+if (otherProjectDescEl) otherProjectDescEl.textContent = otherProjectMeta.desc;
+if (otherProjectCtaEl) otherProjectCtaEl.textContent = otherProjectMeta.cta;
+
 const footerLine = document.getElementById('footer-text-line2');
 if (footerLine) footerLine.innerHTML = '';
 
