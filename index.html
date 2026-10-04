@@ -560,6 +560,48 @@ body{
   width:100%;
 }
 
+/* Two learning tools, with LingoRole's conversation colors. */
+.hero-card .ecosystem-link-section{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:1rem;
+}
+.hero-card .ecosystem-card{
+  min-width:0;
+  height:100%;
+  flex-wrap:wrap;
+}
+.hero-card .ecosystem-main{flex:1 1 230px}
+.hero-card .ecosystem-cta{margin-inline-start:auto}
+.ecosystem-card.role-promo-card{
+  border-color:color-mix(in oklab,#0f9e85 55%,var(--border-strong));
+  background:
+    radial-gradient(490px 180px at 12% 0%,rgba(16,185,129,.17),transparent 65%),
+    radial-gradient(400px 160px at 96% 5%,rgba(14,116,144,.12),transparent 65%),
+    linear-gradient(135deg,color-mix(in oklab,var(--surface) 95%,transparent),color-mix(in oklab,var(--surface-2) 76%,transparent));
+  box-shadow:var(--shadow-strong),var(--inner),0 0 0 7px rgba(16,185,129,.06);
+}
+.ecosystem-card.role-promo-card:hover{
+  border-color:#0d9488;
+  box-shadow:var(--shadow-strong),0 0 0 8px rgba(16,185,129,.11);
+}
+.role-promo-card .ecosystem-icon{background:linear-gradient(135deg,#047857,#0e7490)}
+.role-promo-card .ecosystem-icon svg{width:38px;height:38px;display:block}
+.role-promo-card .ecosystem-kicker{color:color-mix(in oklab,#059669 82%,var(--text))}
+.role-promo-card .ecosystem-cta{
+  color:#fff;
+  background:linear-gradient(135deg,#047857,#0e7490);
+  box-shadow:0 14px 34px -22px rgba(4,120,87,.8),var(--inner);
+}
+@media(max-width:900px){
+  .hero-card .ecosystem-link-section{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .hero-card .ecosystem-cta{margin-inline-start:0}
+  .hero-card .ecosystem-main{flex:0 1 auto}
+  .hero-card .ecosystem-card{height:auto}
+}
+
 </style>
 </head>
 <body>
@@ -718,7 +760,7 @@ body{
 
     </div>
 
-    <section class="ecosystem-link-section" aria-label="Other project">
+    <section id="learning-tools" class="ecosystem-link-section" aria-label="دیگر ابزارهای یادگیری">
   <a class="ecosystem-card" href="https://mr-qaderi.github.io/LingoPen/" target="_blank" rel="noopener">
     <div class="ecosystem-main">
       <div class="ecosystem-icon" aria-hidden="true">✒️</div>
@@ -729,6 +771,17 @@ body{
       </div>
     </div>
     <span id="other-project-cta" class="ecosystem-cta">باز کردن قلم‌یار ↗</span>
+  </a>
+  <a class="ecosystem-card role-promo-card" href="https://mr-qaderi.github.io/LingoRole/" target="_blank" rel="noopener">
+    <div class="ecosystem-main">
+      <div class="ecosystem-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true"><path d="M27 24v-7A11 11 0 0 1 38 6h9a11 11 0 0 1 11 11v9c0 5-2.5 8.5-6.5 10.5l2.5 8-10-6h-4" fill="white" stroke="black" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 15h14m-10 7h10" fill="none" stroke="black" stroke-width="3.5" stroke-linecap="round"/><path d="M17 23h15a12 12 0 0 1 12 12v5a12 12 0 0 1-12 12H19L8 59l3-10a12 12 0 0 1-6-10v-4a12 12 0 0 1 12-12z" fill="white" stroke="black" stroke-width="3.5" stroke-linejoin="round"/><g fill="black"><circle cx="16" cy="37" r="2.2"/><circle cx="24.5" cy="37" r="2.2"/><circle cx="33" cy="37" r="2.2"/></g></svg></div>
+      <div class="min-w-0">
+        <div id="role-project-kicker" class="ecosystem-kicker">تازه در مجموعهٔ ما</div>
+        <h3 id="role-project-title" class="ecosystem-title">گپ‌یار | LingoRole</h3>
+        <p id="role-project-desc" class="ecosystem-desc">در موقعیت دلخواهت با تایپ یا صدا مکالمه کن و از گفت‌وگو درس اختصاصی بگیر.</p>
+      </div>
+    </div>
+    <span id="role-project-cta" class="ecosystem-cta">باز کردن گپ‌یار ↗</span>
   </a>
 </section>
   </div>
@@ -2368,6 +2421,72 @@ const otherProjectLocale = {
   }
 };
 
+const rolePromoLocale = {
+  "fa": {
+    "sectionLabel": "دیگر ابزارهای یادگیری",
+    "kicker": "تازه در مجموعهٔ ما",
+    "title": "گپ‌یار | LingoRole",
+    "desc": "در موقعیت دلخواهت با تایپ یا صدا مکالمه کن و از گفت‌وگو درس اختصاصی بگیر.",
+    "cta": "باز کردن گپ‌یار ↗"
+  },
+  "en": {
+    "sectionLabel": "More learning tools",
+    "kicker": "New in our collection",
+    "title": "LingoRole | Conversation practice",
+    "desc": "Roleplay by typing or speaking, then get a personal lesson from your conversation.",
+    "cta": "Open LingoRole ↗"
+  },
+  "de": {
+    "sectionLabel": "Weitere Lerntools",
+    "kicker": "Neu in unserer Sammlung",
+    "title": "LingoRole | Gespräche üben",
+    "desc": "Übe Rollenspiele per Text oder Sprache und erhalte eine persönliche Lektion aus dem Gespräch.",
+    "cta": "LingoRole öffnen ↗"
+  },
+  "fr": {
+    "sectionLabel": "Autres outils d’apprentissage",
+    "kicker": "Nouveau dans notre collection",
+    "title": "LingoRole | Pratique de l’oral",
+    "desc": "Joue un rôle en écrivant ou en parlant, puis reçois une leçon personnalisée à partir de l’échange.",
+    "cta": "Ouvrir LingoRole ↗"
+  },
+  "es": {
+    "sectionLabel": "Más herramientas de aprendizaje",
+    "kicker": "Nuevo en nuestra colección",
+    "title": "LingoRole | Practica conversaciones",
+    "desc": "Practica situaciones por texto o voz y recibe una lección personalizada al terminar.",
+    "cta": "Abrir LingoRole ↗"
+  },
+  "zh": {
+    "sectionLabel": "更多学习工具",
+    "kicker": "学习工具新成员",
+    "title": "LingoRole | 情境对话练习",
+    "desc": "通过打字或语音进行角色对话，结束后获得根据对话生成的专属学习建议。",
+    "cta": "打开 LingoRole ↗"
+  },
+  "tr": {
+    "sectionLabel": "Diğer öğrenme araçları",
+    "kicker": "Koleksiyonumuzda yeni",
+    "title": "LingoRole | Konuşma pratiği",
+    "desc": "Yazarak veya sesinle rol yapma sohbeti kur; sohbetinden kişisel bir ders çıkar.",
+    "cta": "LingoRole’u aç ↗"
+  },
+  "it": {
+    "sectionLabel": "Altri strumenti di studio",
+    "kicker": "Novità nella nostra raccolta",
+    "title": "LingoRole | Pratica la conversazione",
+    "desc": "Simula dialoghi scrivendo o parlando e ricevi una lezione personalizzata dalla conversazione.",
+    "cta": "Apri LingoRole ↗"
+  },
+  "ru": {
+    "sectionLabel": "Другие инструменты для обучения",
+    "kicker": "Новинка в нашей коллекции",
+    "title": "LingoRole | Практика диалогов",
+    "desc": "Разыгрывай ситуации текстом или голосом и получай персональный урок по итогам беседы.",
+    "cta": "Открыть LingoRole ↗"
+  }
+};
+
 function setLanguage(lang){
 currentLang = lang;
 const s = uiStrings[lang] || uiStrings.en;
@@ -2440,6 +2559,12 @@ if (otherProjectKickerEl) otherProjectKickerEl.textContent = otherProjectMeta.ki
 if (otherProjectTitleEl) otherProjectTitleEl.textContent = otherProjectMeta.title;
 if (otherProjectDescEl) otherProjectDescEl.textContent = otherProjectMeta.desc;
 if (otherProjectCtaEl) otherProjectCtaEl.textContent = otherProjectMeta.cta;
+const roleProjectMeta = rolePromoLocale[lang] || rolePromoLocale.en;
+document.getElementById('learning-tools').setAttribute('aria-label', roleProjectMeta.sectionLabel);
+document.getElementById('role-project-kicker').textContent = roleProjectMeta.kicker;
+document.getElementById('role-project-title').textContent = roleProjectMeta.title;
+document.getElementById('role-project-desc').textContent = roleProjectMeta.desc;
+document.getElementById('role-project-cta').textContent = roleProjectMeta.cta;
 
 const footerLine = document.getElementById('footer-text-line2');
 if (footerLine) footerLine.innerHTML = '';
